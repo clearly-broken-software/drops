@@ -1,0 +1,13 @@
+
+bin/
+
+\.kdev4/
+
+*.d
+
+*.o
+
+drops\.kdev4
+
+build*
+.vscode/settings.json

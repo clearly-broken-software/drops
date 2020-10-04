@@ -1,0 +1,61 @@
+//------------------------------------------------------------------------------
+// A basic sfz template
+//------------------------------------------------------------------------------
+<control>
+default_path=
+
+<global>
+// parameters that affect the whole instrument go here.
+
+// *****************************************************************************
+// Your mapping starts here
+// *****************************************************************************
+
+<group> // 1
+
+// Parameters that affect multiple regions go here
+
+
+  
+  // amp ADSR
+  ampeg_attack=0
+  ampeg_attack_oncc201=10
+  ampeg_decay=0
+  ampeg_decay_oncc202=10
+  ampeg_sustain=100
+  ampeg_sustain_oncc203=-100
+  ampeg_release=1
+  ampeg_release_oncc204=10
+  
+  // filter
+  fil_type=lpf_2p         // One of the many filter types available
+  cutoff=20      // freq in hertz
+  cutoff_oncc310=9600     // variation in cents
+  resonance=0      // value in db
+  resonance_oncc311=20  // variation in db
+  // filter ADSR
+  fileg_depth=9600
+  fileg_attack=0
+  fileg_attack_oncc301=10
+  fileg_decay=0
+  fileg_decay_oncc302=10
+  fileg_sustain=100
+  fileg_sustain_oncc303=-100
+  fileg_release=0.1
+  fileg_release_oncc304=10
+
+  // pitch ADSR
+  pitcheg_depth=1200
+  pitcheg_attack=0
+  pitcheg_attack_oncc401=10
+  pitcheg_decay=0
+  pitcheg_decay_oncc402=10
+  pitcheg_sustain=0
+  pitcheg_sustain_oncc403=100
+  pitcheg_release=0.001
+  pitcheg_release_oncc404=10
+
+
+  trigger=attack    // or release or first or legato
+  loop_mode=loop_sustain // or loop_continuous or one_shot or loop_sustain
+<region> sample=/home/rob/git/drops/plugins/drops/res/saw.wav lokey=0 hikey=127 pitch_keycenter=c4

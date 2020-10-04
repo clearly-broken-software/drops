@@ -1,0 +1,46 @@
+    <region>
+    sample=*sine
+     
+    //eg15_amplitude=100
+    eg15_ampeg=1
+     
+    eg15_time1=.1  eg15_level1=.25
+    eg15_time2=.15  eg15_level2=1
+    eg15_time3=.2  eg15_level3=.5 eg15_sustain=3
+    eg15_time4=.4 eg15_level4=1
+     
+    // //eg15_points=5
+    // eg15_time0=0.0  eg15_level0=0.0
+    // ///eg15_time0=1.0  eg15_level0=-1.0
+    // eg15_time1=0.5  eg15_level1=1 eg15_shape1=-10 //eg15_time1_oncc24=5
+    // eg15_time2=1.0  eg15_level2=0.5 eg15_shape2=-10 eg15_sustain=2
+    // eg15_time3=1.0  eg15_level3=0
+    // eg15_time4=1.25 eg15_level4=1
+    // eg15_dynamic=1
+     
+    // eg15_time1=.1  eg15_level1=0
+    // eg15_time2=.15  eg15_level2=1
+    // eg15_time3=.2  eg15_level3=.5
+    // eg15_time4=.25  eg15_level4=0.75 eg15_sustain=4
+    // eg15_time5=.3  eg15_level5=0
+    // eg15_time6=1.25 eg15_level6=1
+        // eg15_loop=2
+        // eg15_loop_count=3
+     
+    // eg15_time2=.1  eg15_level2=0
+    // eg15_time3=.15  eg15_level3=1
+    // eg15_time4=.2  eg15_level4=.5
+    // eg15_time5=.25  eg15_level5=0.75 eg15_sustain=5
+    // eg15_time6=.3  eg15_level6=0
+    // eg15_time7=1.25 eg15_level7=1
+    //     eg15_loop=0
+    //     eg15_loop_count=4
+     
+    // eg15_level1=0
+    // eg15_time2=2
+    // eg15_level2=1
+    // eg15_time3=8
+    // eg15_level3=1
+    // eg15_time4=2
+    // eg15_level4=0
+    // eg15_sustain=3
