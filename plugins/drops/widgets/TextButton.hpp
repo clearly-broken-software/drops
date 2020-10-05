@@ -6,6 +6,7 @@
 #include "Window.hpp"
 #include "Widget.hpp"
 #include "NanoVG.hpp"
+#include <string>
 
 START_NAMESPACE_DISTRHO
 
@@ -19,13 +20,15 @@ public:
     virtual void textButtonClicked(TextButton *textButton) = 0;
   };
   explicit TextButton(Window &parent, Size<uint> size) noexcept;
+  void setText(std::string str);
   void setCallback(Callback *cb);
 
 protected:
   void onNanoDisplay() override;
-  bool onMouse(const MouseEvent&) override;
+  bool onMouse(const MouseEvent &) override;
 
 private:
+  std::string buttonText;
   Callback *callback;
 
   DISTRHO_LEAK_DETECTOR(TextButton)

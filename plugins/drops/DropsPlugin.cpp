@@ -77,7 +77,6 @@ DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 0)
     fFilterLFOFreq = 0.0f;
     fFilterLFODepth = 0.0f;
     fFilterLFOSync = 0.0f;
-   
 }
 
 // --  PARAMETERS  -------------------------------------------------------------
@@ -769,13 +768,13 @@ void DropsPlugin::makeSFZ()
         "pitcheg_sustain_oncc403=100\n"
         "pitcheg_release=0.001\n"
         "pitcheg_release_oncc404=10\n"
-        "trigger=attack\n"    // or release or first or legato
+        "trigger=attack\n"       // or release or first or legato
         "loop_mode=no_sustain\n" // or loop_continuous or one_shot or loop_sustain
         "<region> sample=";
     char bar[] = "lokey=0 hikey=127 pitch_keycenter=a4";
     char buffer[2048];
     sprintf(buffer, "%s%s\n%s", foo, path.c_str(), bar);
-    printf("The SFZ File\n\n %s\n", buffer);
+    // printf("The SFZ File\n\n %s\n", buffer);
     synth.loadSfzString("", buffer);
 }
 

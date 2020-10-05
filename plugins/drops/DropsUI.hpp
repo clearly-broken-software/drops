@@ -7,13 +7,15 @@
 #include <sndfile.hh>
 #include <vector>
 #include "TextButton.hpp"
+#include "ScrollBar.hpp"
 
 START_NAMESPACE_DISTRHO
 
 // -----------------------------------------------------------------------------------------------------------
 
 class DropsUI : public UI,
-                public TextButton::Callback
+                public TextButton::Callback,
+                public ScrollBar::Callback
 {
 public:
     DropsUI();
@@ -27,12 +29,15 @@ protected:
     bool onScroll(const ScrollEvent &) override;
     bool onMotion(const MotionEvent &) override;
     void textButtonClicked ( TextButton* textButton) override;
+    void scrollBarClicked ( ScrollBar* scrollBar, bool dragging) override;
 
 private:
     ScopedPointer<TextButton> fFileOpenButton;
+    ScopedPointer<ScrollBar> fScrollBar;
     int loadSample(const char *fp);
     void drawWaveform();
     void drawMinimap();
+    bool scrollbarDragging;
     bool sampleLoaded;
     char *filepath;
     sf_count_t sampleLength;
@@ -40,7 +45,7 @@ private:
     int file_samplerate;
     // sample
     sf_count_t sampleIn, sampleOut, sampleLoopStart, sampleLoopEnd;
-    //
+    
     std::vector<signed char> waveForm;
     std::vector<char> miniMap;
     sf_count_t viewStart;

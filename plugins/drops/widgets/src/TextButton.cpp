@@ -6,7 +6,7 @@ START_NAMESPACE_DISTRHO
 TextButton::TextButton(Window &parent, Size<uint> size) noexcept
     : NanoWidget(parent)
 {
-    printf("TextButton constructed\n");
+    buttonText = "click to load sample";
     loadSharedResources();
 }
 
@@ -14,7 +14,6 @@ bool TextButton::onMouse(const MouseEvent &ev)
 {
     if (contains(ev.pos) && ev.press && ev.button == 1)
     {
-        //  printf("mouse click %i in TextButton\n", ev.button);
         callback->textButtonClicked(this);
         return true;
     }
@@ -26,7 +25,6 @@ bool TextButton::onMouse(const MouseEvent &ev)
 
 void TextButton::onNanoDisplay()
 {
-    printf("draw button\n");
     int w = getWidth();
     int h = getHeight();
     beginPath();
@@ -37,15 +35,18 @@ void TextButton::onNanoDisplay()
     // text
     beginPath();
     fillColor(0, 0, 0);
-    fontSize(48);
+    fontSize(24);
     textAlign(ALIGN_LEFT | ALIGN_TOP);
-    text(0, 0, "click to load sample", NULL);
+    text(0, 0, buttonText.c_str(), NULL);
     closePath();
 }
 
-void TextButton::setCallback(Callback *cb) 
+void TextButton::setText(std::string str)
 {
-    printf("setCallback\n");
+    buttonText = str;
+}
+void TextButton::setCallback(Callback *cb)
+{
     callback = cb;
 }
 

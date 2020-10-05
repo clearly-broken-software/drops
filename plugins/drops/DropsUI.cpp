@@ -12,10 +12,19 @@ DropsUI::DropsUI()
     sampleLoaded = false;
     display.setSize(display_width, display_height);
     display.setPos(display_left, display_top);
+    scrollbarDragging = false;
+    mouseX = 0;
+    mouseY = 0;
+
     fFileOpenButton = new TextButton(window, Size<uint>(40, 40));
     fFileOpenButton->setCallback(this);
     fFileOpenButton->setAbsolutePos(238, 0);
     fFileOpenButton->setSize(530, 55);
+
+    fScrollBar = new ScrollBar(window);
+    fScrollBar->setSize(display_width, minimap_height);
+    fScrollBar->setAbsolutePos(display_left, display_bottom);
+    fScrollBar->setCallback(this);
 }
 
 void DropsUI::parameterChanged(uint32_t index, float value)
@@ -127,7 +136,6 @@ void DropsUI::onNanoDisplay()
 void DropsUI::drawWaveform()
 {
     double view = viewEnd - viewStart; // set these when zooming in
-
     double samples_per_pixel = view / (double)display_width;
     float fIndex;
     uint iIndex;
@@ -148,7 +156,6 @@ void DropsUI::drawWaveform()
         uint16_t max = *minmax.second + display_center;
         lineTo(i + display_left, min);
         lineTo(i + display_left, max);
-        //     printf("x = %i, max = %i, min = %i\n", i + display_left, min, max);
     }
     stroke();
     closePath();
@@ -174,16 +181,17 @@ void DropsUI::drawMinimap()
     closePath();
 
     // draw "handlebar"
-    // viewStart to pixels left
-    // viewEnd to pixles right
     double samples_per_pixel = waveForm.size() / (double)display_width;
     int leftPixel = viewStart / samples_per_pixel;
     int rightPixel = viewEnd / samples_per_pixel;
+
+    // darken left of the bar
     fillColor(0, 0, 0, 64);
     beginPath();
     rect(display_left, display_bottom, display_left + leftPixel, minimap_height);
     fill();
     closePath();
+    // darken left of the bar
     beginPath();
     rect(display_left + rightPixel, display_bottom, display_width - rightPixel, minimap_height);
     fill();
@@ -195,7 +203,8 @@ void DropsUI::uiFileBrowserSelected(const char *filename)
     // if a file was selected, tell DSP
     if (filename != nullptr)
     {
-        printf("DropsUI::uiFileBrowserSelected\n filename =%s\n", filename);
+        
+        fFileOpenButton->setText(filename);
         setState("filepath", filename);
         loadSample(filename);
         repaint();
@@ -212,15 +221,11 @@ void DropsUI::stateChanged(const char *key, const char *)
 
 bool DropsUI::onMouse(const MouseEvent &ev)
 {
-    /* if (ev.press)
+    if (ev.press && scrollbarDragging)
     {
-        DGL::Window::FileBrowserOptions opts;
-        opts.title = "Load SFZ";
-        opts.buttons.showPlaces = 2;
-        getParentWindow().openFileBrowser(opts);
-    }*/
+        mouseX = ev.pos.getX();
+    }
     return false;
-    
 }
 
 bool DropsUI::onScroll(const ScrollEvent &ev)
@@ -292,7 +297,15 @@ bool DropsUI::onScroll(const ScrollEvent &ev)
         viewEnd = waveForm.size();
         start = viewEnd - length;
     }
+    samples_per_pixel = pow(viewMaxZoom, viewZoom);
     viewStart = start < 0 ? 0 : start;
+    double spp = waveForm.size() / (double)display_width;
+    // int leftPixel = viewStart / samples_per_pixel;
+    // int rightPixel = viewEnd / samples_per_pixel;
+    int leftPixel = viewStart / spp;
+    int rightPixel = viewEnd / spp;
+    fScrollBar->setWidth(rightPixel - leftPixel);
+    fScrollBar->setAbsoluteX(leftPixel);
 
     repaint();
     return true;
@@ -300,18 +313,49 @@ bool DropsUI::onScroll(const ScrollEvent &ev)
 
 bool DropsUI::onMotion(const MotionEvent &ev)
 {
+    if (scrollbarDragging)
+    {
+        int distance = ev.pos.getX() - mouseX;
+             mouseX = ev.pos.getX();
+        float samples_per_pixel = waveForm.size() / (double)display_width;
+        int underflowcheck = viewStart + (float(distance) * samples_per_pixel);
+        if (underflowcheck < 0)
+        {
+            viewStart = 0;
+            int length = display_width * pow(viewMaxZoom, viewZoom);
+            viewEnd = viewStart + length;
+        }
+        else
+        {
+            viewStart = underflowcheck;
+            viewEnd = viewEnd + ((float)distance * samples_per_pixel);
+        }
+
+        if (viewEnd > waveForm.size())
+        {
+            viewEnd = waveForm.size();
+            viewStart = (float)waveForm.size() - (float)display_width * pow(viewMaxZoom, viewZoom);
+        }
+        int leftPixel = (float)viewStart / samples_per_pixel;
+        fScrollBar->setAbsoluteX(leftPixel);
+        repaint();
+    }
+
     return false;
 }
 
 void DropsUI::textButtonClicked(TextButton *textButton)
 {
-    printf("button clicked\n");
     DGL::Window::FileBrowserOptions opts;
     opts.title = "Load SFZ";
     opts.buttons.showPlaces = 2;
     getParentWindow().openFileBrowser(opts);
 }
 
+void DropsUI::scrollBarClicked(ScrollBar *scrollBar, bool dragging)
+{
+    scrollbarDragging = dragging;
+}
 UI *createUI()
 {
     return new DropsUI();
