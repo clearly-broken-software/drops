@@ -40,13 +40,14 @@ private:
     }
 
     ScopedPointer<TextButton> fFileOpenButton;
-    ScopedPointer<ScrollBar> fScrollBar, fLoopStart, fLoopEnd;
+    ScopedPointer<ScrollBar> fScrollBar, fLoopStart, fLoopEnd, fSampleIn, fSampleOut;
     NanoImage imgLoopStart, imgLoopEnd;
     int loadSample(const char *fp);
     void drawWaveform();
     void drawMinimap();
     void drawLoopMarkers();
-    bool scrollbarDragging, loopstartDragging, loopendDragging;
+    void drawInOutMarkers();
+    bool scrollbarDragging, loopstartDragging, loopendDragging, sampleInDragging, sampleOutDragging;
     bool sampleLoaded;
     char *filepath;
     sf_count_t sampleLength;
@@ -73,6 +74,7 @@ private:
     static constexpr unsigned int display_center = (display_bottom - display_top) / 2 + display_top;
     static constexpr unsigned int minimap_height = 35;
     static constexpr unsigned int scrollbar_id = 900;
+    static constexpr unsigned int sample_inout_font_size = 12;
 
     DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DropsUI)
 };
