@@ -29,18 +29,24 @@ protected:
     bool onMouse(const MouseEvent &ev) override;
     bool onScroll(const ScrollEvent &) override;
     bool onMotion(const MotionEvent &) override;
-    void textButtonClicked ( TextButton* textButton) override;
-    void scrollBarClicked ( ScrollBar* scrollBar, bool dragging) override;
+    void textButtonClicked(TextButton *textButton) override;
+    void scrollBarClicked(ScrollBar *scrollBar, bool dragging) override;
 
 private:
+    template <class T>
+    const T &clamp(const T &x, const T &upper, const T &lower)
+    {
+        return std::min(upper, std::max(x, lower));
+    }
+
     ScopedPointer<TextButton> fFileOpenButton;
-    ScopedPointer<ScrollBar> fScrollBar,fLoopStart,fLoopEnd;
-    NanoImage imgLoopStart,imgLoopEnd;
+    ScopedPointer<ScrollBar> fScrollBar, fLoopStart, fLoopEnd;
+    NanoImage imgLoopStart, imgLoopEnd;
     int loadSample(const char *fp);
     void drawWaveform();
     void drawMinimap();
     void drawLoopMarkers();
-    bool scrollbarDragging,loopstartDragging,loopendDragging;
+    bool scrollbarDragging, loopstartDragging, loopendDragging;
     bool sampleLoaded;
     char *filepath;
     sf_count_t sampleLength;
@@ -48,7 +54,7 @@ private:
     int file_samplerate;
     // sample
     sf_count_t sampleIn, sampleOut, sampleLoopStart, sampleLoopEnd;
-    
+
     std::vector<signed char> waveForm;
     std::vector<char> miniMap;
     sf_count_t viewStart;
