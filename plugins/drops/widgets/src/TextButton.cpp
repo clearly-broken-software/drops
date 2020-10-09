@@ -25,19 +25,35 @@ bool TextButton::onMouse(const MouseEvent &ev)
 
 void TextButton::onNanoDisplay()
 {
-    int w = getWidth();
-    int h = getHeight();
+    int width = getWidth();
+    int height = getHeight();
     beginPath();
     fillColor(169, 169, 169);
-    rect(0, 0, w, h);
+    rect(0, 0, width, height);
     fill();
     closePath();
     // text
     beginPath();
     fillColor(0, 0, 0);
-    fontSize(24);
-    textAlign(ALIGN_LEFT | ALIGN_TOP);
-    text(0, 0, buttonText.c_str(), NULL);
+    fontSize(24); 
+    textAlign(ALIGN_LEFT | ALIGN_MIDDLE);
+    Rectangle<float> bounds;
+    textBounds(0, 0, buttonText.c_str(), NULL, bounds);
+    std::string tempText = buttonText;
+    for (int i = 0; i < buttonText.size(); i++) // maybe i = 1 ??
+    {
+        textBounds(0, 0, tempText.c_str(), NULL, bounds);
+        // too large ?
+        if (bounds.getWidth() > width)
+        {
+            // remove 1st character
+            tempText = buttonText.substr(i);
+        }
+        else
+            break;
+    }
+
+    text(0, std::round(height / 2.0f), tempText.c_str(), NULL);
     closePath();
 }
 

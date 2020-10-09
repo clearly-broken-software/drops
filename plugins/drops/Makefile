@@ -18,7 +18,8 @@ FILES_DSP = \
 FILES_UI  = \
 			DropsUI.cpp \
 			widgets/src/TextButton.cpp \
-			widgets/src/ScrollBar.cpp
+			widgets/src/ScrollBar.cpp \
+			artwork.cpp
 
 # --------------------------------------------------------------
 # Do some magic

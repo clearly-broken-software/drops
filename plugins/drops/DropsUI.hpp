@@ -8,6 +8,7 @@
 #include <vector>
 #include "TextButton.hpp"
 #include "ScrollBar.hpp"
+#include "artwork.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -33,11 +34,13 @@ protected:
 
 private:
     ScopedPointer<TextButton> fFileOpenButton;
-    ScopedPointer<ScrollBar> fScrollBar;
+    ScopedPointer<ScrollBar> fScrollBar,fLoopStart,fLoopEnd;
+    NanoImage imgLoopStart,imgLoopEnd;
     int loadSample(const char *fp);
     void drawWaveform();
     void drawMinimap();
-    bool scrollbarDragging;
+    void drawLoopMarkers();
+    bool scrollbarDragging,loopstartDragging,loopendDragging;
     bool sampleLoaded;
     char *filepath;
     sf_count_t sampleLength;
@@ -63,6 +66,7 @@ private:
     static constexpr unsigned int display_bottom = display_top + display_height;
     static constexpr unsigned int display_center = (display_bottom - display_top) / 2 + display_top;
     static constexpr unsigned int minimap_height = 35;
+    static constexpr unsigned int scrollbar_id = 900;
 
     DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DropsUI)
 };
