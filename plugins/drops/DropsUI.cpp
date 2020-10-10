@@ -1,3 +1,6 @@
+/*
+license here
+*/
 
 #include "DropsUI.hpp"
 using namespace artwork;
@@ -9,7 +12,6 @@ START_NAMESPACE_DISTRHO
 DropsUI::DropsUI()
     : UI(1000, 700)
 {
-    Window &window = getParentWindow();
     loadSharedResources();
     sampleLoaded = false;
     loopstartDragging = false;
@@ -23,44 +25,61 @@ DropsUI::DropsUI()
     mouseX = 0;
     mouseY = 0;
 
-    fFileOpenButton = new TextButton(window, Size<uint>(40, 40));
-    fFileOpenButton->setCallback(this);
-    fFileOpenButton->setAbsolutePos(238, 0);
-    fFileOpenButton->setSize(530, 55);
-
-    fScrollBar = new ScrollBar(window);
-    fScrollBar->setId(scrollbar_id); // fixme harcoded
-    fScrollBar->setSize(display_width, minimap_height);
-    fScrollBar->setAbsolutePos(display_left, display_bottom);
-    fScrollBar->setCallback(this);
-
     imgLoopStart = createImageFromMemory((uchar *)artwork::loopstartData, artwork::loopstartDataSize, 1);
     imgLoopEnd = createImageFromMemory((uchar *)artwork::loopendData, artwork::loopendDataSize, 1);
     /* for testing */
     sampleLoopStart = 14525;
+    sampleLoopEnd = 15525;
+    sampleIn = 3000;
+    sampleOut = 20000;
     /* ----------- */
+
+    initWidgets();
+}
+
+void DropsUI::initWidgets()
+{
+    Window &window = getParentWindow();
+    fFileOpenButton = new TextButton(window, Size<uint>(40, 40)); // fixme , remove Size
+    fFileOpenButton->setCallback(this);
+    fFileOpenButton->setAbsolutePos(238, 0);
+    fFileOpenButton->setSize(530, 55);
+
+    fScrollBarHandle = new ScrollBar(window);
+    fScrollBarHandle->setId(scrollbarHandle_id);
+    fScrollBarHandle->setSize(display_width, minimap_height);
+    fScrollBarHandle->setAbsolutePos(display_left, display_bottom);
+    fScrollBarHandle->setCallback(this);
+
+    fScrollBarLeft = new ScrollBar(window);
+    fScrollBarLeft->setId(scrollbarLeft_id);
+    fScrollBarLeft->setSize(0, minimap_height);
+    fScrollBarLeft->setAbsolutePos(display_left, display_bottom);
+    fScrollBarLeft->setCallback(this);
+
+    fScrollBarRight = new ScrollBar(window);
+    fScrollBarRight->setId(scrollbarRight_id);
+    fScrollBarRight->setSize(0, minimap_height);
+    fScrollBarRight->setAbsolutePos(display_right, display_bottom);
+    fScrollBarRight->setCallback(this);
+
     fLoopStart = new ScrollBar(window);
     fLoopStart->setId(kSampleLoopStart);
     fLoopStart->setSize(32, 32); // fixme hardcoded
     fLoopStart->setCallback(this);
     fLoopStart->hide();
 
-    sampleLoopEnd = 15525;
     fLoopEnd = new ScrollBar(window);
     fLoopEnd->setId(kSampleLoopEnd);
     fLoopEnd->setSize(32, 32); // fixme hardcoded
     fLoopEnd->setCallback(this);
     fLoopEnd->hide();
 
-    sampleIn = 3000;
-
     fSampleIn = new ScrollBar(window);
     fSampleIn->setId(kSampleIn);
     fSampleIn->setSize(32, 32);
     fSampleIn->setCallback(this);
     fSampleIn->hide();
-
-    sampleOut = 20000;
 
     fSampleOut = new ScrollBar(window);
     fSampleOut->setId(kSampleOut);
@@ -76,7 +95,7 @@ void DropsUI::parameterChanged(uint32_t index, float value)
 
 int DropsUI::loadSample(const char *fp)
 {
-    // init waveform andminiMap
+    // init waveform and miniMap
     waveForm.resize(0);
     miniMap.resize(0);
 
@@ -85,7 +104,6 @@ int DropsUI::loadSample(const char *fp)
 
     // get the number of frames in the sample
     sampleLength = fileHandle.frames();
-    // printf("length in frames %i\n", fileHandle.frames());
     if (sampleLength == 0)
     {
         //file doesn't exist or is of incompatible type, main handles the -1
@@ -93,7 +111,6 @@ int DropsUI::loadSample(const char *fp)
         return -1;
     }
     // get some more info of the sample
-
     sampleChannels = fileHandle.channels();
     file_samplerate = fileHandle.samplerate();
 
@@ -154,10 +171,10 @@ int DropsUI::loadSample(const char *fp)
         miniMap[i] = (float)maxValue / (float)(display_height / 2) * (float)minimap_height;
     }
     /* FIXME : only set this when there are loop points */
-    float loopStartPixel = static_cast<float>(sampleLoopStart) / samples_per_pixel;
-    float loopEndPixel = static_cast<float>(sampleLoopEnd) / samples_per_pixel;
-    float sampleInPixel = static_cast<float>(sampleIn) / samples_per_pixel;
-    float sampleOutPixel = static_cast<float>(sampleOut) / samples_per_pixel;
+    float loopStartPixel = static_cast<float>(sampleLoopStart) / samples_per_pixel + static_cast<float>(display_left);
+    float loopEndPixel = static_cast<float>(sampleLoopEnd) / samples_per_pixel + static_cast<float>(display_left);
+    float sampleInPixel = static_cast<float>(sampleIn) / samples_per_pixel + static_cast<float>(display_left);
+    float sampleOutPixel = static_cast<float>(sampleOut) / samples_per_pixel + static_cast<float>(display_left);
 
     fLoopStart->setAbsolutePos(loopStartPixel - 32, display_bottom - 32);
     fLoopEnd->setAbsolutePos(loopEndPixel, display_bottom - 32);
@@ -222,6 +239,12 @@ void DropsUI::drawWaveform()
     }
     stroke();
     closePath();
+    // center line
+    beginPath();
+    moveTo(display_left, display_center);
+    lineTo(display_right, display_center);
+    stroke();
+    closePath();
 }
 
 void DropsUI::drawMinimap()
@@ -237,26 +260,25 @@ void DropsUI::drawMinimap()
 
     for (int i = 0; i < display_width; i++)
     {
-        moveTo(i, display_bottom + minimap_height);
-        lineTo(i, display_bottom + minimap_height - miniMap[i]);
+        moveTo(i + display_left, display_bottom + minimap_height);
+        lineTo(i + display_left, display_bottom + minimap_height - miniMap[i]);
     }
     stroke();
     closePath();
 
     // draw "handlebar"
     double samples_per_pixel = waveForm.size() / (double)display_width;
-    int leftPixel = viewStart / samples_per_pixel;
-    int rightPixel = viewEnd / samples_per_pixel;
-
+    int leftPixel = static_cast<float>(viewStart) / samples_per_pixel + static_cast<float>(display_left);
+    int rightPixel = static_cast<float>(viewEnd) / samples_per_pixel + static_cast<float>(display_left);
     // darken left of the bar
     fillColor(0, 0, 0, 64);
     beginPath();
-    rect(display_left, display_bottom, display_left + leftPixel, minimap_height);
+    rect(display_left, display_bottom, leftPixel - display_left, minimap_height);
     fill();
     closePath();
     // darken left of the bar
     beginPath();
-    rect(display_left + rightPixel, display_bottom, display_width - rightPixel, minimap_height);
+    rect(rightPixel, display_bottom, display_right - rightPixel, minimap_height);
     fill();
     closePath();
 }
@@ -269,7 +291,7 @@ void DropsUI::drawInOutMarkers()
 
         // sample to pixel
         double sample_per_pixel = pow(viewMaxZoom, viewZoom);
-        float sampleInPixel = (sampleIn / sample_per_pixel) - (viewStart / sample_per_pixel);
+        float sampleInPixel = (sampleIn / sample_per_pixel) - (viewStart / sample_per_pixel) + static_cast<float>(display_left);
         fillColor(154, 154, 154);
         strokeColor(154, 154, 154);
         strokeWidth(1.0f);
@@ -301,7 +323,7 @@ void DropsUI::drawInOutMarkers()
     if (sampleOut <= viewEnd && sampleOut >= viewStart)
     {
         double sample_per_pixel = pow(viewMaxZoom, viewZoom);
-        float sampleOutPixel = (sampleOut / sample_per_pixel) - (viewStart / sample_per_pixel);
+        float sampleOutPixel = (sampleOut / sample_per_pixel) - (viewStart / sample_per_pixel) + static_cast<float>(display_left);
 
         fillColor(154, 154, 154);
         strokeColor(154, 154, 154);
@@ -340,7 +362,8 @@ void DropsUI::drawLoopMarkers()
 
         // sample to pixel
         double sample_per_pixel = pow(viewMaxZoom, viewZoom);
-        float loopStartPixel = (sampleLoopStart / sample_per_pixel) - (viewStart / sample_per_pixel);
+        float loopStartPixel = (sampleLoopStart / sample_per_pixel) - (viewStart / sample_per_pixel) + static_cast<float>(display_left);
+        ;
 
         fillColor(154, 154, 154);
         strokeColor(154, 154, 154);
@@ -374,7 +397,7 @@ void DropsUI::drawLoopMarkers()
     if (sampleLoopEnd <= viewEnd && sampleLoopEnd >= viewStart)
     {
         double sample_per_pixel = pow(viewMaxZoom, viewZoom);
-        float loopEndPixel = (sampleLoopEnd / sample_per_pixel) - (viewStart / sample_per_pixel);
+        float loopEndPixel = (sampleLoopEnd / sample_per_pixel) - (viewStart / sample_per_pixel) + static_cast<float>(display_left);
 
         fillColor(154, 154, 154);
         strokeColor(154, 154, 154);
@@ -439,6 +462,62 @@ bool DropsUI::onMouse(const MouseEvent &ev)
     return false;
 }
 
+void DropsUI::scrollWaveform(bool LeftOrRight)
+{
+    float leftright = LeftOrRight ? -1.0f : 1.0f;
+    float samples_per_pixel = pow(viewMaxZoom, viewZoom);
+    float length = samples_per_pixel * static_cast<float>(display_width);
+    float samples_to_scroll = static_cast<float>(display_width) * samples_per_pixel * .5 * leftright;
+    viewStart += static_cast<int>(samples_to_scroll);
+    if (viewStart < 0)
+    {
+        viewStart = 0;
+        viewEnd = static_cast<sf_count_t>(length);
+        setMarkers();
+        setScrollbarWidgets();
+        repaint();
+        return;
+    }
+    viewEnd += static_cast<int>(samples_to_scroll);
+    if (viewEnd > waveForm.size())
+    {
+        viewEnd = waveForm.size();
+        viewStart = viewEnd - length;
+        setMarkers();
+        setScrollbarWidgets();
+        repaint();
+        return;
+    }
+    setMarkers();
+    setScrollbarWidgets();
+    repaint();
+}
+
+void DropsUI::setMarkers()
+{
+    float samples_per_pixel = pow(viewMaxZoom, viewZoom);
+    float loopStartPixel = static_cast<float>(sampleLoopStart - viewStart) / samples_per_pixel + static_cast<float>(display_left);
+    float loopEndPixel = static_cast<float>(sampleLoopEnd - viewStart) / samples_per_pixel + static_cast<float>(display_left);
+    fLoopStart->setAbsoluteX(loopStartPixel - 32);
+    fLoopEnd->setAbsoluteX(loopEndPixel);
+
+    float sampleInPixel = static_cast<float>(sampleIn - viewStart) / samples_per_pixel + static_cast<float>(display_left);
+    float sampleOutPixel = static_cast<float>(sampleOut - viewStart) / samples_per_pixel + static_cast<float>(display_left);
+    fSampleIn->setAbsoluteX(sampleInPixel - 32);
+    fSampleOut->setAbsoluteX(sampleOutPixel);
+}
+
+void DropsUI::setScrollbarWidgets()
+{
+    double samples_per_pixel = waveForm.size() / (double)display_width;
+    int leftPixel = viewStart / samples_per_pixel + display_left;
+    int rightPixel = viewEnd / samples_per_pixel + display_left;
+    fScrollBarHandle->setWidth(rightPixel - leftPixel);
+    fScrollBarHandle->setAbsoluteX(leftPixel);
+    fScrollBarLeft->setWidth(leftPixel - display_left);
+    fScrollBarRight->setWidth(display_right - rightPixel);
+    fScrollBarRight->setAbsoluteX(rightPixel);
+}
 bool DropsUI::onScroll(const ScrollEvent &ev)
 {
     // is the pointer in the display
@@ -510,22 +589,18 @@ bool DropsUI::onScroll(const ScrollEvent &ev)
     }
     samples_per_pixel = pow(viewMaxZoom, viewZoom);
     viewStart = start < 0 ? 0 : start;
+    /*
     double spp = waveForm.size() / (double)display_width;
-    int leftPixel = viewStart / spp;
-    int rightPixel = viewEnd / spp;
-    fScrollBar->setWidth(rightPixel - leftPixel);
-    fScrollBar->setAbsoluteX(leftPixel);
-
-    float loopStartPixel = static_cast<float>(sampleLoopStart - viewStart) / samples_per_pixel;
-    float loopEndPixel = static_cast<float>(sampleLoopEnd - viewStart) / samples_per_pixel;
-    fLoopStart->setAbsoluteX(loopStartPixel - 32);
-    fLoopEnd->setAbsoluteX(loopEndPixel);
-
-    float sampleInPixel = static_cast<float>(sampleIn - viewStart) / samples_per_pixel;
-    float sampleOutPixel = static_cast<float>(sampleOut - viewStart) / samples_per_pixel;
-    fSampleIn->setAbsoluteX(sampleInPixel - 32);
-    fSampleOut->setAbsoluteX(sampleOutPixel);
-
+    int leftPixel = viewStart / spp + display_left;
+    int rightPixel = viewEnd / spp + display_left;
+    fScrollBarHandle->setWidth(rightPixel - leftPixel);
+    fScrollBarHandle->setAbsoluteX(leftPixel);
+    fScrollBarLeft->setWidth(leftPixel - display_left);
+    fScrollBarRight->setWidth(display_right - rightPixel);
+    fScrollBarRight->setAbsoluteX(rightPixel);
+    */
+    setScrollbarWidgets();
+    setMarkers();
     repaint();
     return true;
 }
@@ -555,14 +630,8 @@ bool DropsUI::onMotion(const MotionEvent &ev)
             viewEnd = waveForm.size();
             viewStart = (float)waveForm.size() - (float)display_width * pow(viewMaxZoom, viewZoom);
         }
-        int leftPixel = (float)viewStart / samples_per_pixel;
-        fScrollBar->setAbsoluteX(leftPixel);
-
-        // loop points
-        float loopStartPixel = static_cast<float>(sampleLoopStart - viewStart) / pow(viewMaxZoom, viewZoom);
-        fLoopStart->setAbsoluteX(loopStartPixel - 32);
-        float loopEndPixel = static_cast<float>(sampleLoopEnd - viewStart) / pow(viewMaxZoom, viewZoom);
-        fLoopEnd->setAbsoluteX(loopEndPixel);
+        setScrollbarWidgets();
+        setMarkers();
         repaint();
     }
 
@@ -573,7 +642,7 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         float samples_per_pixel = pow(viewMaxZoom, viewZoom);
         sampleLoopStart = static_cast<float>(sampleLoopStart) + distance * samples_per_pixel;
         sampleLoopStart = clamp<sf_count_t>(sampleLoopStart, sampleLoopEnd - 1, sampleIn);
-        float loopStartPixel = static_cast<float>(sampleLoopStart - viewStart) / samples_per_pixel;
+        float loopStartPixel = static_cast<float>(sampleLoopStart - viewStart) / samples_per_pixel + static_cast<float>(display_left);
         fLoopStart->setAbsoluteX(loopStartPixel - 32);
         repaint();
     }
@@ -585,7 +654,7 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         float samples_per_pixel = pow(viewMaxZoom, viewZoom);
         sampleLoopEnd = static_cast<float>(sampleLoopEnd) + distance * samples_per_pixel;
         sampleLoopEnd = clamp<sf_count_t>(sampleLoopEnd, sampleOut, sampleLoopStart + 1);
-        float loopEndPixel = static_cast<float>(sampleLoopEnd - viewStart) / samples_per_pixel;
+        float loopEndPixel = static_cast<float>(sampleLoopEnd - viewStart) / samples_per_pixel + static_cast<float>(display_left);
         fLoopEnd->setAbsoluteX(loopEndPixel);
         repaint();
     }
@@ -597,7 +666,7 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         float samples_per_pixel = pow(viewMaxZoom, viewZoom);
         sampleIn = static_cast<float>(sampleIn) + distance * samples_per_pixel;
         sampleIn = clamp<sf_count_t>(sampleIn, sampleOut - 1, 0);
-        float sampleInPixel = static_cast<float>(sampleIn - viewStart) / samples_per_pixel;
+        float sampleInPixel = static_cast<float>(sampleIn - viewStart) / samples_per_pixel + static_cast<float>(display_left);
         fSampleIn->setAbsoluteX(sampleInPixel - 32);
         repaint();
     }
@@ -609,7 +678,7 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         float samples_per_pixel = pow(viewMaxZoom, viewZoom);
         sampleOut = static_cast<float>(sampleOut) + distance * samples_per_pixel;
         sampleOut = clamp<sf_count_t>(sampleOut, waveForm.size(), sampleIn + 1);
-        float sampleOutPixel = static_cast<float>(sampleOut - viewStart) / samples_per_pixel;
+        float sampleOutPixel = static_cast<float>(sampleOut - viewStart) / samples_per_pixel + static_cast<float>(display_left);
         fSampleOut->setAbsoluteX(sampleOutPixel);
         repaint();
     }
@@ -630,8 +699,20 @@ void DropsUI::scrollBarClicked(ScrollBar *scrollBar, bool dragging)
     uint id = scrollBar->getId();
     switch ((id))
     {
-    case scrollbar_id:
+    case scrollbarHandle_id:
         scrollbarDragging = dragging;
+        break;
+    case scrollbarLeft_id:
+        if (!dragging)
+        {
+            scrollWaveform(true);
+        }
+        break;
+    case scrollbarRight_id:
+        if (!dragging)
+        {
+            scrollWaveform(false);
+        }
         break;
     case kSampleLoopStart:
         loopstartDragging = dragging;
@@ -644,7 +725,7 @@ void DropsUI::scrollBarClicked(ScrollBar *scrollBar, bool dragging)
         break;
     case kSampleOut:
         sampleOutDragging = dragging;
-
+        break;
     default:
         break;
     }

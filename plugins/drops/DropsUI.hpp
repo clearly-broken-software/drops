@@ -40,13 +40,17 @@ private:
     }
 
     ScopedPointer<TextButton> fFileOpenButton;
-    ScopedPointer<ScrollBar> fScrollBar, fLoopStart, fLoopEnd, fSampleIn, fSampleOut;
+    ScopedPointer<ScrollBar> fScrollBarHandle, fLoopStart, fLoopEnd, fSampleIn, fSampleOut, fScrollBarLeft, fScrollBarRight;
     NanoImage imgLoopStart, imgLoopEnd;
+    void initWidgets();
     int loadSample(const char *fp);
     void drawWaveform();
     void drawMinimap();
     void drawLoopMarkers();
     void drawInOutMarkers();
+    void scrollWaveform( bool leftright);
+    void setMarkers();
+    void setScrollbarWidgets();
     bool scrollbarDragging, loopstartDragging, loopendDragging, sampleInDragging, sampleOutDragging;
     bool sampleLoaded;
     char *filepath;
@@ -65,15 +69,18 @@ private:
     int mouseX, mouseY;
     Rectangle<int> display;
 
-    static constexpr unsigned int display_left = 0;
+    static constexpr unsigned int display_left = 32;
     static constexpr unsigned int display_top = 100;
-    static constexpr unsigned int display_width = 1000;
+    static constexpr unsigned int display_width = 1000 - 64 ;
     static constexpr unsigned int display_right = display_left + display_width;
     static constexpr unsigned int display_height = 190;
     static constexpr unsigned int display_bottom = display_top + display_height;
     static constexpr unsigned int display_center = (display_bottom - display_top) / 2 + display_top;
     static constexpr unsigned int minimap_height = 35;
-    static constexpr unsigned int scrollbar_id = 900;
+    static constexpr unsigned int scrollbarHandle_id = 900;
+    static constexpr unsigned int scrollbarLeft_id = 901;
+    static constexpr unsigned int scrollbarRight_id = 902;
+    
     static constexpr unsigned int sample_inout_font_size = 12;
 
     DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DropsUI)

@@ -31,7 +31,7 @@ bool ScrollBar::onMouse(const MouseEvent &ev)
 
 void ScrollBar::onNanoDisplay()
 {
-    /*    
+    #ifdef DEBUG   
     int w = getWidth();
     int h = getHeight();
     beginPath();
@@ -40,7 +40,8 @@ void ScrollBar::onNanoDisplay()
     rect(1, 1, w-2, h-2);
     stroke();
     closePath();
-    */
+    #endif
+    
 }
 
 void ScrollBar::setCallback(Callback *cb)

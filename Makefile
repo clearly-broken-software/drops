@@ -8,7 +8,6 @@ include dpf/Makefile.base.mk
 
 
 all: dgl plugins gen
-clean: sfizz-clean
 plugins: sfizz-lib
 include sfizz/dpf.mk
 # --------------------------------------------------------------
@@ -41,6 +40,7 @@ clean:
 	$(MAKE) clean -C plugins/drops
 	rm -rf bin build
 
+cleanall:clean sfizz-clean
 # --------------------------------------------------------------
 
 .PHONY: plugins
