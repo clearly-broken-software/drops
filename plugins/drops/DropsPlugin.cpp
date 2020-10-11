@@ -28,10 +28,11 @@ START_NAMESPACE_DISTRHO
 
 // -----------------------------------------------------------------------------
 
-DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 0)
+DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 1)
 {
 
     sampleRate = getSampleRate();
+    sampleLoaded = false;
     synth.setSampleRate(sampleRate);
     synth.loadSfzFile("/home/rob/git/drops/plugins/drops/res/basic.sfz");
     synth.setNumVoices(16);
@@ -422,6 +423,13 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.ranges.def = 0.0f;
         parameter.hints = kParameterIsAutomable;
         break;
+    case kSampleLoaded:
+        parameter.name = "Sample Loaded";
+        parameter.symbol = "sampleloaded";
+        parameter.ranges.min = 0.0f;
+        parameter.ranges.max = 1.0f;
+        parameter.ranges.def = 0.0f;
+        parameter.hints = kParameterIsBoolean | kParameterIsOutput;
 
     default:
         break;
@@ -560,7 +568,12 @@ float DropsPlugin::getParameterValue(uint32_t index) const
     case kFilterLFOSync:
         val = fFilterLFOSync;
         break;
+    case kSampleLoaded:
+        val = sampleLoaded;
+        break;
+
     default:
+        printf("Unknown parameter: %i\n", index);
         break;
     }
     return val;
@@ -704,27 +717,115 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
 
 void DropsPlugin::setState(const char *key, const char *value)
 {
+    if(strcmp(key, "ui_sample_loaded") == 0)
+    {
+        sampleLoaded = false;
+    }
     if (strcmp(key, "filepath") == 0)
     {
         path = std::string(value);
         std::cout << path << std::endl;
+        loadSample(value);
         makeSFZ();
     }
 }
 
-String DropsPlugin::getState(const char *) const
+String DropsPlugin::getState(const char * key) const
 {
     const String foo = String("Describe it");
     return foo;
 };
 
-void DropsPlugin::initState(unsigned int key, String &val, String &def)
+void DropsPlugin::initState(unsigned int index, String &stateKey, String &defaultStateValue)
 {
-
-    if (key == 0)
+    switch (index)
     {
-        val = String("filepath");
+    case 0:
+        stateKey = "filepath";
+        defaultStateValue = "empty";
+        break;
+    case 1:
+        stateKey = "ui_sample_loaded";
+        defaultStateValue = "false";
+        break;
+
+    default:
+        printf("initState %i\n", index);
+        break;
     }
+}
+
+int DropsPlugin::loadSample(const char *fp)
+{
+    // init waveform and miniMap
+    waveForm.resize(0);
+    miniMap.resize(0);
+
+    int file_samplerate(0);
+    SndfileHandle fileHandle(fp);
+
+    // get the number of frames in the sample
+    sf_count_t sampleLength = fileHandle.frames();
+    if (sampleLength == 0)
+    {
+        //file doesn't exist or is of incompatible type, main handles the -1
+        printf("Can't load sample %s \n", fp);
+        sampleLoaded = false;
+        return -1;
+    }
+    // get some more info of the sample
+    int sampleChannels = fileHandle.channels();
+    file_samplerate = fileHandle.samplerate();
+
+    // get max value
+    double max_val;
+    fileHandle.command(SFC_CALC_NORM_SIGNAL_MAX, &max_val, sizeof(max_val));
+    // normalize factor
+    float ratio = max_val > 1.0f ? 1.0f : 1.0f / max_val;
+
+    // resize vector
+    std::vector<float> sample;
+    sample.resize(sampleLength * sampleChannels);
+    // load sample memory in samplevector
+    fileHandle.read(&sample.at(0), sampleLength * sampleChannels);
+    // sum to mono if needed
+    sf_count_t size = sampleLength;
+    if (sampleChannels == 2)
+    { // sum to mono
+
+        for (int i = 0, j = 0; i < size; i++)
+        {
+            float sum_mono = (sample[j] + sample[j + 1]) * 0.5f;
+            waveForm.push_back((sum_mono * ratio) * float(display_height / 2));
+            j += 2;
+        }
+    }
+    else
+    {
+        waveForm.resize(size);
+        for (int i = 0; i < size; i++)
+        {
+            waveForm[i] = (sample[i] * ratio) * float(display_height / 2);
+        }
+    }
+
+    // make minimap
+    miniMap.resize(display_width);
+    float samples_per_pixel = static_cast<float>(sampleLength) / (float)display_width;
+    float fIndex;
+    uint iIndex;
+    for (uint16_t i = 0; i < display_width; i++)
+    {
+        fIndex = float(i) * samples_per_pixel;
+        iIndex = fIndex;
+        auto minmax = std::minmax_element(waveForm.begin() + iIndex, waveForm.begin() + iIndex + int(samples_per_pixel));
+        signed char min = std::abs(*minmax.first);
+        signed char max = std::abs(*minmax.second);
+        signed char maxValue = std::max(min, max);
+        miniMap[i] = (float)maxValue / (float)(display_height / 2) * (float)minimap_height;
+    }
+    sampleLoaded = true;
+    return 0;
 }
 
 void DropsPlugin::makeSFZ()

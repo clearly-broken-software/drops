@@ -21,6 +21,7 @@
 #include <sfizz.hpp>
 #include <iostream>
 #include "DistrhoPluginInfo.h"
+#include <sndfile.hh>
 START_NAMESPACE_DISTRHO
 
 // -----------------------------------------------------------------------
@@ -92,9 +93,13 @@ protected:
 
 private:
     void makeSFZ();
+    int loadSample(const char *fp);
+    bool sampleLoaded;
     std::string path;
     double sampleRate;
     sfz::Sfizz synth;
+    std::vector<signed char> waveForm;
+    std::vector<char> miniMap;
 
     // Parameters
     //  common     */
@@ -109,14 +114,14 @@ private:
         fAmpLFOType, fAmpLFOFreq, fAmpLFODepth, fAmpLFOSync;
     //  pitch tab */
     float fPitchEGAttack, fPitchEgDecay, fPitchEgSustain, fPitchEgRelease,
-        fPitchEgDepth, fPitchLFOType, fPitchLFOFreq, fPitchLFODepth, 
+        fPitchEgDepth, fPitchLFOType, fPitchLFOFreq, fPitchLFODepth,
         fPitchLFOSync;
     //  filter tab  */
     float fFilterType, fFilterCutOff, fFilterResonance,
         fFilterEGAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease,
         fFilterEgDepth, fFilterLFOType, fFilterLFOFreq, fFilterLFODepth,
         fFilterLFOSync;
-
+    friend class DropsUI;
     /*
      * Set our plugin class as non-copyable and add a leak detector just in case.
     */

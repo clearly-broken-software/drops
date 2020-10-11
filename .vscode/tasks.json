@@ -25,6 +25,12 @@
             "problemMatcher": []
         },
         {
+            "label": "clean all",
+            "type": "shell",
+            "command": "make cleanall",
+            "problemMatcher": []
+        },
+        {
             "label": "run",
             "type": "shell",
             "command": "./bin/drops",

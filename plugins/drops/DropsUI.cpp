@@ -13,7 +13,11 @@ DropsUI::DropsUI()
     : UI(1000, 700)
 {
     loadSharedResources();
+    plugin = static_cast<DropsPlugin *>(getPluginInstancePointer());
+    waveForm = &plugin->waveForm;
+    miniMap = &plugin->miniMap;
     sampleLoaded = false;
+    showWaveForm=false;
     loopstartDragging = false;
     loopendDragging = false;
     scrollbarDragging = false;
@@ -90,87 +94,40 @@ void DropsUI::initWidgets()
 
 void DropsUI::parameterChanged(uint32_t index, float value)
 {
+    switch (index)
+    {
+    case kSampleLoaded:
+    {
+        bool oldSampleLoaded = sampleLoaded;
+        if (static_cast<bool>(value) == oldSampleLoaded)
+        {
+            break;
+        }
+        sampleLoaded = value;
+        if (sampleLoaded)
+        {
+            loadSample();
+        }
+
+        break;
+    }
+    default:
+        break;
+    }
     //printf("DropsUI::parameterChanged(%i, %f)\n", index, value);
 }
 
-int DropsUI::loadSample(const char *fp)
+int DropsUI::loadSample()
 {
-    // init waveform and miniMap
-    waveForm.resize(0);
-    miniMap.resize(0);
-
-    int file_samplerate(0);
-    SndfileHandle fileHandle(fp);
-
-    // get the number of frames in the sample
-    sampleLength = fileHandle.frames();
-    if (sampleLength == 0)
-    {
-        //file doesn't exist or is of incompatible type, main handles the -1
-        printf("Can't load sample %s \n", fp);
-        return -1;
-    }
-    // get some more info of the sample
-    sampleChannels = fileHandle.channels();
-    file_samplerate = fileHandle.samplerate();
-
-    // get max value
-    double max_val;
-    fileHandle.command(SFC_CALC_NORM_MAX_ALL_CHANNELS, &max_val, sizeof(max_val));
-    // normalize factor
-    float ratio = max_val > 1.0f ? 1.0f : 1.0f / max_val;
-
-    // resize vector
-    std::vector<float> sample;
-    sample.resize(sampleLength * sampleChannels);
-    // load sample memory in samplevector
-    fileHandle.read(&sample.at(0), sampleLength * sampleChannels);
-    // sum to mono if needed
-    sf_count_t size = sampleLength;
-    if (sampleChannels == 2)
-    { // sum to mono
-
-        for (int i = 0, j = 0; i < size; i++)
-        {
-            float sum_mono = (sample[j] + sample[j + 1]) * 0.5f;
-            waveForm.push_back((sum_mono * ratio) * float(display_height / 2));
-            j += 2;
-        }
-    }
-    else
-    {
-        waveForm.resize(size);
-        for (int i = 0; i < size; i++)
-        {
-            waveForm[i] = (sample[i] * ratio) * float(display_height / 2);
-        }
-    }
 
     viewStart = 0;
-    viewEnd = waveForm.size();
+    viewEnd = waveForm->size();
     viewZoom = 1.0f;
-    viewMaxZoom = float(waveForm.size()) / float(display_width);
-    sampleLoaded = true;
+    viewMaxZoom = float(waveForm->size()) / float(display_width);
 
     // make minimap
-
-    miniMap.resize(display_width);
-    double view = viewEnd - viewStart;
-    double samples_per_pixel = view / (double)display_width;
-    float fIndex;
-    uint iIndex;
-    for (uint16_t i = 0; i < display_width; i++)
-    {
-        fIndex = float(viewStart) + (float(i) * samples_per_pixel);
-        iIndex = fIndex;
-        auto minmax = std::minmax_element(waveForm.begin() + iIndex, waveForm.begin() + iIndex + int(samples_per_pixel));
-
-        signed char min = std::abs(*minmax.first);
-        signed char max = std::abs(*minmax.second);
-        signed char maxValue = std::max(min, max);
-        miniMap[i] = (float)maxValue / (float)(display_height / 2) * (float)minimap_height;
-    }
     /* FIXME : only set this when there are loop points */
+    float samples_per_pixel = static_cast<float>(waveForm->size()) / static_cast<float>(display_width);
     float loopStartPixel = static_cast<float>(sampleLoopStart) / samples_per_pixel + static_cast<float>(display_left);
     float loopEndPixel = static_cast<float>(sampleLoopEnd) / samples_per_pixel + static_cast<float>(display_left);
     float sampleInPixel = static_cast<float>(sampleIn) / samples_per_pixel + static_cast<float>(display_left);
@@ -184,6 +141,8 @@ int DropsUI::loadSample(const char *fp)
     fLoopEnd->show();
     fSampleIn->show();
     fSampleOut->show();
+    setState("ui_sample_loaded","true");
+    showWaveForm = true;
 
     return 0;
 }
@@ -204,7 +163,7 @@ void DropsUI::onNanoDisplay()
     fill();
     closePath();
 
-    if (sampleLoaded)
+    if (showWaveForm)
     {
         drawWaveform();
         drawMinimap();
@@ -231,7 +190,7 @@ void DropsUI::drawWaveform()
     {
         fIndex = float(viewStart) + (float(i) * samples_per_pixel);
         iIndex = fIndex;
-        auto minmax = std::minmax_element(waveForm.begin() + iIndex, waveForm.begin() + iIndex + int(samples_per_pixel));
+        auto minmax = std::minmax_element(waveForm->begin() + iIndex, waveForm->begin() + iIndex + int(samples_per_pixel));
         uint16_t min = *minmax.first + display_center;
         uint16_t max = *minmax.second + display_center;
         lineTo(i + display_left, min);
@@ -261,13 +220,13 @@ void DropsUI::drawMinimap()
     for (int i = 0; i < display_width; i++)
     {
         moveTo(i + display_left, display_bottom + minimap_height);
-        lineTo(i + display_left, display_bottom + minimap_height - miniMap[i]);
+        lineTo(i + display_left, display_bottom + minimap_height - miniMap->at(i));
     }
     stroke();
     closePath();
 
     // draw "handlebar"
-    double samples_per_pixel = waveForm.size() / (double)display_width;
+    double samples_per_pixel = waveForm->size() / (double)display_width;
     int leftPixel = static_cast<float>(viewStart) / samples_per_pixel + static_cast<float>(display_left);
     int rightPixel = static_cast<float>(viewEnd) / samples_per_pixel + static_cast<float>(display_left);
     // darken left of the bar
@@ -439,17 +398,13 @@ void DropsUI::uiFileBrowserSelected(const char *filename)
 
         fFileOpenButton->setText(filename);
         setState("filepath", filename);
-        loadSample(filename);
         repaint();
     }
 }
 
 void DropsUI::stateChanged(const char *key, const char *)
 {
-    if (strcmp(key, "filepath") == 0)
-    {
-        printf("state changed... do something?\n");
-    }
+    printf("state changed... do something?\n");
 }
 
 bool DropsUI::onMouse(const MouseEvent &ev)
@@ -459,6 +414,7 @@ bool DropsUI::onMouse(const MouseEvent &ev)
         {
             mouseX = ev.pos.getX();
         }
+
     return false;
 }
 
@@ -479,9 +435,9 @@ void DropsUI::scrollWaveform(bool LeftOrRight)
         return;
     }
     viewEnd += static_cast<int>(samples_to_scroll);
-    if (viewEnd > waveForm.size())
+    if (viewEnd > waveForm->size())
     {
-        viewEnd = waveForm.size();
+        viewEnd = waveForm->size();
         viewStart = viewEnd - length;
         setMarkers();
         setScrollbarWidgets();
@@ -509,7 +465,7 @@ void DropsUI::setMarkers()
 
 void DropsUI::setScrollbarWidgets()
 {
-    double samples_per_pixel = waveForm.size() / (double)display_width;
+    double samples_per_pixel = waveForm->size() / (double)display_width;
     int leftPixel = viewStart / samples_per_pixel + display_left;
     int rightPixel = viewEnd / samples_per_pixel + display_left;
     fScrollBarHandle->setWidth(rightPixel - leftPixel);
@@ -528,7 +484,7 @@ bool DropsUI::onScroll(const ScrollEvent &ev)
         return false; // get outta here
     }
 
-    if (waveForm.size() <= display_width)
+    if (waveForm->size() <= display_width)
         return false; // can't zoom anyway
 
     x -= display_left; // off set in pixels
@@ -563,7 +519,7 @@ bool DropsUI::onScroll(const ScrollEvent &ev)
     else if (scroll_delta != 0.0)
     {
         if ((scroll_delta < 0 && viewStart == 0) ||
-            (scroll_delta > 0 && viewEnd == waveForm.size()))
+            (scroll_delta > 0 && viewEnd == waveForm->size()))
         {
             // can't scroll any further
             return false;
@@ -582,15 +538,15 @@ bool DropsUI::onScroll(const ScrollEvent &ev)
     uint length = int(samples_per_pixel * float(display_width));
 
     viewEnd = start + length;
-    if (viewEnd > waveForm.size())
+    if (viewEnd > waveForm->size())
     {
-        viewEnd = waveForm.size();
+        viewEnd = waveForm->size();
         start = viewEnd - length;
     }
     samples_per_pixel = pow(viewMaxZoom, viewZoom);
     viewStart = start < 0 ? 0 : start;
     /*
-    double spp = waveForm.size() / (double)display_width;
+    double spp = waveForm->size() / (double)display_width;
     int leftPixel = viewStart / spp + display_left;
     int rightPixel = viewEnd / spp + display_left;
     fScrollBarHandle->setWidth(rightPixel - leftPixel);
@@ -611,7 +567,7 @@ bool DropsUI::onMotion(const MotionEvent &ev)
     {
         int distance = ev.pos.getX() - mouseX;
         mouseX = ev.pos.getX();
-        float samples_per_pixel = waveForm.size() / (double)display_width;
+        float samples_per_pixel = waveForm->size() / (double)display_width;
         int underflowcheck = viewStart + (float(distance) * samples_per_pixel);
         if (underflowcheck < 0)
         {
@@ -625,10 +581,10 @@ bool DropsUI::onMotion(const MotionEvent &ev)
             viewEnd = viewEnd + ((float)distance * samples_per_pixel);
         }
 
-        if (viewEnd > waveForm.size())
+        if (viewEnd > waveForm->size())
         {
-            viewEnd = waveForm.size();
-            viewStart = (float)waveForm.size() - (float)display_width * pow(viewMaxZoom, viewZoom);
+            viewEnd = waveForm->size();
+            viewStart = (float)waveForm->size() - (float)display_width * pow(viewMaxZoom, viewZoom);
         }
         setScrollbarWidgets();
         setMarkers();
@@ -644,6 +600,8 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         sampleLoopStart = clamp<sf_count_t>(sampleLoopStart, sampleLoopEnd - 1, sampleIn);
         float loopStartPixel = static_cast<float>(sampleLoopStart - viewStart) / samples_per_pixel + static_cast<float>(display_left);
         fLoopStart->setAbsoluteX(loopStartPixel - 32);
+        float value = static_cast<float>(sampleLoopStart) / static_cast<float>(waveForm->size());
+        setParameterValue(kSampleLoopStart, value);
         repaint();
     }
 
@@ -677,7 +635,7 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         mouseX = ev.pos.getX();
         float samples_per_pixel = pow(viewMaxZoom, viewZoom);
         sampleOut = static_cast<float>(sampleOut) + distance * samples_per_pixel;
-        sampleOut = clamp<sf_count_t>(sampleOut, waveForm.size(), sampleIn + 1);
+        sampleOut = clamp<sf_count_t>(sampleOut, waveForm->size(), sampleIn + 1);
         float sampleOutPixel = static_cast<float>(sampleOut - viewStart) / samples_per_pixel + static_cast<float>(display_left);
         fSampleOut->setAbsoluteX(sampleOutPixel);
         repaint();
