@@ -40,9 +40,9 @@ DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 1)
     fPolyphony = 0.0f;
     fGain = 0.0f;
     fSampleIn = 0.0f;
-    fSampleOut = 0.0f;
+    fSampleOut = 1.0f;
     fSampleLoopStart = 0.0f;
-    fSampleLoopEnd = 0.0f;
+    fSampleLoopEnd = 1.0f;
     fSampleXFade = 0.0f;
     fSampleNormalize = 0.0f;
     fSamplePitchKeyCenter = 0.0f;
@@ -78,6 +78,7 @@ DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 1)
     fFilterLFOFreq = 0.0f;
     fFilterLFODepth = 0.0f;
     fFilterLFOSync = 0.0f;
+    initSFZ();
 }
 
 // --  PARAMETERS  -------------------------------------------------------------
@@ -124,7 +125,7 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.symbol = "sample_out";
         parameter.ranges.min = 0.0f;
         parameter.ranges.max = 1.0f;
-        parameter.ranges.def = 0.0f;
+        parameter.ranges.def = 1.0f;
         parameter.hints = kParameterIsAutomable;
         break;
     case kSampleLoopStart:
@@ -140,7 +141,7 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.symbol = "sample_loop_end";
         parameter.ranges.min = 0.0f;
         parameter.ranges.max = 1.0f;
-        parameter.ranges.def = 0.0f;
+        parameter.ranges.def = 1.0f;
         parameter.hints = kParameterIsAutomable;
         break;
     case kSampleXFade:
@@ -452,7 +453,9 @@ float DropsPlugin::getParameterValue(uint32_t index) const
         val = fGain;
         break;
     case kSampleIn:
+    {
         val = fSampleIn;
+    }
         break;
     case kSampleOut:
         val = fSampleOut;
@@ -594,15 +597,19 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         break;
     case kSampleIn:
         fSampleIn = value;
+        makeSFZ();
         break;
     case kSampleOut:
         fSampleOut = value;
+        makeSFZ();
         break;
     case kSampleLoopStart:
         fSampleLoopStart = value;
+        makeSFZ();
         break;
     case kSampleLoopEnd:
         fSampleLoopEnd = value;
+        makeSFZ();
         break;
     case kSampleXFade:
         fSampleXFade = value;
@@ -717,7 +724,7 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
 
 void DropsPlugin::setState(const char *key, const char *value)
 {
-    if(strcmp(key, "ui_sample_loaded") == 0)
+    if (strcmp(key, "ui_sample_loaded") == 0)
     {
         sampleLoaded = false;
     }
@@ -730,7 +737,7 @@ void DropsPlugin::setState(const char *key, const char *value)
     }
 }
 
-String DropsPlugin::getState(const char * key) const
+String DropsPlugin::getState(const char *key) const
 {
     const String foo = String("Describe it");
     return foo;
@@ -765,7 +772,7 @@ int DropsPlugin::loadSample(const char *fp)
     SndfileHandle fileHandle(fp);
 
     // get the number of frames in the sample
-    sf_count_t sampleLength = fileHandle.frames();
+    sampleLength = fileHandle.frames();
     if (sampleLength == 0)
     {
         //file doesn't exist or is of incompatible type, main handles the -1
@@ -828,55 +835,121 @@ int DropsPlugin::loadSample(const char *fp)
     return 0;
 }
 
+void DropsPlugin::initSFZ()
+{
+    opcodes["default_path"] = "";
+    opcodes["ampeg_attack"] = "0";
+    opcodes["ampeg_attack_oncc2010"] = "10";
+    opcodes["ampeg_decay"] = "0";
+    opcodes["ampeg_decay_oncc202"] = "10";
+    opcodes["ampeg_sustain"] = "100";
+    opcodes["ampeg_sustain_oncc203"] = "-100";
+    opcodes["ampeg_release"] = "1";
+    opcodes["ampeg_release_oncc204"] = "10";
+    opcodes["fil_type"] = "lpf_2p";
+    opcodes["cutoff"] = "20";
+    opcodes["cutoff_oncc310"] = "9600";
+    opcodes["resonance"] = "0";
+    opcodes["resonance_oncc311"] = "20";
+    opcodes["fileg_depth"] = "9600";
+    opcodes["fileg_attack"] = "0";
+    opcodes["fileg_attack_oncc301"] = "10";
+    opcodes["fileg_decay"] = "0";
+    opcodes["fileg_decay_oncc302"] = "10";
+    opcodes["fileg_sustain"] = "100";
+    opcodes["fileg_sustain_oncc303"] = "-100";
+    opcodes["fileg_release"] = "0.1";
+    opcodes["fileg_release_oncc304"] = "10";
+    opcodes["pitcheg_depth"] = "1200";
+    opcodes["pitcheg_attack"] = "0";
+    opcodes["pitcheg_attack_oncc401"] = "10";
+    opcodes["pitcheg_decay"] = "0";
+    opcodes["pitcheg_decay_oncc402"] = "10";
+    opcodes["pitcheg_sustain"] = "0";
+    opcodes["pitcheg_sustain_oncc403"] = "100";
+    opcodes["pitcheg_release"] = "0.001";
+    opcodes["pitcheg_release_oncc404"] = "10";
+    opcodes["trigger"] = "attack";
+    opcodes["loop_mode"] = "no_loop";
+    opcodes["loop_start"] = "0";
+    opcodes["loop_end"] = "4294967296";
+    opcodes["sample"] = "";
+    opcodes["lokey"] = "0";
+    opcodes["hikey"] = "127";
+    opcodes["pitch_keycenter"] = "c4";
+    opcodes["offset"] = "0";
+    opcodes["end"] = "4294967296";
+
+}
+
 void DropsPlugin::makeSFZ()
 {
-    const char foo[] =
-        "<control>\n"
-        "default_path=\n"
-        "<global>\n"
-        "<group>\n"
-        "ampeg_attack=0\n"
-        "ampeg_attack_oncc201=10\n"
-        "ampeg_decay=0\n"
-        "ampeg_decay_oncc202=10\n"
-        "ampeg_sustain=100\n"
-        "ampeg_sustain_oncc203=-100\n"
-        "ampeg_release=1\n"
-        "ampeg_release_oncc204=10\n"
-        // filter
-        "fil_type=lpf_2p\n"
-        "cutoff=20\n"
-        "cutoff_oncc310=9600\n"
-        "resonance=0\n"
-        "resonance_oncc311=20\n"
-        // filter ADSR
-        "fileg_depth=9600\n"
-        "fileg_attack=0\n"
-        "fileg_attack_oncc301=10\n"
-        "fileg_decay=0\n"
-        "fileg_decay_oncc302=10\n"
-        "fileg_sustain=100\n"
-        "fileg_sustain_oncc303=-100\n"
-        "fileg_release=0.1\n"
-        "fileg_release_oncc304=10\n"
-        // pitch ADSR
-        "pitcheg_depth=1200\n"
-        "pitcheg_attack=0\n"
-        "pitcheg_attack_oncc401=10\n"
-        "pitcheg_decay=0\n"
-        "pitcheg_decay_oncc402=10\n"
-        "pitcheg_sustain=0\n"
-        "pitcheg_sustain_oncc403=100\n"
-        "pitcheg_release=0.001\n"
-        "pitcheg_release_oncc404=10\n"
-        "trigger=attack\n"       // or release or first or legato
-        "loop_mode=no_sustain\n" // or loop_continuous or one_shot or loop_sustain
-        "<region> sample=";
-    char bar[] = "lokey=0 hikey=127 pitch_keycenter=a4";
-    char buffer[2048];
-    sprintf(buffer, "%s%s\n%s", foo, path.c_str(), bar);
-    // printf("The SFZ File\n\n %s\n", buffer);
-    synth.loadSfzString("", buffer);
+    const float fSampleLength = static_cast<float>(sampleLength);
+    uint loopstartInFrames = fSampleLength * fSampleLoopStart;
+    uint loopEndInFrames = fSampleLength * fSampleLoopEnd;
+    uint sampleInInFrames = fSampleLength * fSampleIn;
+    uint sampleOutInFrames = fSampleLength * fSampleOut;
+    opcodes["sample"] = path;
+    opcodes["loop_start"] = std::to_string(loopstartInFrames);
+    opcodes["loop_end"] = std::to_string(loopEndInFrames);
+    opcodes["offset"] = std::to_string(sampleInInFrames);
+    opcodes["end"] = std::to_string(sampleOutInFrames);
+    
+    std::stringstream buffer;
+    // amp ADSR
+    buffer << "<control>\n";
+    buffer << "default_path=\n";
+    buffer << "<global>\n";
+    buffer << "<group>\n";
+    buffer << "ampeg_attack=0\n";
+    buffer << "ampeg_attack_oncc201=10\n";
+    buffer << "ampeg_decay=0\n";
+    buffer << "ampeg_decay_oncc202=10\n";
+    buffer << "ampeg_sustain=100\n";
+    buffer << "ampeg_sustain_oncc203=-100\n";
+    buffer << "ampeg_release=1\n";
+    buffer << "ampeg_release_oncc204=10\n";
+    buffer << "fil_type=lpf_2p\n";
+    buffer << "cutoff=20\n";
+    buffer << "cutoff_oncc310=9600\n";
+    buffer << "resonance=0\n";
+    buffer << "resonance_oncc311=20\n";
+    buffer << "fileg_depth=9600\n";
+    buffer << "fileg_attack=0\n";
+    buffer << "fileg_attack_oncc301=10\n";
+    buffer << "fileg_decay=0\n";
+    buffer << "fileg_decay_oncc302=10 \n";
+    buffer << "fileg_sustain=100 \n";
+    buffer << "fileg_sustain_oncc303=-100 \n";
+    buffer << "fileg_release=0.1 \n";
+    buffer << "fileg_release_oncc304=10\n";
+    buffer << "pitcheg_depth=1200\n";
+    buffer << "pitcheg_attack=0 \n";
+    buffer << "pitcheg_attack_oncc401=10\n";
+    buffer << "pitcheg_decay=0\n";
+    buffer << "pitcheg_decay_oncc402=10\n";
+    buffer << "pitcheg_sustain=0\n";
+    buffer << "pitcheg_sustain_oncc403=100\n";
+    buffer << "pitcheg_release=0.001\n";
+    buffer << "pitcheg_release_oncc404=10\n";
+    buffer << "trigger=attack\n";
+    buffer << "loop_mode=loop_sustain\n";
+    buffer << "<region>\n";
+    buffer << "sample=" << opcodes["sample"] << "\n";
+    buffer << "lokey=0\n";
+    buffer << "hikey=127\n";
+    buffer << "pitch_keycenter=c4\n";
+    buffer << "offset=" << opcodes["offset"] << "\n";
+    buffer << "end=" << opcodes["end"] << "\n";
+    buffer << "loop_start=" << opcodes["loop_start"] << "\n";
+    buffer << "loop_end=" << opcodes["loop_end"] << "\n";
+    #ifdef DEBUG
+    std::cout << "----------------- SFZ FILE ------------------\n";
+    std::cout << buffer.str() << std::endl;
+    #endif
+
+   
+    synth.loadSfzString("", buffer.str());
 }
 
 // --  MAIN PLUGIN FUNCTIONS  --------------------------------------------------

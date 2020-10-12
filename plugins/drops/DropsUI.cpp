@@ -614,6 +614,8 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         sampleLoopEnd = clamp<sf_count_t>(sampleLoopEnd, sampleOut, sampleLoopStart + 1);
         float loopEndPixel = static_cast<float>(sampleLoopEnd - viewStart) / samples_per_pixel + static_cast<float>(display_left);
         fLoopEnd->setAbsoluteX(loopEndPixel);
+        float value = static_cast<float>(sampleLoopEnd) / static_cast<float>(waveForm->size());
+        setParameterValue(kSampleLoopEnd, value);
         repaint();
     }
 
@@ -626,6 +628,8 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         sampleIn = clamp<sf_count_t>(sampleIn, sampleOut - 1, 0);
         float sampleInPixel = static_cast<float>(sampleIn - viewStart) / samples_per_pixel + static_cast<float>(display_left);
         fSampleIn->setAbsoluteX(sampleInPixel - 32);
+        float value = static_cast<float>(sampleIn) / static_cast<float>(waveForm->size());
+        setParameterValue(kSampleIn,value);
         repaint();
     }
 
@@ -638,6 +642,8 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         sampleOut = clamp<sf_count_t>(sampleOut, waveForm->size(), sampleIn + 1);
         float sampleOutPixel = static_cast<float>(sampleOut - viewStart) / samples_per_pixel + static_cast<float>(display_left);
         fSampleOut->setAbsoluteX(sampleOutPixel);
+        float value = static_cast<float>(sampleOut) / static_cast<float>(waveForm->size());
+        setParameterValue(kSampleOut,value);
         repaint();
     }
 

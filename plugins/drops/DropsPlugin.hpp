@@ -22,6 +22,10 @@
 #include <iostream>
 #include "DistrhoPluginInfo.h"
 #include <sndfile.hh>
+#include <unordered_map>
+#include <string>  
+#include <iostream> 
+#include <sstream> 
 START_NAMESPACE_DISTRHO
 
 // -----------------------------------------------------------------------
@@ -92,8 +96,10 @@ protected:
     // -------------------------------------------------------------------
 
 private:
+    void initSFZ();
     void makeSFZ();
     int loadSample(const char *fp);
+    sf_count_t sampleLength;
     bool sampleLoaded;
     std::string path;
     double sampleRate;
@@ -121,6 +127,9 @@ private:
         fFilterEGAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease,
         fFilterEgDepth, fFilterLFOType, fFilterLFOFreq, fFilterLFODepth,
         fFilterLFOSync;
+    
+    std::unordered_map<std::string,std::string> opcodes;
+    
     friend class DropsUI;
     /*
      * Set our plugin class as non-copyable and add a leak detector just in case.
