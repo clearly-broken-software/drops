@@ -16,8 +16,8 @@ DropsUI::DropsUI()
     plugin = static_cast<DropsPlugin *>(getPluginInstancePointer());
     waveForm = &plugin->waveForm;
     miniMap = &plugin->miniMap;
-    sampleLoaded = false;
-    showWaveForm=false;
+    sig_sampleLoaded = false;
+    showWaveForm = false;
     loopstartDragging = false;
     loopendDragging = false;
     scrollbarDragging = false;
@@ -32,13 +32,16 @@ DropsUI::DropsUI()
     imgLoopStart = createImageFromMemory((uchar *)artwork::loopstartData, artwork::loopstartDataSize, 1);
     imgLoopEnd = createImageFromMemory((uchar *)artwork::loopendData, artwork::loopendDataSize, 1);
     /* for testing */
-    sampleLoopStart = 14525;
-    sampleLoopEnd = 15525;
-    sampleIn = 3000;
-    sampleOut = 20000;
+    sampleLoopStart = 0;
+    sampleLoopEnd = 0;
+    sampleIn = 0;
+    sampleOut = 0;
     /* ----------- */
-
     initWidgets();
+    if (plugin->loadedSample)
+    {
+        loadSample();
+    }
 }
 
 void DropsUI::initWidgets()
@@ -94,23 +97,41 @@ void DropsUI::initWidgets()
 
 void DropsUI::parameterChanged(uint32_t index, float value)
 {
+    // printf("parameterChanged(%i,%f)\n", index, value);
     switch (index)
     {
     case kSampleLoaded:
     {
-        bool oldSampleLoaded = sampleLoaded;
+        bool oldSampleLoaded = sig_sampleLoaded;
         if (static_cast<bool>(value) == oldSampleLoaded)
         {
             break;
         }
-        sampleLoaded = value;
-        if (sampleLoaded)
+        sig_sampleLoaded = value;
+        if (sig_sampleLoaded)
         {
             loadSample();
         }
 
         break;
     }
+    case kSampleIn:
+        sampleIn = value * static_cast<float>(sampleLength);
+        setMarkers(); // FIXME all markers are set, only one needed :-/
+        break;
+    case kSampleOut:
+        sampleOut = value * static_cast<float>(sampleLength);
+        setMarkers();
+        break;
+    case kSampleLoopStart:
+        sampleLoopStart = value * static_cast<float>(sampleLength);
+        setMarkers();
+        break;
+    case kSampleLoopEnd:
+        sampleLoopEnd = value * static_cast<float>(sampleLength);
+        setMarkers();
+        break;
+
     default:
         break;
     }
@@ -119,15 +140,19 @@ void DropsUI::parameterChanged(uint32_t index, float value)
 
 int DropsUI::loadSample()
 {
-
+    sampleLength = static_cast<sf_count_t>(waveForm->size());
+    sampleIn = 0;
+    sampleOut = sampleLength;
+    sampleLoopStart = 0;
+    sampleLoopEnd = sampleLength;
     viewStart = 0;
-    viewEnd = waveForm->size();
+    viewEnd = sampleLength;
     viewZoom = 1.0f;
-    viewMaxZoom = float(waveForm->size()) / float(display_width);
+    viewMaxZoom = float(sampleLength) / float(display_width);
 
     // make minimap
     /* FIXME : only set this when there are loop points */
-    float samples_per_pixel = static_cast<float>(waveForm->size()) / static_cast<float>(display_width);
+    float samples_per_pixel = static_cast<float>(sampleLength) / static_cast<float>(display_width);
     float loopStartPixel = static_cast<float>(sampleLoopStart) / samples_per_pixel + static_cast<float>(display_left);
     float loopEndPixel = static_cast<float>(sampleLoopEnd) / samples_per_pixel + static_cast<float>(display_left);
     float sampleInPixel = static_cast<float>(sampleIn) / samples_per_pixel + static_cast<float>(display_left);
@@ -141,7 +166,7 @@ int DropsUI::loadSample()
     fLoopEnd->show();
     fSampleIn->show();
     fSampleOut->show();
-    setState("ui_sample_loaded","true");
+    setState("ui_sample_loaded", "true");
     showWaveForm = true;
 
     return 0;
@@ -629,7 +654,7 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         float sampleInPixel = static_cast<float>(sampleIn - viewStart) / samples_per_pixel + static_cast<float>(display_left);
         fSampleIn->setAbsoluteX(sampleInPixel - 32);
         float value = static_cast<float>(sampleIn) / static_cast<float>(waveForm->size());
-        setParameterValue(kSampleIn,value);
+        setParameterValue(kSampleIn, value);
         repaint();
     }
 
@@ -643,7 +668,7 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         float sampleOutPixel = static_cast<float>(sampleOut - viewStart) / samples_per_pixel + static_cast<float>(display_left);
         fSampleOut->setAbsoluteX(sampleOutPixel);
         float value = static_cast<float>(sampleOut) / static_cast<float>(waveForm->size());
-        setParameterValue(kSampleOut,value);
+        setParameterValue(kSampleOut, value);
         repaint();
     }
 

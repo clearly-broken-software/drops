@@ -54,7 +54,7 @@ private:
     void setMarkers();
     void setScrollbarWidgets();
     bool scrollbarDragging, loopstartDragging, loopendDragging, sampleInDragging, sampleOutDragging;
-    bool sampleLoaded;
+    bool sig_sampleLoaded;
     bool showWaveForm;
     char *filepath;
     sf_count_t sampleLength;

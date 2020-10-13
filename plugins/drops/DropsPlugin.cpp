@@ -28,13 +28,14 @@ START_NAMESPACE_DISTRHO
 
 // -----------------------------------------------------------------------------
 
-DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 1)
+DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 2)
 {
 
     sampleRate = getSampleRate();
-    sampleLoaded = false;
+    sig_sampleLoaded = false;
+    loadedSample = false;
     synth.setSampleRate(sampleRate);
-    synth.loadSfzFile("/home/rob/git/drops/plugins/drops/res/basic.sfz");
+    //synth.loadSfzFile("/home/rob/git/drops/plugins/drops/res/basic.sfz");
     synth.setNumVoices(16);
     fPitchBendDepth = 0.0f;
     fPolyphony = 0.0f;
@@ -572,7 +573,7 @@ float DropsPlugin::getParameterValue(uint32_t index) const
         val = fFilterLFOSync;
         break;
     case kSampleLoaded:
-        val = sampleLoaded;
+        val = sig_sampleLoaded;
         break;
 
     default:
@@ -726,7 +727,7 @@ void DropsPlugin::setState(const char *key, const char *value)
 {
     if (strcmp(key, "ui_sample_loaded") == 0)
     {
-        sampleLoaded = false;
+        sig_sampleLoaded = false;
     }
     if (strcmp(key, "filepath") == 0)
     {
@@ -739,8 +740,12 @@ void DropsPlugin::setState(const char *key, const char *value)
 
 String DropsPlugin::getState(const char *key) const
 {
-    const String foo = String("Describe it");
-    return foo;
+    printf("getState(%s)\n",key);
+    if (strcmp(key,"filepath"));
+    {
+    return String(path.c_str());
+    }
+
 };
 
 void DropsPlugin::initState(unsigned int index, String &stateKey, String &defaultStateValue)
@@ -777,7 +782,7 @@ int DropsPlugin::loadSample(const char *fp)
     {
         //file doesn't exist or is of incompatible type, main handles the -1
         printf("Can't load sample %s \n", fp);
-        sampleLoaded = false;
+        sig_sampleLoaded = false;
         return -1;
     }
     // get some more info of the sample
@@ -831,7 +836,8 @@ int DropsPlugin::loadSample(const char *fp)
         signed char maxValue = std::max(min, max);
         miniMap[i] = (float)maxValue / (float)(display_height / 2) * (float)minimap_height;
     }
-    sampleLoaded = true;
+    sig_sampleLoaded = true;
+    loadedSample = true;
     return 0;
 }
 

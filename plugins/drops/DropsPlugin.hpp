@@ -100,7 +100,8 @@ private:
     void makeSFZ();
     int loadSample(const char *fp);
     sf_count_t sampleLength;
-    bool sampleLoaded;
+    bool sig_sampleLoaded;
+    bool loadedSample;
     std::string path;
     double sampleRate;
     sfz::Sfizz synth;
