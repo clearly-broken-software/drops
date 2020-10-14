@@ -41,13 +41,16 @@ DropsUI::DropsUI()
     if (plugin->loadedSample)
     {
         loadSample();
+        std::string filename = plugin->path;
+        fFileOpenButton->setText(filename);
+
     }
 }
 
 void DropsUI::initWidgets()
 {
     Window &window = getParentWindow();
-    fFileOpenButton = new TextButton(window, Size<uint>(40, 40)); // fixme , remove Size
+    fFileOpenButton = new TextButton(window, Size<uint>(40, 40)); // FIXME: remove Size
     fFileOpenButton->setCallback(this);
     fFileOpenButton->setAbsolutePos(238, 0);
     fFileOpenButton->setSize(530, 55);
@@ -72,13 +75,13 @@ void DropsUI::initWidgets()
 
     fLoopStart = new ScrollBar(window);
     fLoopStart->setId(kSampleLoopStart);
-    fLoopStart->setSize(32, 32); // fixme hardcoded
+    fLoopStart->setSize(32, 32); // FIXME: hardcoded
     fLoopStart->setCallback(this);
     fLoopStart->hide();
 
     fLoopEnd = new ScrollBar(window);
     fLoopEnd->setId(kSampleLoopEnd);
-    fLoopEnd->setSize(32, 32); // fixme hardcoded
+    fLoopEnd->setSize(32, 32); // FIXME: hardcoded
     fLoopEnd->setCallback(this);
     fLoopEnd->hide();
 
@@ -117,7 +120,7 @@ void DropsUI::parameterChanged(uint32_t index, float value)
     }
     case kSampleIn:
         sampleIn = value * static_cast<float>(sampleLength);
-        setMarkers(); // FIXME all markers are set, only one needed :-/
+        setMarkers(); // FIXME: all markers are set, only 1 is needed :-/
         break;
     case kSampleOut:
         sampleOut = value * static_cast<float>(sampleLength);
@@ -151,7 +154,7 @@ int DropsUI::loadSample()
     viewMaxZoom = float(sampleLength) / float(display_width);
 
     // make minimap
-    /* FIXME : only set this when there are loop points */
+    /* FIXME: only set this when there are loop points */
     float samples_per_pixel = static_cast<float>(sampleLength) / static_cast<float>(display_width);
     float loopStartPixel = static_cast<float>(sampleLoopStart) / samples_per_pixel + static_cast<float>(display_left);
     float loopEndPixel = static_cast<float>(sampleLoopEnd) / samples_per_pixel + static_cast<float>(display_left);
