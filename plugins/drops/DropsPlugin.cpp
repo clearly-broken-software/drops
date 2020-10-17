@@ -52,7 +52,7 @@ DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 2)
     fSamplePlayDirection = 0.0f;
     fAmpEGAttack = 0.0f;
     fAmpEgDecay = 0.0f;
-    fAmpEgSustain = 0.0f;
+    fAmpEgSustain = 1.0f;
     fAmpEgRelease = 0.0f;
     fAmpLFOType = 0.0f;
     fAmpLFOFreq = 0.0f;
@@ -181,8 +181,16 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.name = "Playmode";
         parameter.symbol = "playmode";
         parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 1.0f;
+        parameter.ranges.max = 3.0f;
         parameter.ranges.def = 0.0f;
+        parameter.enumValues.count = 4;
+        parameter.enumValues.restrictedMode = true;
+        parameter.enumValues.values = new ParameterEnumerationValue[4]{
+            ParameterEnumerationValue(0.0f, "no_loop"),
+            ParameterEnumerationValue(1.0f, "one_shot"),
+            ParameterEnumerationValue(2.0f, "loop_continuous"),
+            ParameterEnumerationValue(3.0f, "loop_sustain")};
+        
         parameter.hints = kParameterIsAutomable;
         break;
     case kSamplePlayDirection:
@@ -193,7 +201,7 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.ranges.def = 0.0f;
         parameter.hints = kParameterIsAutomable;
         break;
-    case kAmpEGAttack:
+    case kAmpEgAttack:
         parameter.name = "Amp Attack";
         parameter.symbol = "amp_attack";
         parameter.ranges.min = 0.0f;
@@ -214,7 +222,7 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.symbol = "amp_sustain";
         parameter.ranges.min = 0.0f;
         parameter.ranges.max = 1.0f;
-        parameter.ranges.def = 0.0f;
+        parameter.ranges.def = 1.0f;
         parameter.hints = kParameterIsAutomable;
         break;
     case kAmpEgRelease:
@@ -457,7 +465,7 @@ float DropsPlugin::getParameterValue(uint32_t index) const
     {
         val = fSampleIn;
     }
-        break;
+    break;
     case kSampleOut:
         val = fSampleOut;
         break;
@@ -485,7 +493,7 @@ float DropsPlugin::getParameterValue(uint32_t index) const
     case kSamplePlayDirection:
         val = fSamplePlayDirection;
         break;
-    case kAmpEGAttack:
+    case kAmpEgAttack:
         val = fAmpEGAttack;
         break;
     case kAmpEgDecay:
@@ -626,11 +634,12 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         break;
     case kSamplePlayMode:
         fSamplePlayMode = value;
+        makeSFZ();
         break;
     case kSamplePlayDirection:
         fSamplePlayDirection = value;
         break;
-    case kAmpEGAttack:
+    case kAmpEgAttack:
         fAmpEGAttack = value;
         break;
     case kAmpEgDecay:
@@ -740,12 +749,12 @@ void DropsPlugin::setState(const char *key, const char *value)
 
 String DropsPlugin::getState(const char *key) const
 {
-    printf("getState(%s)\n",key);
-    if (strcmp(key,"filepath"));
+    printf("getState(%s)\n", key);
+    if (strcmp(key, "filepath"))
+        ;
     {
-    return String(path.c_str());
+        return String(path.c_str());
     }
-
 };
 
 void DropsPlugin::initState(unsigned int index, String &stateKey, String &defaultStateValue)
@@ -885,7 +894,6 @@ void DropsPlugin::initSFZ()
     opcodes["pitch_keycenter"] = "c4";
     opcodes["offset"] = "0";
     opcodes["end"] = "4294967296";
-
 }
 
 void DropsPlugin::makeSFZ()
@@ -900,7 +908,7 @@ void DropsPlugin::makeSFZ()
     opcodes["loop_end"] = std::to_string(loopEndInFrames);
     opcodes["offset"] = std::to_string(sampleInInFrames);
     opcodes["end"] = std::to_string(sampleOutInFrames);
-    
+
     std::stringstream buffer;
     // amp ADSR
     buffer << "<control>\n";
@@ -911,12 +919,12 @@ void DropsPlugin::makeSFZ()
     buffer << "ampeg_attack_oncc201=10\n";
     buffer << "ampeg_decay=0\n";
     buffer << "ampeg_decay_oncc202=10\n";
-    buffer << "ampeg_sustain=100\n";
-    buffer << "ampeg_sustain_oncc203=-100\n";
-    buffer << "ampeg_release=1\n";
+    buffer << "ampeg_sustain=0\n";
+    buffer << "ampeg_sustain_oncc203=100\n";
+    buffer << "ampeg_release=0.001\n";
     buffer << "ampeg_release_oncc204=10\n";
     buffer << "fil_type=lpf_2p\n";
-    buffer << "cutoff=20\n";
+    buffer << "cutoff=" << sampleRate / 2 << "\n";
     buffer << "cutoff_oncc310=9600\n";
     buffer << "resonance=0\n";
     buffer << "resonance_oncc311=20\n";
@@ -927,8 +935,8 @@ void DropsPlugin::makeSFZ()
     buffer << "fileg_decay_oncc302=10 \n";
     buffer << "fileg_sustain=100 \n";
     buffer << "fileg_sustain_oncc303=-100 \n";
-    buffer << "fileg_release=0.1 \n";
-    buffer << "fileg_release_oncc304=10\n";
+    buffer << "fileg_release=10 \n";
+    buffer << "fileg_release_oncc304=-10\n";
     buffer << "pitcheg_depth=1200\n";
     buffer << "pitcheg_attack=0 \n";
     buffer << "pitcheg_attack_oncc401=10\n";
@@ -939,7 +947,7 @@ void DropsPlugin::makeSFZ()
     buffer << "pitcheg_release=0.001\n";
     buffer << "pitcheg_release_oncc404=10\n";
     buffer << "trigger=attack\n";
-    buffer << "loop_mode=loop_sustain\n";
+    buffer << "loop_mode=" << play_modes_[static_cast<uint>(fSamplePlayMode)]<<"\n";
     buffer << "<region>\n";
     buffer << "sample=" << opcodes["sample"] << "\n";
     buffer << "lokey=0\n";
@@ -949,12 +957,11 @@ void DropsPlugin::makeSFZ()
     buffer << "end=" << opcodes["end"] << "\n";
     buffer << "loop_start=" << opcodes["loop_start"] << "\n";
     buffer << "loop_end=" << opcodes["loop_end"] << "\n";
-    #ifdef DEBUG
     std::cout << "----------------- SFZ FILE ------------------\n";
+#ifdef DEBUG
     std::cout << buffer.str() << std::endl;
-    #endif
+#endif
 
-   
     synth.loadSfzString("", buffer.str());
 }
 

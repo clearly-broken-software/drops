@@ -9,6 +9,9 @@
 #include "DropsPlugin.hpp"
 #include "TextButton.hpp"
 #include "ScrollBar.hpp"
+#include "Knob.hpp"
+#include "DropDown.hpp"
+#include "Menu.hpp"
 #include "artwork.hpp"
 
 START_NAMESPACE_DISTRHO
@@ -17,7 +20,10 @@ START_NAMESPACE_DISTRHO
 
 class DropsUI : public UI,
                 public TextButton::Callback,
-                public ScrollBar::Callback
+                public ScrollBar::Callback,
+                public Knob::Callback,
+                public DropDown::Callback,
+                public Menu::Callback
 {
 public:
     DropsUI();
@@ -32,6 +38,9 @@ protected:
     bool onMotion(const MotionEvent &) override;
     void textButtonClicked(TextButton *textButton) override;
     void scrollBarClicked(ScrollBar *scrollBar, bool dragging) override;
+    void dropDownClicked(DropDown* dropdown) override;
+    void knobValueChanged(Knob *knob, float value) override;
+    void menuClicked(Menu* menu, uint id, std::string item);
 
 private:
     template <class T>
@@ -39,10 +48,13 @@ private:
     {
         return std::min(upper, std::max(x, lower));
     }
-    
-    DropsPlugin * plugin;
+
+    DropsPlugin *plugin;
     ScopedPointer<TextButton> fFileOpenButton;
     ScopedPointer<ScrollBar> fScrollBarHandle, fLoopStart, fLoopEnd, fSampleIn, fSampleOut, fScrollBarLeft, fScrollBarRight;
+    ScopedPointer<Knob> fAmpEgAttack, fAmpEgDecay, fAmpEgSustain, fAmpEgRelease;
+    ScopedPointer<DropDown> fLoopMode;
+    ScopedPointer<Menu> fLoopMenu;
     NanoImage imgLoopStart, imgLoopEnd;
     void initWidgets();
     int loadSample();
@@ -50,7 +62,7 @@ private:
     void drawMinimap();
     void drawLoopMarkers();
     void drawInOutMarkers();
-    void scrollWaveform( bool leftright);
+    void scrollWaveform(bool leftright);
     void setMarkers();
     void setScrollbarWidgets();
     bool scrollbarDragging, loopstartDragging, loopendDragging, sampleInDragging, sampleOutDragging;

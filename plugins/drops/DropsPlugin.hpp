@@ -23,9 +23,9 @@
 #include "DistrhoPluginInfo.h"
 #include <sndfile.hh>
 #include <unordered_map>
-#include <string>  
-#include <iostream> 
-#include <sstream> 
+#include <string>
+#include <iostream>
+#include <sstream>
 START_NAMESPACE_DISTRHO
 
 // -----------------------------------------------------------------------
@@ -128,9 +128,14 @@ private:
         fFilterEGAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease,
         fFilterEgDepth, fFilterLFOType, fFilterLFOFreq, fFilterLFODepth,
         fFilterLFOSync;
-    
-    std::unordered_map<std::string,std::string> opcodes;
-    
+
+    const char *play_modes_[4]{
+        "no_loop", "one_shot",
+        "loop_continuous",
+        "loop_sustain"};
+    std::unordered_map<std::string, std::string>
+        opcodes;
+
     friend class DropsUI;
     /*
      * Set our plugin class as non-copyable and add a leak detector just in case.

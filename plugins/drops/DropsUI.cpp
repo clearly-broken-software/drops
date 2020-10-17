@@ -43,7 +43,6 @@ DropsUI::DropsUI()
         loadSample();
         std::string filename = plugin->path;
         fFileOpenButton->setText(filename);
-
     }
 }
 
@@ -96,6 +95,62 @@ void DropsUI::initWidgets()
     fSampleOut->setSize(32, 32);
     fSampleOut->setCallback(this);
     fSampleOut->hide();
+
+    const Size<uint> knobSize = Size<uint>(76, 76);
+    const uint knobSpacing = knobSize.getWidth() + 15;
+
+    fAmpEgAttack = new Knob(window);
+    fAmpEgAttack->setId(kAmpEgAttack);
+    fAmpEgAttack->setSize(knobSize);
+    fAmpEgAttack->setCallback(this);
+    fAmpEgAttack->setAbsolutePos(100, 350);
+    fAmpEgAttack->label = "ATTACK";
+
+    fAmpEgDecay = new Knob(window);
+    fAmpEgDecay->setId(kAmpEgDecay);
+    fAmpEgDecay->setSize(knobSize);
+    fAmpEgDecay->setCallback(this);
+    fAmpEgDecay->setAbsolutePos(100 + 1 * knobSpacing, 350);
+    fAmpEgDecay->label = "DECAY";
+
+    fAmpEgSustain = new Knob(window);
+    fAmpEgSustain->setId(kAmpEgSustain);
+    fAmpEgSustain->setSize(knobSize);
+    fAmpEgSustain->setCallback(this);
+    fAmpEgSustain->setAbsolutePos(100 + 2 * knobSpacing, 350);
+    fAmpEgSustain->label = "SUSTAIN";
+
+    fAmpEgRelease = new Knob(window);
+    fAmpEgRelease->setId(kAmpEgRelease);
+    fAmpEgRelease->setSize(knobSize);
+    fAmpEgRelease->setCallback(this);
+    fAmpEgRelease->setAbsolutePos(100 + 3 * knobSpacing, 350);
+    fAmpEgRelease->label = "RELEASE";
+
+    fLoopMode = new DropDown(window);
+    fLoopMode->setId(kSamplePlayMode);
+    fLoopMode->font_size = 16;
+    fLoopMode->setSize(216, fLoopMode->font_size + fLoopMode->margin * 2.0f);
+    fLoopMode->setCallback(this);
+    fLoopMode->setAbsolutePos(100 + 4 * knobSpacing, 350);
+    fLoopMode->label = "LOOP MODE:";
+    fLoopMode->item = "NO LOOP";
+
+    fLoopMenu = new Menu(window);
+    fLoopMenu->setId(9999); // FIXME: hardcode id
+    //fLoopMenu->setSize(200, 120);
+    fLoopMenu->setCallback(this);
+    const float x = fLoopMode->getMenuOffset() + fLoopMode->getAbsoluteX();
+    const float y = fLoopMode->getAbsoluteY() + fLoopMode->getHeight();
+    fLoopMenu->setAbsolutePos(x, y);
+    fLoopMenu->addItem("NO LOOP");
+    fLoopMenu->addItem("ONE SHOT");
+    fLoopMenu->addItem("CONTINUOUS");
+    fLoopMenu->addItem("SUSTAIN");
+    fLoopMenu->font_size = 16;
+    fLoopMenu->hide();
+
+    fLoopMode->setMenu(fLoopMenu);
 }
 
 void DropsUI::parameterChanged(uint32_t index, float value)
@@ -134,11 +189,26 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         sampleLoopEnd = value * static_cast<float>(sampleLength);
         setMarkers();
         break;
+    case kAmpEgAttack:
+        fAmpEgAttack->setValue(value);
+        repaint();
+        break;
+    case kAmpEgDecay:
+        fAmpEgDecay->setValue(value);
+        repaint();
+        break;
+    case kAmpEgSustain:
+        fAmpEgSustain->setValue(value);
+        repaint();
+        break;
+    case kAmpEgRelease:
+        fAmpEgRelease->setValue(value);
+        repaint();
+        break;
 
     default:
         break;
     }
-    //printf("DropsUI::parameterChanged(%i, %f)\n", index, value);
 }
 
 int DropsUI::loadSample()
@@ -685,6 +755,45 @@ void DropsUI::textButtonClicked(TextButton *textButton)
     opts.buttons.showPlaces = 2;
     getParentWindow().openFileBrowser(opts);
 }
+void DropsUI::dropDownClicked(DropDown *dropDown)
+{
+    uint id = dropDown->getId();
+    switch (id)
+    {
+    case kSamplePlayMode:
+        fLoopMenu->show(); /* code */
+        break;
+
+    default:
+        break;
+    }
+    printf("dropdown clicked\n");
+}
+
+void DropsUI::knobValueChanged(Knob *knob, float value)
+{
+    uint id = knob->getId();
+    switch (id)
+    {
+    case kAmpEgAttack:
+        setParameterValue(kAmpEgAttack, value);
+        break;
+    case kAmpEgDecay:
+        setParameterValue(kAmpEgDecay, value);
+        break;
+    case kAmpEgSustain:
+        setParameterValue(kAmpEgSustain, value);
+        break;
+    case kAmpEgRelease:
+        setParameterValue(kAmpEgRelease, value);
+        break;
+    default:
+        printf("knob changed: id %i, value %f\n", knob->getId(), value);
+        break;
+    }
+
+    repaint();
+}
 
 void DropsUI::scrollBarClicked(ScrollBar *scrollBar, bool dragging)
 {
@@ -721,6 +830,13 @@ void DropsUI::scrollBarClicked(ScrollBar *scrollBar, bool dragging)
     default:
         break;
     }
+}
+
+void DropsUI::menuClicked(Menu *, uint id, std::string item)
+{
+    fLoopMode->item = item;
+    fLoopMenu->hide();
+    setParameterValue(kSamplePlayMode, id);
 }
 
 UI *createUI()

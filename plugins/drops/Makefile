@@ -19,6 +19,9 @@ FILES_UI  = \
 			DropsUI.cpp \
 			widgets/src/TextButton.cpp \
 			widgets/src/ScrollBar.cpp \
+			widgets/src/Knob.cpp \
+			widgets/src/DropDown.cpp \
+			widgets/src/Menu.cpp \
 			artwork.cpp
 
 # --------------------------------------------------------------

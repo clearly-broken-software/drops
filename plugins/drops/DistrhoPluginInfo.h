@@ -43,7 +43,7 @@ enum Parameters
    kSamplePlayMode,       // loopmode
    kSamplePlayDirection,  // direction
    /*    amp tab */
-   kAmpEGAttack,  // ampeg_attack
+   kAmpEgAttack,  // ampeg_attack
    kAmpEgDecay,   // ampeg_decay
    kAmpEgSustain, // ampeg_sustain
    kAmpEgRelease, // ampeg_release
