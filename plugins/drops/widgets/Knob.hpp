@@ -25,6 +25,10 @@ public:
     void setValue(float val) noexcept;
     std::string label; // public, no getter or setter
     float labelSize;
+    Color background_color;
+    Color foreground_color;
+    Color highlite_color;
+    Color text_color;
     float margin;
     
 protected:
@@ -39,6 +43,8 @@ private:
     float valueTmp_;
     int mouseY_;
     FontId font_;
+    Color fill_color_;
+    bool has_mouse_;
     
 
     DISTRHO_LEAK_DETECTOR(Knob)

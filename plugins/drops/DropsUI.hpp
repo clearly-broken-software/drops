@@ -12,7 +12,9 @@
 #include "Knob.hpp"
 #include "DropDown.hpp"
 #include "Menu.hpp"
-#include "artwork.hpp"
+#include "Artwork.hpp"
+#include "DropsColors.hpp"
+
 
 START_NAMESPACE_DISTRHO
 

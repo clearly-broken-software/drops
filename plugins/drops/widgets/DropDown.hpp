@@ -31,6 +31,8 @@ public:
   std::string item;
   float font_size;
   float margin;
+  Color background_color, foreground_color,text_color;
+  
 
 protected:
   void onNanoDisplay() override;

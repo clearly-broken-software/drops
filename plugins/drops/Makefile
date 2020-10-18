@@ -22,7 +22,7 @@ FILES_UI  = \
 			widgets/src/Knob.cpp \
 			widgets/src/DropDown.cpp \
 			widgets/src/Menu.cpp \
-			artwork.cpp
+			Artwork.cpp
 
 # --------------------------------------------------------------
 # Do some magic

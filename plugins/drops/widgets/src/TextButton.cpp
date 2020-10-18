@@ -7,6 +7,9 @@ TextButton::TextButton(Window &parent, Size<uint> size) noexcept
     : NanoWidget(parent)
 {
     buttonText = "click to load sample";
+    back_ground_color = Color(0.8f, 0.8f, 0.8f);
+    text_color = Color(0.1f, 0.1f, 0.1f);
+    font_size = 16;
     loadSharedResources();
 }
 
@@ -28,14 +31,15 @@ void TextButton::onNanoDisplay()
     int width = getWidth();
     int height = getHeight();
     beginPath();
-    fillColor(169, 169, 169);
+    fillColor(back_ground_color);
     rect(0, 0, width, height);
     fill();
     closePath();
+
     // text
     beginPath();
-    fillColor(0, 0, 0);
-    fontSize(24); 
+    fillColor(text_color);
+    fontSize(font_size);
     textAlign(ALIGN_LEFT | ALIGN_MIDDLE);
     Rectangle<float> bounds;
     textBounds(0, 0, buttonText.c_str(), NULL, bounds);

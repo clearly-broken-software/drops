@@ -53,6 +53,9 @@ void DropsUI::initWidgets()
     fFileOpenButton->setCallback(this);
     fFileOpenButton->setAbsolutePos(238, 0);
     fFileOpenButton->setSize(530, 55);
+    fFileOpenButton->back_ground_color = black_olive;
+    fFileOpenButton->text_color = floral_white;
+    fFileOpenButton->font_size = 24.f;
 
     fScrollBarHandle = new ScrollBar(window);
     fScrollBarHandle->setId(scrollbarHandle_id);
@@ -105,6 +108,11 @@ void DropsUI::initWidgets()
     fAmpEgAttack->setCallback(this);
     fAmpEgAttack->setAbsolutePos(100, 350);
     fAmpEgAttack->label = "ATTACK";
+    fAmpEgAttack->foreground_color = floral_white;
+    fAmpEgAttack->background_color = black_olive;
+    fAmpEgAttack->highlite_color = flame;
+    fAmpEgAttack->text_color = floral_white;
+    
 
     fAmpEgDecay = new Knob(window);
     fAmpEgDecay->setId(kAmpEgDecay);
@@ -112,6 +120,10 @@ void DropsUI::initWidgets()
     fAmpEgDecay->setCallback(this);
     fAmpEgDecay->setAbsolutePos(100 + 1 * knobSpacing, 350);
     fAmpEgDecay->label = "DECAY";
+    fAmpEgDecay->foreground_color = floral_white;
+    fAmpEgDecay->background_color = black_olive;
+    fAmpEgDecay->highlite_color = flame;
+    fAmpEgDecay->text_color = floral_white;
 
     fAmpEgSustain = new Knob(window);
     fAmpEgSustain->setId(kAmpEgSustain);
@@ -119,6 +131,10 @@ void DropsUI::initWidgets()
     fAmpEgSustain->setCallback(this);
     fAmpEgSustain->setAbsolutePos(100 + 2 * knobSpacing, 350);
     fAmpEgSustain->label = "SUSTAIN";
+    fAmpEgSustain->foreground_color = floral_white;
+    fAmpEgSustain->background_color = black_olive;
+    fAmpEgSustain->highlite_color = flame;
+    fAmpEgSustain->text_color = floral_white;
 
     fAmpEgRelease = new Knob(window);
     fAmpEgRelease->setId(kAmpEgRelease);
@@ -126,6 +142,10 @@ void DropsUI::initWidgets()
     fAmpEgRelease->setCallback(this);
     fAmpEgRelease->setAbsolutePos(100 + 3 * knobSpacing, 350);
     fAmpEgRelease->label = "RELEASE";
+    fAmpEgRelease->foreground_color = floral_white;
+    fAmpEgRelease->background_color = black_olive;
+    fAmpEgRelease->highlite_color = flame;
+    fAmpEgRelease->text_color = floral_white;
 
     fLoopMode = new DropDown(window);
     fLoopMode->setId(kSamplePlayMode);
@@ -135,10 +155,14 @@ void DropsUI::initWidgets()
     fLoopMode->setAbsolutePos(100 + 4 * knobSpacing, 350);
     fLoopMode->label = "LOOP MODE:";
     fLoopMode->item = "NO LOOP";
+    fLoopMode->foreground_color = floral_white;
+    fLoopMode->background_color = black_olive;
+    fLoopMode->text_color = floral_white;
+
+    
 
     fLoopMenu = new Menu(window);
     fLoopMenu->setId(9999); // FIXME: hardcode id
-    //fLoopMenu->setSize(200, 120);
     fLoopMenu->setCallback(this);
     const float x = fLoopMode->getMenuOffset() + fLoopMode->getAbsoluteX();
     const float y = fLoopMode->getAbsoluteY() + fLoopMode->getHeight();
@@ -149,13 +173,19 @@ void DropsUI::initWidgets()
     fLoopMenu->addItem("SUSTAIN");
     fLoopMenu->font_size = 16;
     fLoopMenu->hide();
+    fLoopMenu->background_color = black_olive;
+    fLoopMenu->foreground_color = floral_white;
+    fLoopMenu->highlite_color = flame;
+    fLoopMenu->text_color = floral_white;
 
     fLoopMode->setMenu(fLoopMenu);
 }
 
 void DropsUI::parameterChanged(uint32_t index, float value)
 {
-    // printf("parameterChanged(%i,%f)\n", index, value);
+#ifdef DEBUG
+    printf("parameterChanged(%i,%f)\n", index, value);
+#endif
     switch (index)
     {
     case kSampleLoaded:
@@ -250,13 +280,13 @@ void DropsUI::onNanoDisplay()
     float width = getWidth();
     float height = getHeight();
     beginPath();
-    fillColor(121, 121, 121);
+    fillColor(eerie_black);
     rect(0.0f, 0.0f, width, height);
     fill();
     closePath();
 
     beginPath();
-    fillColor(82, 82, 82);
+    fillColor(black_olive);
     rect(display_left, display_top, display_width, display_height);
     fill();
     closePath();
@@ -280,7 +310,7 @@ void DropsUI::drawWaveform()
     fIndex = float(viewStart) + float(samples_per_pixel);
     iIndex = fIndex;
     beginPath();
-    strokeColor(161, 161, 161);
+    strokeColor(pale_silver);
     strokeWidth(1.0f);
     moveTo(display_left, display_center);
 
@@ -307,9 +337,13 @@ void DropsUI::drawWaveform()
 void DropsUI::drawMinimap()
 {
     beginPath();
-    strokeColor(143, 143, 143);
+    strokeColor(pale_silver);
     strokeWidth(1);
-    fillColor(107, 107, 107);
+    float brighten = 1.5f;
+    float r = black_olive.red * brighten;
+    float g = black_olive.green * brighten;
+    float b = black_olive.blue * brighten;
+    fillColor(r, g, b);
     rect(display_left, display_bottom, display_width, minimap_height);
     fill();
     closePath();
@@ -349,8 +383,8 @@ void DropsUI::drawInOutMarkers()
         // sample to pixel
         double sample_per_pixel = pow(viewMaxZoom, viewZoom);
         float sampleInPixel = (sampleIn / sample_per_pixel) - (viewStart / sample_per_pixel) + static_cast<float>(display_left);
-        fillColor(154, 154, 154);
-        strokeColor(154, 154, 154);
+        fillColor(pale_silver);
+        strokeColor(flame);
         strokeWidth(1.0f);
         // line
         beginPath();
@@ -369,7 +403,7 @@ void DropsUI::drawInOutMarkers()
         closePath();
         // IN text
         beginPath();
-        fillColor(86, 86, 86);
+        fillColor(eerie_black);
         fontSize(sample_inout_font_size);
         textAlign(ALIGN_CENTER | ALIGN_MIDDLE);
         text(sampleInPixel - 16.f, display_top + 16.f, "IN", NULL);
@@ -382,8 +416,8 @@ void DropsUI::drawInOutMarkers()
         double sample_per_pixel = pow(viewMaxZoom, viewZoom);
         float sampleOutPixel = (sampleOut / sample_per_pixel) - (viewStart / sample_per_pixel) + static_cast<float>(display_left);
 
-        fillColor(154, 154, 154);
-        strokeColor(154, 154, 154);
+        fillColor(pale_silver);
+        strokeColor(flame);
         strokeWidth(1.0f);
         // line
         beginPath();
@@ -404,7 +438,7 @@ void DropsUI::drawInOutMarkers()
         // text OUT
         beginPath();
 
-        fillColor(86, 86, 86);
+        fillColor(eerie_black);
         fontSize(sample_inout_font_size);
         textAlign(ALIGN_CENTER | ALIGN_MIDDLE);
         text(sampleOutPixel + 16.f, display_top + 16.f, "OUT", NULL);
@@ -414,17 +448,16 @@ void DropsUI::drawInOutMarkers()
 
 void DropsUI::drawLoopMarkers()
 {
+
     if (sampleLoopStart >= viewStart && sampleLoopStart <= viewEnd)
     {
-
+        fillColor(pale_silver);
+        strokeColor(flame);
+        strokeWidth(1.0f);
         // sample to pixel
         double sample_per_pixel = pow(viewMaxZoom, viewZoom);
         float loopStartPixel = (sampleLoopStart / sample_per_pixel) - (viewStart / sample_per_pixel) + static_cast<float>(display_left);
         ;
-
-        fillColor(154, 154, 154);
-        strokeColor(154, 154, 154);
-        strokeWidth(1.0f);
         // line
         beginPath();
         moveTo(loopStartPixel, display_bottom);
@@ -453,12 +486,12 @@ void DropsUI::drawLoopMarkers()
 
     if (sampleLoopEnd <= viewEnd && sampleLoopEnd >= viewStart)
     {
+        fillColor(pale_silver);
+        strokeColor(flame);
+        strokeWidth(1.0f);
         double sample_per_pixel = pow(viewMaxZoom, viewZoom);
         float loopEndPixel = (sampleLoopEnd / sample_per_pixel) - (viewStart / sample_per_pixel) + static_cast<float>(display_left);
 
-        fillColor(154, 154, 154);
-        strokeColor(154, 154, 154);
-        strokeWidth(1.0f);
         // line
         beginPath();
         moveTo(loopEndPixel, display_bottom);
@@ -502,7 +535,9 @@ void DropsUI::uiFileBrowserSelected(const char *filename)
 
 void DropsUI::stateChanged(const char *key, const char *)
 {
+#ifdef DEBUG
     printf("state changed... do something?\n");
+#endif
 }
 
 bool DropsUI::onMouse(const MouseEvent &ev)
@@ -767,7 +802,6 @@ void DropsUI::dropDownClicked(DropDown *dropDown)
     default:
         break;
     }
-    printf("dropdown clicked\n");
 }
 
 void DropsUI::knobValueChanged(Knob *knob, float value)
@@ -788,7 +822,6 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
         setParameterValue(kAmpEgRelease, value);
         break;
     default:
-        printf("knob changed: id %i, value %f\n", knob->getId(), value);
         break;
     }
 

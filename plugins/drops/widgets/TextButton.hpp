@@ -22,6 +22,9 @@ public:
   explicit TextButton(Window &parent, Size<uint> size) noexcept;
   void setText(std::string str);
   void setCallback(Callback *cb);
+  Color back_ground_color;
+  Color text_color;
+  float font_size;
 
 protected:
   void onNanoDisplay() override;

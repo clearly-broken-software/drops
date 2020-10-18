@@ -13,6 +13,9 @@ DropDown::DropDown(Window &parent) noexcept
     margin = 2.f;
     parent.addIdleCallback(this);
     has_mouse_ = false;
+    background_color = Color(0.0f,0.0f,0.0f);
+    foreground_color = Color(0.5f,0.5f,0.5f);
+    text_color = Color (1.0f,1.0f,1.0f);
 }
 
 bool DropDown::onMouse(const MouseEvent &ev)
@@ -57,13 +60,13 @@ void DropDown::onNanoDisplay()
     const float height = getHeight();
     // background
     beginPath();
-    fillColor(169, 169, 169);
+    fillColor(background_color);
     rect(0, 0, width, height);
     fill();
     closePath();
     // label
     beginPath();
-    fillColor(0, 0, 0);
+    fillColor(text_color);
     fontSize(font_size);
     textAlign(ALIGN_TOP);
     // item

@@ -30,7 +30,10 @@ public:
   float margin;
   int timer, time_out;
   bool dropdown_has_mouse;
-  
+  Color background_color;
+  Color foreground_color;
+  Color highlite_color;
+  Color text_color;
 
 protected:
   void onNanoDisplay() override;

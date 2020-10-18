@@ -44,7 +44,6 @@ bool Menu::onMotion(const MotionEvent &ev)
         timer = time_out;
         const int mouse_y = ev.pos.getY();
         highlighted_item_ = mouse_y / font_size;
-        printf("highlighted_item_ %i\n", highlighted_item_);
         repaint();
     }
     else
@@ -71,7 +70,7 @@ void Menu::onNanoDisplay()
     int width = getWidth();
     int height = getHeight();
     beginPath();
-    fillColor(169, 169, 169);
+    fillColor(background_color);
     rect(0, 0, width, height);
     fill();
     closePath();
@@ -80,25 +79,22 @@ void Menu::onNanoDisplay()
     {
         beginPath();
         rect(0, font_size * highlighted_item_, width, font_size);
-        fillColor(0.2f, 0.2f, 0.2f);
+        fillColor(highlite_color);
         fill();
         closePath();
         ;
     }
     int j = 0;
-
-    fillColor(0, 0, 0);
-    j = 0;
     textAlign(ALIGN_TOP);
     for (auto i : items_)
     {
         if (j == highlighted_item_)
         {
-            fillColor(0.8f, 0.8f, 0.8f);
+            fillColor(background_color);
         }
         else
         {
-            fillColor(0.1f, 0.1f, 0.1f);
+            fillColor(text_color);
         }
         text(0, font_size * j + margin, i.c_str(), nullptr);
         j++;
@@ -118,21 +114,14 @@ void Menu::addItem(std::string item)
 
 void Menu::resize()
 {
-    //float maxX = 0.0f;
-    //float maxY = 0.0f;
     float bounds[4];
-
     std::stringstream buffer;
     for (auto i : items_)
     {
         buffer << i << "\n";
-        //    printf("%s\n",i.c_str());
     }
-    printf("%s", buffer.str().c_str());
-    textAlign(ALIGN_LEFT || ALIGN_TOP);
+    textAlign(ALIGN_LEFT | ALIGN_TOP);
     textBoxBounds(0.f, 0.f, 200.f, buffer.str().c_str(), nullptr, bounds);
-    printf("xmin %f, ymin %f, xmax %f, ymax %f\n", bounds[0], bounds[1], bounds[2], bounds[3]);
-    printf("size xmax - xmin %f , ymax - ymin %f\n", bounds[2] - bounds[0], bounds[3] - bounds[1]);
     setSize(bounds[2] - bounds[0], bounds[3] - bounds[1]);
 }
 

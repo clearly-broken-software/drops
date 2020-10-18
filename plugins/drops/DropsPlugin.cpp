@@ -190,7 +190,7 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
             ParameterEnumerationValue(1.0f, "one_shot"),
             ParameterEnumerationValue(2.0f, "loop_continuous"),
             ParameterEnumerationValue(3.0f, "loop_sustain")};
-        
+
         parameter.hints = kParameterIsAutomable;
         break;
     case kSamplePlayDirection:
@@ -585,7 +585,9 @@ float DropsPlugin::getParameterValue(uint32_t index) const
         break;
 
     default:
+#ifdef DEBUG
         printf("Unknown parameter: %i\n", index);
+#endif
         break;
     }
     return val;
@@ -741,7 +743,9 @@ void DropsPlugin::setState(const char *key, const char *value)
     if (strcmp(key, "filepath") == 0)
     {
         path = std::string(value);
+#ifdef DEBUG
         std::cout << path << std::endl;
+#endif
         loadSample(value);
         makeSFZ();
     }
@@ -749,7 +753,9 @@ void DropsPlugin::setState(const char *key, const char *value)
 
 String DropsPlugin::getState(const char *key) const
 {
+#ifdef DEBUG
     printf("getState(%s)\n", key);
+#endif
     if (strcmp(key, "filepath"))
         ;
     {
@@ -771,7 +777,9 @@ void DropsPlugin::initState(unsigned int index, String &stateKey, String &defaul
         break;
 
     default:
+#ifdef DEBUG
         printf("initState %i\n", index);
+#endif
         break;
     }
 }
@@ -789,8 +797,11 @@ int DropsPlugin::loadSample(const char *fp)
     sampleLength = fileHandle.frames();
     if (sampleLength == 0)
     {
-        //file doesn't exist or is of incompatible type, main handles the -1
+//TODO: show this in UI
+//file doesn't exist or is of incompatible type, main handles the -1
+#ifdef DEBUG
         printf("Can't load sample %s \n", fp);
+#endif
         sig_sampleLoaded = false;
         return -1;
     }
@@ -947,7 +958,7 @@ void DropsPlugin::makeSFZ()
     buffer << "pitcheg_release=0.001\n";
     buffer << "pitcheg_release_oncc404=10\n";
     buffer << "trigger=attack\n";
-    buffer << "loop_mode=" << play_modes_[static_cast<uint>(fSamplePlayMode)]<<"\n";
+    buffer << "loop_mode=" << play_modes_[static_cast<uint>(fSamplePlayMode)] << "\n";
     buffer << "<region>\n";
     buffer << "sample=" << opcodes["sample"] << "\n";
     buffer << "lokey=0\n";
@@ -957,8 +968,8 @@ void DropsPlugin::makeSFZ()
     buffer << "end=" << opcodes["end"] << "\n";
     buffer << "loop_start=" << opcodes["loop_start"] << "\n";
     buffer << "loop_end=" << opcodes["loop_end"] << "\n";
-    std::cout << "----------------- SFZ FILE ------------------\n";
 #ifdef DEBUG
+    std::cout << "----------------- SFZ FILE ------------------\n";
     std::cout << buffer.str() << std::endl;
 #endif
 

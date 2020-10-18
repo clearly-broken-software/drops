@@ -1,6 +1,6 @@
 /* (Auto-generated binary data file). */
 
-#include "artwork.hpp"
+#include "Artwork.hpp"
 
 static const unsigned char temp_loopend_1[] = {
   137,  80,  78,  71,  13,  10,  26,  10,   0,   0,   0,  13,  73,  72,  68,  82,   0,   0,   0,  18,   0,
