@@ -28,12 +28,18 @@ void Menu::idleCallback()
 
 bool Menu::onMouse(const MouseEvent &ev)
 {
-    if (contains(ev.pos) && ev.press && ev.button == 1)
-    {
-        if (highlighted_item_ >= 0)
-            callback_->menuClicked(this, highlighted_item_, items_[highlighted_item_]);
+    if (ev.press && ev.button == 1){
+        if (contains(ev.pos)){
+            if(highlighted_item_ >= 0){
+                callback_->menuClicked(this, highlighted_item_, items_[highlighted_item_]);
+                return true;
+            }
+        } else {
+            hide();
+            return true;
+        }
     }
-    return true;
+    return false;
 }
 
 bool Menu::onMotion(const MotionEvent &ev)
