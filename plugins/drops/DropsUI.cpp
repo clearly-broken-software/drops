@@ -112,7 +112,6 @@ void DropsUI::initWidgets()
     fAmpEgAttack->background_color = black_olive;
     fAmpEgAttack->highlite_color = flame;
     fAmpEgAttack->text_color = floral_white;
-    
 
     fAmpEgDecay = new Knob(window);
     fAmpEgDecay->setId(kAmpEgDecay);
@@ -158,8 +157,6 @@ void DropsUI::initWidgets()
     fLoopMode->foreground_color = floral_white;
     fLoopMode->background_color = black_olive;
     fLoopMode->text_color = floral_white;
-
-    
 
     fLoopMenu = new Menu(window);
     fLoopMenu->setId(9999); // FIXME: hardcode id
@@ -243,7 +240,7 @@ void DropsUI::parameterChanged(uint32_t index, float value)
 
 int DropsUI::loadSample()
 {
-    sampleLength = static_cast<sf_count_t>(waveForm->size());
+    sampleLength = static_cast<sf_count_t>(waveForm->size() - 1);
     sampleIn = 0;
     sampleOut = sampleLength;
     sampleLoopStart = 0;
@@ -542,6 +539,7 @@ void DropsUI::stateChanged(const char *key, const char *)
 
 bool DropsUI::onMouse(const MouseEvent &ev)
 {
+
     if (ev.press)
         if (scrollbarDragging || loopstartDragging || loopendDragging || sampleInDragging || sampleOutDragging)
         {
@@ -607,6 +605,7 @@ void DropsUI::setScrollbarWidgets()
     fScrollBarRight->setWidth(display_right - rightPixel);
     fScrollBarRight->setAbsoluteX(rightPixel);
 }
+
 bool DropsUI::onScroll(const ScrollEvent &ev)
 {
     // is the pointer in the display
@@ -678,16 +677,6 @@ bool DropsUI::onScroll(const ScrollEvent &ev)
     }
     samples_per_pixel = pow(viewMaxZoom, viewZoom);
     viewStart = start < 0 ? 0 : start;
-    /*
-    double spp = waveForm->size() / (double)display_width;
-    int leftPixel = viewStart / spp + display_left;
-    int rightPixel = viewEnd / spp + display_left;
-    fScrollBarHandle->setWidth(rightPixel - leftPixel);
-    fScrollBarHandle->setAbsoluteX(leftPixel);
-    fScrollBarLeft->setWidth(leftPixel - display_left);
-    fScrollBarRight->setWidth(display_right - rightPixel);
-    fScrollBarRight->setAbsoluteX(rightPixel);
-    */
     setScrollbarWidgets();
     setMarkers();
     repaint();
@@ -730,11 +719,13 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         mouseX = ev.pos.getX();
         float samples_per_pixel = pow(viewMaxZoom, viewZoom);
         sampleLoopStart = static_cast<float>(sampleLoopStart) + distance * samples_per_pixel;
-        sampleLoopStart = clamp<sf_count_t>(sampleLoopStart, sampleLoopEnd - 1, sampleIn);
+        //sampleLoopStart = clamp<sf_count_t>(sampleLoopStart, sampleLoopEnd - 1, sampleIn);
         float loopStartPixel = static_cast<float>(sampleLoopStart - viewStart) / samples_per_pixel + static_cast<float>(display_left);
         fLoopStart->setAbsoluteX(loopStartPixel - 32);
+        /*
         float value = static_cast<float>(sampleLoopStart) / static_cast<float>(waveForm->size());
         setParameterValue(kSampleLoopStart, value);
+         */
         repaint();
     }
 
@@ -744,11 +735,13 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         mouseX = ev.pos.getX();
         float samples_per_pixel = pow(viewMaxZoom, viewZoom);
         sampleLoopEnd = static_cast<float>(sampleLoopEnd) + distance * samples_per_pixel;
-        sampleLoopEnd = clamp<sf_count_t>(sampleLoopEnd, sampleOut, sampleLoopStart + 1);
+        //sampleLoopEnd = clamp<sf_count_t>(sampleLoopEnd, sampleOut, sampleLoopStart + 1);
         float loopEndPixel = static_cast<float>(sampleLoopEnd - viewStart) / samples_per_pixel + static_cast<float>(display_left);
         fLoopEnd->setAbsoluteX(loopEndPixel);
+        /* 
         float value = static_cast<float>(sampleLoopEnd) / static_cast<float>(waveForm->size());
         setParameterValue(kSampleLoopEnd, value);
+         */
         repaint();
     }
 
@@ -761,8 +754,8 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         sampleIn = clamp<sf_count_t>(sampleIn, sampleOut - 1, 0);
         float sampleInPixel = static_cast<float>(sampleIn - viewStart) / samples_per_pixel + static_cast<float>(display_left);
         fSampleIn->setAbsoluteX(sampleInPixel - 32);
-        float value = static_cast<float>(sampleIn) / static_cast<float>(waveForm->size());
-        setParameterValue(kSampleIn, value);
+        // float value = static_cast<float>(sampleIn) / static_cast<float>(waveForm->size());
+        // setParameterValue(kSampleIn, value);
         repaint();
     }
 
@@ -775,8 +768,8 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         sampleOut = clamp<sf_count_t>(sampleOut, waveForm->size(), sampleIn + 1);
         float sampleOutPixel = static_cast<float>(sampleOut - viewStart) / samples_per_pixel + static_cast<float>(display_left);
         fSampleOut->setAbsoluteX(sampleOutPixel);
-        float value = static_cast<float>(sampleOut) / static_cast<float>(waveForm->size());
-        setParameterValue(kSampleOut, value);
+        // float value = static_cast<float>(sampleOut) / static_cast<float>(waveForm->size());
+        // setParameterValue(kSampleOut, value);
         repaint();
     }
 
@@ -790,6 +783,7 @@ void DropsUI::textButtonClicked(TextButton *textButton)
     opts.buttons.showPlaces = 2;
     getParentWindow().openFileBrowser(opts);
 }
+
 void DropsUI::dropDownClicked(DropDown *dropDown)
 {
     uint id = dropDown->getId();
@@ -803,10 +797,21 @@ void DropsUI::dropDownClicked(DropDown *dropDown)
         break;
     }
 }
-
+void DropsUI::knobDragStarted(Knob *knob)
+{
+    int id = knob->getId();
+    printf("knob %i drag started\n", id);
+}
+void DropsUI::knobDragFinished(Knob *knob)
+{
+    int id = knob->getId();
+    printf("knob %i drag finished\n", id);
+}
 void DropsUI::knobValueChanged(Knob *knob, float value)
 {
+
     uint id = knob->getId();
+    printf("%i, %f\n", id, value);
     switch (id)
     {
     case kAmpEgAttack:
@@ -849,17 +854,45 @@ void DropsUI::scrollBarClicked(ScrollBar *scrollBar, bool dragging)
         }
         break;
     case kSampleLoopStart:
+    {
         loopstartDragging = dragging;
+        if (!loopstartDragging)
+        {
+            float value = static_cast<float>(sampleLoopStart) / static_cast<float>(waveForm->size());
+            setParameterValue(kSampleLoopStart, value);
+        }
         break;
+    }
     case kSampleLoopEnd:
+    {
         loopendDragging = dragging;
+        if (!loopendDragging)
+        {
+            float value = static_cast<float>(sampleLoopEnd) / static_cast<float>(waveForm->size());
+            setParameterValue(kSampleLoopEnd, value);
+        }
         break;
+    }
     case kSampleIn:
+    {
         sampleInDragging = dragging;
+        if (!sampleInDragging)
+        {
+            float value = static_cast<float>(sampleIn) / static_cast<float>(waveForm->size());
+            setParameterValue(kSampleIn, value);
+        }
         break;
+    }
     case kSampleOut:
+    {
         sampleOutDragging = dragging;
+        if (!sampleOutDragging)
+        {
+            float value = static_cast<float>(sampleOut) / static_cast<float>(waveForm->size());
+            setParameterValue(kSampleOut, value);
+        }
         break;
+    }
     default:
         break;
     }
