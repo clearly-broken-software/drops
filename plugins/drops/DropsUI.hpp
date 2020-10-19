@@ -41,7 +41,10 @@ protected:
     void textButtonClicked(TextButton *textButton) override;
     void scrollBarClicked(ScrollBar *scrollBar, bool dragging) override;
     void dropDownClicked(DropDown* dropdown) override;
+    void knobDragStarted(Knob* knob) override;
+    void knobDragFinished(Knob* knob) override;
     void knobValueChanged(Knob *knob, float value) override;
+
     void menuClicked(Menu* menu, uint id, std::string item);
 
 private:

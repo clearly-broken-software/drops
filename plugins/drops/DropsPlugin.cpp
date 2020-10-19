@@ -757,7 +757,6 @@ String DropsPlugin::getState(const char *key) const
     printf("getState(%s)\n", key);
 #endif
     if (strcmp(key, "filepath"))
-        ;
     {
         return String(path.c_str());
     }
@@ -790,11 +789,11 @@ int DropsPlugin::loadSample(const char *fp)
     waveForm.resize(0);
     miniMap.resize(0);
 
-    int file_samplerate(0);
     SndfileHandle fileHandle(fp);
 
     // get the number of frames in the sample
-    sampleLength = fileHandle.frames();
+    // sample range in sfizz is 0 ... frames - 1
+    sampleLength = fileHandle.frames() - 1;
     if (sampleLength == 0)
     {
 //TODO: show this in UI
@@ -807,8 +806,6 @@ int DropsPlugin::loadSample(const char *fp)
     }
     // get some more info of the sample
     int sampleChannels = fileHandle.channels();
-    file_samplerate = fileHandle.samplerate();
-
     // get max value
     double max_val;
     fileHandle.command(SFC_CALC_NORM_SIGNAL_MAX, &max_val, sizeof(max_val));
@@ -911,7 +908,7 @@ void DropsPlugin::makeSFZ()
 {
     const float fSampleLength = static_cast<float>(sampleLength);
     uint loopstartInFrames = fSampleLength * fSampleLoopStart;
-    uint loopEndInFrames = fSampleLength * fSampleLoopEnd;
+    uint loopEndInFrames = std::min(static_cast<uint>(sampleLength - 1), static_cast<uint>(fSampleLength * fSampleLoopEnd));
     uint sampleInInFrames = fSampleLength * fSampleIn;
     uint sampleOutInFrames = fSampleLength * fSampleOut;
     opcodes["sample"] = path;
@@ -922,10 +919,11 @@ void DropsPlugin::makeSFZ()
 
     std::stringstream buffer;
     // amp ADSR
-    buffer << "<control>\n";
-    buffer << "default_path=\n";
-    buffer << "<global>\n";
-    buffer << "<group>\n";
+    buffer << "<region>\n";
+    // buffer << "<control>\n";
+    // buffer << "default_path=\n";
+    // buffer << "<global>\n";
+    // buffer << "<group>\n";
     buffer << "ampeg_attack=0\n";
     buffer << "ampeg_attack_oncc201=10\n";
     buffer << "ampeg_decay=0\n";
@@ -934,40 +932,40 @@ void DropsPlugin::makeSFZ()
     buffer << "ampeg_sustain_oncc203=100\n";
     buffer << "ampeg_release=0.001\n";
     buffer << "ampeg_release_oncc204=10\n";
-    buffer << "fil_type=lpf_2p\n";
-    buffer << "cutoff=" << sampleRate / 2 << "\n";
-    buffer << "cutoff_oncc310=9600\n";
-    buffer << "resonance=0\n";
-    buffer << "resonance_oncc311=20\n";
-    buffer << "fileg_depth=9600\n";
-    buffer << "fileg_attack=0\n";
-    buffer << "fileg_attack_oncc301=10\n";
-    buffer << "fileg_decay=0\n";
-    buffer << "fileg_decay_oncc302=10 \n";
-    buffer << "fileg_sustain=100 \n";
-    buffer << "fileg_sustain_oncc303=-100 \n";
-    buffer << "fileg_release=10 \n";
-    buffer << "fileg_release_oncc304=-10\n";
-    buffer << "pitcheg_depth=1200\n";
-    buffer << "pitcheg_attack=0 \n";
-    buffer << "pitcheg_attack_oncc401=10\n";
-    buffer << "pitcheg_decay=0\n";
-    buffer << "pitcheg_decay_oncc402=10\n";
-    buffer << "pitcheg_sustain=0\n";
-    buffer << "pitcheg_sustain_oncc403=100\n";
-    buffer << "pitcheg_release=0.001\n";
-    buffer << "pitcheg_release_oncc404=10\n";
-    buffer << "trigger=attack\n";
-    buffer << "loop_mode=" << play_modes_[static_cast<uint>(fSamplePlayMode)] << "\n";
-    buffer << "<region>\n";
-    buffer << "sample=" << opcodes["sample"] << "\n";
-    buffer << "lokey=0\n";
-    buffer << "hikey=127\n";
-    buffer << "pitch_keycenter=c4\n";
+    // buffer << "fil_type=lpf_2p\n";
+    // buffer << "cutoff=" << sampleRate / 2 << "\n";
+    // buffer << "cutoff_oncc310=9600\n";
+    // buffer << "resonance=0\n";
+    // buffer << "resonance_oncc311=20\n";
+    // buffer << "fileg_depth=9600\n";
+    // buffer << "fileg_attack=0\n";
+    // buffer << "fileg_attack_oncc301=10\n";
+    // buffer << "fileg_decay=0\n";
+    // buffer << "fileg_decay_oncc302=10 \n";
+    // buffer << "fileg_sustain=100 \n";
+    // buffer << "fileg_sustain_oncc303=-100 \n";
+    // buffer << "fileg_release=10 \n";
+    // buffer << "fileg_release_oncc304=-10\n";
+    // buffer << "pitcheg_depth=1200\n";
+    // buffer << "pitcheg_attack=0 \n";
+    // buffer << "pitcheg_attack_oncc401=10\n";
+    // buffer << "pitcheg_decay=0\n";
+    // buffer << "pitcheg_decay_oncc402=10\n";
+    // buffer << "pitcheg_sustain=0\n";
+    // buffer << "pitcheg_sustain_oncc403=100\n";
+    // buffer << "pitcheg_release=0.001\n";
+    // buffer << "pitcheg_release_oncc404=10\n";
+    // buffer << "trigger=attack\n";
     buffer << "offset=" << opcodes["offset"] << "\n";
     buffer << "end=" << opcodes["end"] << "\n";
+    buffer << "loop_mode=" << play_modes_[static_cast<uint>(fSamplePlayMode)] << "\n";
     buffer << "loop_start=" << opcodes["loop_start"] << "\n";
     buffer << "loop_end=" << opcodes["loop_end"] << "\n";
+    buffer << "sample=" << opcodes["sample"] << "\n";
+    // buffer << "lokey=0\n";
+    // buffer << "hikey=127\n";
+    // buffer << "pitch_keycenter=c4\n";
+
 #ifdef DEBUG
     std::cout << "----------------- SFZ FILE ------------------\n";
     std::cout << buffer.str() << std::endl;

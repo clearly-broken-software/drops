@@ -8,8 +8,12 @@ Knob::Knob(Window &parent) noexcept
 {
     loadSharedResources();
     dragging_ = false;
+    has_mouse_ = false;
     value_ = 0.f;
-    valueTmp_ = 0.f;
+    value_tmp_ = 0.f;
+    maximum_value = 1.0f;
+    minimum_value = 0.0f;
+    using_log_ = false;
     labelSize = 14.0f;
     label = "label";
     margin = 4.0f;
@@ -24,63 +28,119 @@ Knob::Knob(Window &parent) noexcept
     text_color = Color(1, 1, 1);
     fill_color_ = foreground_color;
 }
-
+float Knob::getValue() noexcept {
+    return value_;
+}
 bool Knob::onMouse(const MouseEvent &ev)
 {
-    if (!ev.press && !contains(ev.pos) && !dragging_)
-    {
-        has_mouse_ = false;
-        repaint();
+    if (ev.button != 1)
         return false;
-    }
-    
-    if (contains(ev.pos) && ev.press && ev.button == 1)
+    has_mouse_ = true;
+    if (ev.press)
     {
+        if (!contains(ev.pos))
+            return false;
+
+        if ((ev.mod & kModifierShift) != 0 && using_default_)
+        {
+            setValue(default_value);
+            tmp_value_ = value_;
+            return true;
+        }
+
         dragging_ = true;
-        mouseY_ = ev.pos.getY();
-        return false;
+        last_mouse_x_ = ev.pos.getX();
+        last_mouse_y_ = ev.pos.getY();
+
+        if (callback != nullptr)
+            callback->knobDragStarted(this);
+
+        return true;
     }
-    else if (!ev.press && ev.button == 1 && dragging_)
+    else if (dragging_)
     {
+        if (callback != nullptr)
+            callback->knobDragFinished(this);
+
         dragging_ = false;
         repaint();
-        return false;
+        return true;
     }
-    else
+
+    has_mouse_ = false;
+    return false;
+}
+
+bool Knob::onScroll(const ScrollEvent &ev)
+{
+    if (!contains(ev.pos))
+        return false;
+
+    const float d = (ev.mod & kModifierControl) ? 2000.0f : 200.0f;
+    float value = (using_log_ ? _invlogscale(tmp_value_) : tmp_value_) + (float(maximum_value - minimum_value) / d * 10.f * ev.delta.getY());
+
+    if (using_log_)
+        value = _logscale(value);
+
+    if (value < minimum_value)
     {
-        return false;
+        tmp_value_ = value = minimum_value;
     }
+    else if (value > maximum_value)
+    {
+        tmp_value_ = value = maximum_value;
+    }
+    else if (d_isNotZero(step_value))
+    {
+        tmp_value_ = value;
+        const float rest = std::fmod(value, step_value);
+        value = value - rest + (rest > step_value / 2.0f ? step_value : 0.0f);
+    }
+
+    setValue(value);
+    return true;
 }
 
 bool Knob::onMotion(const MotionEvent &ev)
 {
-    if (contains(ev.pos))
+    if (contains(ev.pos) && !has_mouse_)
     {
         has_mouse_ = true;
         repaint();
     }
-    else
+    if (!contains(ev.pos) && !dragging_)
     {
-        if (!dragging_ && has_mouse_)
-        {
-            has_mouse_ = false;
-            repaint();
-        }
+        has_mouse_ = false;
+        repaint();
     }
-    if (dragging_)
+    if (!dragging_)
+        return false;
+
+    float d, value = 0.0f;
+    const int movY = last_mouse_y_ - ev.pos.getY();
+    d = (ev.mod & kModifierControl) ? 2000.0f : 200.0f;
+    //    printf("d = %f\n",d);
+    value = (using_log_ ? _invlogscale(tmp_value_) : tmp_value_) + (float(maximum_value - minimum_value) / d * float(movY));
+    //  printf("value %f\n", value);
+
+    if (using_log_)
+        value = _logscale(value);
+
+    if (value < minimum_value)
     {
-        fill_color_ = highlite_color;
-        float d, val = 0.0f;
-        const int movY = mouseY_ - ev.pos.getY();
-        d = 2000.0f;
-        val = valueTmp_ + (1.f / d * float(movY));
-        setValue(val);
-        if (val > 1.0f || val < 0.0f)
-        {
-            mouseY_ = ev.pos.getY();
-        }
+        tmp_value_ = value = minimum_value;
     }
-    return false;
+    else if (value > maximum_value)
+    {
+        tmp_value_ = value = maximum_value;
+    }
+   
+    setValue(value);
+
+    last_mouse_x_ = ev.pos.getX();
+    last_mouse_y_ = ev.pos.getY();
+
+    return true;
 }
 
 void Knob::onNanoDisplay()
@@ -141,9 +201,23 @@ void Knob::onNanoDisplay()
 
 void Knob::setValue(float val) noexcept
 {
-    value_ = std::max(0.0f, std::min(val, 1.0f));
-    valueTmp_ = value_;
+    value_ = std::max(minimum_value, std::min(val, maximum_value));
+    tmp_value_ = value_;
     callback->knobValueChanged(this, value_);
+}
+
+float Knob::_logscale(float value) const
+{
+    const float b = std::log(maximum_value / minimum_value) / (maximum_value - minimum_value);
+    const float a = maximum_value / std::exp(maximum_value * b);
+    return a * std::exp(b * value);
+}
+
+float Knob::_invlogscale(float value) const
+{
+    const float b = std::log(maximum_value / minimum_value) / (maximum_value - minimum_value);
+    const float a = maximum_value / std::exp(maximum_value * b);
+    return std::log(value / a) / b;
 }
 
 void Knob::setCallback(Callback *cb)
