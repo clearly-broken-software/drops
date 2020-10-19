@@ -90,13 +90,6 @@ bool Knob::onScroll(const ScrollEvent &ev)
     {
         tmp_value_ = value = maximum_value;
     }
-    else if (d_isNotZero(step_value))
-    {
-        tmp_value_ = value;
-        const float rest = std::fmod(value, step_value);
-        value = value - rest + (rest > step_value / 2.0f ? step_value : 0.0f);
-    }
-
     setValue(value);
     return true;
 }
