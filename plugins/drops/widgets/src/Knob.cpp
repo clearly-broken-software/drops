@@ -28,14 +28,15 @@ Knob::Knob(Window &parent) noexcept
     text_color = Color(1, 1, 1);
     fill_color_ = foreground_color;
 }
-float Knob::getValue() noexcept {
+float Knob::getValue() noexcept
+{
     return value_;
 }
 bool Knob::onMouse(const MouseEvent &ev)
 {
     if (ev.button != 1)
         return false;
-    has_mouse_ = true;
+
     if (ev.press)
     {
         if (!contains(ev.pos))
@@ -47,7 +48,7 @@ bool Knob::onMouse(const MouseEvent &ev)
             tmp_value_ = value_;
             return true;
         }
-
+        has_mouse_ = true;
         dragging_ = true;
         last_mouse_x_ = ev.pos.getX();
         last_mouse_y_ = ev.pos.getY();
@@ -127,7 +128,7 @@ bool Knob::onMotion(const MotionEvent &ev)
     {
         tmp_value_ = value = maximum_value;
     }
-   
+
     setValue(value);
 
     last_mouse_x_ = ev.pos.getX();
@@ -186,10 +187,6 @@ void Knob::onNanoDisplay()
     arc(center_x, center_y, radius - stroke_width, 0.75f * M_PI, (0.75f + 1.5f * value_) * M_PI, NanoVG::Winding::CW);
     stroke();
     closePath();
-
-    // label
-    // find center
-    float centerY = getWidth() / 2.0f;
 }
 
 void Knob::setValue(float val) noexcept
