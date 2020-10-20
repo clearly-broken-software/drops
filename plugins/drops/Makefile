@@ -22,6 +22,7 @@ FILES_UI  = \
 			widgets/src/Knob.cpp \
 			widgets/src/DropDown.cpp \
 			widgets/src/Menu.cpp \
+			widgets/src/Slider.cpp \
 			Artwork.cpp
 
 # --------------------------------------------------------------

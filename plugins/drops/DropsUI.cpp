@@ -176,6 +176,18 @@ void DropsUI::initWidgets()
     fLoopMenu->text_color = floral_white;
 
     fLoopMode->setMenu(fLoopMenu);
+
+    fSlider = new Slider(window);
+    fSlider->setId(9998);
+    fSlider->setCallback(this);
+    fSlider->setAbsolutePos(400,500);
+    fSlider->setSize(300,20);
+    fSlider->setLabel("LFO DEPTH:");
+    fSlider->background_color = pale_silver;
+    fSlider->foreground_color = floral_white;
+    fSlider->highlite_color = flame;
+    fSlider->text_color = floral_white;
+    
 }
 
 void DropsUI::parameterChanged(uint32_t index, float value)
@@ -831,6 +843,12 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
     }
 
     repaint();
+}
+
+void DropsUI::sliderValueChanged(Slider* slider,float value)
+{
+    uint id = slider->getId();
+    printf("slider %i, value %f\n", id, value);
 }
 
 void DropsUI::scrollBarClicked(ScrollBar *scrollBar, bool dragging)
