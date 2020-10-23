@@ -188,7 +188,7 @@ void DropsUI::initWidgets()
 
     box_layout_ = new Box(window);
     box_layout_->setAbsolutePos(0, display_bottom + minimap_height);
-    box_layout_->setWidth(getWidth());
+    box_layout_->setWidth(getWidth()-50);
     //box_layout_->setHeight(300);
     box_layout_->align_items = Box::Align_Items::top;
     box_layout_->justify_content = Box::Justify_Content::space_evenly;
@@ -197,7 +197,7 @@ void DropsUI::initWidgets()
     box_layout_->addWidget(fAmpEgSustain);
     box_layout_->addWidget(fAmpEgRelease);
     box_layout_->addWidget(fLoopMode);
-    box_layout_->setWidgetAlignment(kSamplePlayMode,Box::Align_Items::middle);
+    box_layout_->setWidgetAlignment(kSamplePlayMode, Box::Align_Items::middle);
 
     const float x = fLoopMode->getMenuOffset() + fLoopMode->getAbsoluteX();
     const float y = fLoopMode->getAbsoluteY() + fLoopMode->getHeight();
@@ -826,18 +826,14 @@ void DropsUI::dropDownClicked(DropDown *dropDown)
 void DropsUI::knobDragStarted(Knob *knob)
 {
     int id = knob->getId();
-    printf("knob %i drag started\n", id);
 }
 void DropsUI::knobDragFinished(Knob *knob)
 {
     int id = knob->getId();
-    printf("knob %i drag finished\n", id);
 }
 void DropsUI::knobValueChanged(Knob *knob, float value)
 {
-
     uint id = knob->getId();
-    printf("%i, %f\n", id, value);
     switch (id)
     {
     case kAmpEgAttack:
@@ -855,14 +851,12 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
     default:
         break;
     }
-
     repaint();
 }
 
 void DropsUI::sliderValueChanged(Slider *slider, float value)
 {
     uint id = slider->getId();
-    printf("slider %i, value %f\n", id, value);
 }
 
 void DropsUI::scrollBarClicked(ScrollBar *scrollBar, bool dragging)
