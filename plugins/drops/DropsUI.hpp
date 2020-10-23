@@ -12,6 +12,8 @@
 #include "Knob.hpp"
 #include "DropDown.hpp"
 #include "Menu.hpp"
+#include "Slider.hpp"
+#include "Box.hpp"
 #include "Artwork.hpp"
 #include "DropsColors.hpp"
 
@@ -25,7 +27,8 @@ class DropsUI : public UI,
                 public ScrollBar::Callback,
                 public Knob::Callback,
                 public DropDown::Callback,
-                public Menu::Callback
+                public Menu::Callback,
+                public Slider::Callback
 {
 public:
     DropsUI();
@@ -44,7 +47,7 @@ protected:
     void knobDragStarted(Knob* knob) override;
     void knobDragFinished(Knob* knob) override;
     void knobValueChanged(Knob *knob, float value) override;
-
+    void sliderValueChanged(Slider *slider, float value) override;
     void menuClicked(Menu* menu, uint id, std::string item);
 
 private:
@@ -60,6 +63,8 @@ private:
     ScopedPointer<Knob> fAmpEgAttack, fAmpEgDecay, fAmpEgSustain, fAmpEgRelease;
     ScopedPointer<DropDown> fLoopMode;
     ScopedPointer<Menu> fLoopMenu;
+    ScopedPointer<Slider>fSlider;
+    ScopedPointer<Box> box_layout_;
     NanoImage imgLoopStart, imgLoopEnd;
     void initWidgets();
     int loadSample();

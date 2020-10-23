@@ -106,7 +106,7 @@ void DropsUI::initWidgets()
     fAmpEgAttack->setId(kAmpEgAttack);
     fAmpEgAttack->setSize(knobSize);
     fAmpEgAttack->setCallback(this);
-    fAmpEgAttack->setAbsolutePos(100, 350);
+    //fAmpEgAttack->setAbsolutePos(100, 350);
     fAmpEgAttack->label = "ATTACK";
     fAmpEgAttack->foreground_color = floral_white;
     fAmpEgAttack->background_color = black_olive;
@@ -117,7 +117,7 @@ void DropsUI::initWidgets()
     fAmpEgDecay->setId(kAmpEgDecay);
     fAmpEgDecay->setSize(knobSize);
     fAmpEgDecay->setCallback(this);
-    fAmpEgDecay->setAbsolutePos(100 + 1 * knobSpacing, 350);
+    //fAmpEgDecay->setAbsolutePos(100 + 1 * knobSpacing, 350);
     fAmpEgDecay->label = "DECAY";
     fAmpEgDecay->foreground_color = floral_white;
     fAmpEgDecay->background_color = black_olive;
@@ -128,7 +128,7 @@ void DropsUI::initWidgets()
     fAmpEgSustain->setId(kAmpEgSustain);
     fAmpEgSustain->setSize(knobSize);
     fAmpEgSustain->setCallback(this);
-    fAmpEgSustain->setAbsolutePos(100 + 2 * knobSpacing, 350);
+    //fAmpEgSustain->setAbsolutePos(100 + 2 * knobSpacing, 350);
     fAmpEgSustain->label = "SUSTAIN";
     fAmpEgSustain->foreground_color = floral_white;
     fAmpEgSustain->background_color = black_olive;
@@ -139,7 +139,7 @@ void DropsUI::initWidgets()
     fAmpEgRelease->setId(kAmpEgRelease);
     fAmpEgRelease->setSize(knobSize);
     fAmpEgRelease->setCallback(this);
-    fAmpEgRelease->setAbsolutePos(100 + 3 * knobSpacing, 350);
+    //fAmpEgRelease->setAbsolutePos(100 + 3 * knobSpacing, 350);
     fAmpEgRelease->label = "RELEASE";
     fAmpEgRelease->foreground_color = floral_white;
     fAmpEgRelease->background_color = black_olive;
@@ -151,7 +151,7 @@ void DropsUI::initWidgets()
     fLoopMode->font_size = 16;
     fLoopMode->setSize(216, fLoopMode->font_size + fLoopMode->margin * 2.0f);
     fLoopMode->setCallback(this);
-    fLoopMode->setAbsolutePos(100 + 4 * knobSpacing, 350);
+    //fLoopMode->setAbsolutePos(100 + 4 * knobSpacing, 350);
     fLoopMode->label = "LOOP MODE:";
     fLoopMode->item = "NO LOOP";
     fLoopMode->foreground_color = floral_white;
@@ -161,9 +161,7 @@ void DropsUI::initWidgets()
     fLoopMenu = new Menu(window);
     fLoopMenu->setId(9999); // FIXME: hardcode id
     fLoopMenu->setCallback(this);
-    const float x = fLoopMode->getMenuOffset() + fLoopMode->getAbsoluteX();
-    const float y = fLoopMode->getAbsoluteY() + fLoopMode->getHeight();
-    fLoopMenu->setAbsolutePos(x, y);
+
     fLoopMenu->addItem("NO LOOP");
     fLoopMenu->addItem("ONE SHOT");
     fLoopMenu->addItem("CONTINUOUS");
@@ -176,6 +174,34 @@ void DropsUI::initWidgets()
     fLoopMenu->text_color = floral_white;
 
     fLoopMode->setMenu(fLoopMenu);
+
+    fSlider = new Slider(window);
+    fSlider->setId(9998);
+    fSlider->setCallback(this);
+    fSlider->setAbsolutePos(400, 500);
+    fSlider->setSize(300, 20);
+    fSlider->setLabel("LFO DEPTH:");
+    fSlider->background_color = pale_silver;
+    fSlider->foreground_color = floral_white;
+    fSlider->highlite_color = flame;
+    fSlider->text_color = floral_white;
+
+    box_layout_ = new Box(window);
+    box_layout_->setAbsolutePos(0, display_bottom + minimap_height);
+    box_layout_->setWidth(getWidth());
+    //box_layout_->setHeight(300);
+    box_layout_->align_items = Box::Align_Items::top;
+    box_layout_->justify_content = Box::Justify_Content::space_evenly;
+    box_layout_->addWidget(fAmpEgAttack);
+    box_layout_->addWidget(fAmpEgDecay);
+    box_layout_->addWidget(fAmpEgSustain);
+    box_layout_->addWidget(fAmpEgRelease);
+    box_layout_->addWidget(fLoopMode);
+    box_layout_->setWidgetAlignment(kSamplePlayMode,Box::Align_Items::middle);
+
+    const float x = fLoopMode->getMenuOffset() + fLoopMode->getAbsoluteX();
+    const float y = fLoopMode->getAbsoluteY() + fLoopMode->getHeight();
+    fLoopMenu->setAbsolutePos(x, y);
 }
 
 void DropsUI::parameterChanged(uint32_t index, float value)
@@ -831,6 +857,12 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
     }
 
     repaint();
+}
+
+void DropsUI::sliderValueChanged(Slider *slider, float value)
+{
+    uint id = slider->getId();
+    printf("slider %i, value %f\n", id, value);
 }
 
 void DropsUI::scrollBarClicked(ScrollBar *scrollBar, bool dragging)
