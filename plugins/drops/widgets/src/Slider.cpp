@@ -94,12 +94,12 @@ bool Slider::onScroll(const ScrollEvent &ev)
 
 bool Slider::onMotion(const MotionEvent &ev)
 {
-    if (contains(ev.pos) && !has_mouse_)
+    if (handle_.contains(ev.pos) && !has_mouse_)
     {
         has_mouse_ = true;
         repaint();
     }
-    if (!contains(ev.pos) && !dragging_)
+    if (!handle_.contains(ev.pos) && !dragging_)
     {
         has_mouse_ = false;
         repaint();
@@ -110,7 +110,6 @@ bool Slider::onMotion(const MotionEvent &ev)
     const float slider_area_w = static_cast<float>(getWidth() - label_width_ - 2 * margin_);
     const float vper = (mx - label_width_) / slider_area_w;
     const float val = vper * (max_value - min_value);
-    printf("onMotion val %f\n", val);
     setValue(val);
 
     repaint();
