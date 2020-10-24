@@ -40,7 +40,7 @@ clean:
 	$(MAKE) clean -C plugins/drops
 	rm -rf bin build
 
-cleanall:clean sfizz-clean
+dist-clean:clean sfizz-clean
 # --------------------------------------------------------------
 
 .PHONY: plugins

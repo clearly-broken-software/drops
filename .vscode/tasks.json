@@ -25,9 +25,9 @@
             "problemMatcher": []
         },
         {
-            "label": "clean all",
+            "label": "dist-clean",
             "type": "shell",
-            "command": "make cleanall",
+            "command": "make dist-clean",
             "problemMatcher": []
         },
         {
