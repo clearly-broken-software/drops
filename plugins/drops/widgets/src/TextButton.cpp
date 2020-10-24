@@ -13,6 +13,18 @@ TextButton::TextButton(Window &parent, Size<uint> size) noexcept
     loadSharedResources();
 }
 
+TextButton::TextButton(Widget * widget, Size<uint> size) noexcept
+    : NanoWidget(widget)
+{
+    buttonText = "click to load sample";
+    back_ground_color = Color(0.8f, 0.8f, 0.8f);
+    text_color = Color(0.1f, 0.1f, 0.1f);
+    font_size = 16;
+    loadSharedResources();
+}
+
+
+
 bool TextButton::onMouse(const MouseEvent &ev)
 {
     if (contains(ev.pos) && ev.press && ev.button == 1)
