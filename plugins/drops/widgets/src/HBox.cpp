@@ -1,23 +1,23 @@
 /* license */
-#include "Box.hpp"
+#include "HBox.hpp"
 
 START_NAMESPACE_DISTRHO
 
-Box::Box(Window &parent) noexcept
+HBox::HBox(Window &parent) noexcept
     : NanoWidget(parent),
       align_items(Align_Items::middle),
       justify_content(Justify_Content::space_evenly)
 {
 }
 
-Box::Box(Widget *widget) noexcept
+HBox::HBox(Widget *widget) noexcept
     : NanoWidget(widget),
       align_items(Align_Items::middle),
       justify_content(Justify_Content::space_evenly)
 {
 }
 
-void Box::addWidget(Widget *widget)
+void HBox::addWidget(Widget *widget)
 {
     items_.emplace_back(Item(widget));
 
@@ -29,7 +29,7 @@ void Box::addWidget(Widget *widget)
     positionWidgets();
 }
 
-void Box::setWidgetAlignment(uint id, Align_Items a_i)
+void HBox::setWidgetAlignment(uint id, Align_Items a_i)
 {
     for (auto it = items_.begin(); it != items_.end(); it++)
     {
@@ -41,7 +41,7 @@ void Box::setWidgetAlignment(uint id, Align_Items a_i)
         }
     }
 }
-void Box::setWidgetJustify_Content(uint id, Justify_Content j_c)
+void HBox::setWidgetJustify_Content(uint id, Justify_Content j_c)
 {
     for (auto it = items_.begin(); it != items_.end(); it++)
     {
@@ -54,7 +54,7 @@ void Box::setWidgetJustify_Content(uint id, Justify_Content j_c)
     }
 }
 
-void Box::removeWidget(uint id)
+void HBox::removeWidget(uint id)
 {
     for (auto it = items_.begin(); it != items_.end(); it++)
     {
@@ -67,7 +67,7 @@ void Box::removeWidget(uint id)
     }
 }
 
-void Box::positionWidgets()
+void HBox::positionWidgets()
 {
     const uint width = getWidth();
     const uint height = getHeight();
@@ -209,22 +209,22 @@ void Box::positionWidgets()
     }
 }
 
-bool Box::onMouse(const MouseEvent &ev)
+bool HBox::onMouse(const MouseEvent &ev)
 {
     return false;
 }
 
-bool Box::onScroll(const ScrollEvent &ev)
+bool HBox::onScroll(const ScrollEvent &ev)
 {
     return false;
 }
 
-bool Box::onMotion(const MotionEvent &ev)
+bool HBox::onMotion(const MotionEvent &ev)
 {
     return false;
 }
 
-void Box::onNanoDisplay()
+void HBox::onNanoDisplay()
 {
 #ifdef DEBUG
     const uint width = getWidth();

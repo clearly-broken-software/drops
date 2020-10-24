@@ -1,7 +1,7 @@
 /*  license  */
 
-#ifndef BOX_HPP
-#define BOX_HPP
+#ifndef H_BOX_HPP
+#define H_BOX_HPP
 
 #include "Window.hpp"
 #include "Widget.hpp"
@@ -10,11 +10,11 @@
 
 START_NAMESPACE_DISTRHO
 
-class Box : public NanoWidget
+class HBox : public NanoWidget
 {
 public:
-    explicit Box(Window &parent) noexcept;
-    explicit Box(Widget *widget) noexcept;
+    explicit HBox(Window &parent) noexcept;
+    explicit HBox(Widget *widget) noexcept;
     enum struct Align_Items
     {
         none,
@@ -75,7 +75,7 @@ private:
     void positionWidgets();
     std::vector<Item> items_;
 
-    DISTRHO_LEAK_DETECTOR(Box)
+    DISTRHO_LEAK_DETECTOR(HBox)
 };
 
 END_NAMESPACE_DISTRHO
