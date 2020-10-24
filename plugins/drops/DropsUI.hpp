@@ -13,7 +13,8 @@
 #include "DropDown.hpp"
 #include "Menu.hpp"
 #include "Slider.hpp"
-#include "Box.hpp"
+#include "HBox.hpp"
+#include "VBox.hpp"
 #include "Artwork.hpp"
 #include "DropsColors.hpp"
 
@@ -64,7 +65,8 @@ private:
     ScopedPointer<DropDown> fLoopMode;
     ScopedPointer<Menu> fLoopMenu;
     ScopedPointer<Slider>fSlider;
-    ScopedPointer<Box> box_layout_;
+    ScopedPointer<HBox> box_layout_,box_tabs;
+    ScopedPointer<VBox> vbox;
     NanoImage imgLoopStart, imgLoopEnd;
     void initWidgets();
     int loadSample();

@@ -186,22 +186,31 @@ void DropsUI::initWidgets()
     fSlider->highlite_color = flame;
     fSlider->text_color = floral_white;
 
-    box_layout_ = new Box(window);
+    /* box_layout_ = new HBox(window);
     box_layout_->setAbsolutePos(0, display_bottom + minimap_height);
     box_layout_->setWidth(getWidth()-50);
     //box_layout_->setHeight(300);
-    box_layout_->align_items = Box::Align_Items::top;
-    box_layout_->justify_content = Box::Justify_Content::space_evenly;
+    box_layout_->align_items = HBox::Align_Items::top;
+    box_layout_->justify_content = HBox::Justify_Content::space_evenly;
     box_layout_->addWidget(fAmpEgAttack);
     box_layout_->addWidget(fAmpEgDecay);
     box_layout_->addWidget(fAmpEgSustain);
     box_layout_->addWidget(fAmpEgRelease);
     box_layout_->addWidget(fLoopMode);
-    box_layout_->setWidgetAlignment(kSamplePlayMode, Box::Align_Items::middle);
-
+    box_layout_->setWidgetAlignment(kSamplePlayMode, HBox::Align_Items::middle);
+ */
     const float x = fLoopMode->getMenuOffset() + fLoopMode->getAbsoluteX();
     const float y = fLoopMode->getAbsoluteY() + fLoopMode->getHeight();
     fLoopMenu->setAbsolutePos(x, y);
+
+    vbox = new VBox (window);
+    vbox->setAbsolutePos(0,display_bottom+minimap_height);
+    vbox->setHeight(getHeight() - vbox->getAbsoluteY());
+    vbox->addWidget(fAmpEgAttack);
+    vbox->addWidget(fAmpEgDecay);
+    vbox->addWidget(fAmpEgSustain);
+    vbox->addWidget(fAmpEgRelease);
+  
 }
 
 void DropsUI::parameterChanged(uint32_t index, float value)

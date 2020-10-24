@@ -23,7 +23,8 @@ FILES_UI  = \
 			widgets/src/DropDown.cpp \
 			widgets/src/Menu.cpp \
 			widgets/src/Slider.cpp \
-			widgets/src/Box.cpp \
+			widgets/src/HBox.cpp \
+			widgets/src/VBox.cpp \
 			Artwork.cpp
 
 # --------------------------------------------------------------
