@@ -1,5 +1,8 @@
 // TODO Add license
 
+#ifndef DROPSUI_HPP_INCLUDED
+#define DROPSUI_HPP_INCLUDED
+
 #include "DistrhoPluginInfo.h"
 #include "DistrhoUI.hpp"
 #include "NanoVG.hpp"
@@ -8,16 +11,17 @@
 
 #include "DropsPlugin.hpp"
 #include "TextButton.hpp"
+#include "FileOpenButton.hpp"
 #include "ScrollBar.hpp"
 #include "Knob.hpp"
 #include "DropDown.hpp"
 #include "Menu.hpp"
 #include "Slider.hpp"
+#include "RadioButton.hpp"
 #include "HBox.hpp"
 #include "VBox.hpp"
 #include "Artwork.hpp"
 #include "DropsColors.hpp"
-
 
 START_NAMESPACE_DISTRHO
 
@@ -29,7 +33,9 @@ class DropsUI : public UI,
                 public Knob::Callback,
                 public DropDown::Callback,
                 public Menu::Callback,
-                public Slider::Callback
+                public Slider::Callback,
+                public FileOpenButton::Callback,
+                public RadioButton::Callback
 {
 public:
     DropsUI();
@@ -42,14 +48,16 @@ protected:
     bool onMouse(const MouseEvent &ev) override;
     bool onScroll(const ScrollEvent &) override;
     bool onMotion(const MotionEvent &) override;
-    void textButtonClicked(TextButton *textButton) override;
-    void scrollBarClicked(ScrollBar *scrollBar, bool dragging) override;
-    void dropDownClicked(DropDown* dropdown) override;
-    void knobDragStarted(Knob* knob) override;
-    void knobDragFinished(Knob* knob) override;
+    void onTextButtonClicked(TextButton *textButton) override;
+    void onFileOpenButtonClicked(FileOpenButton *fileOpenButton) override;
+    void onScrollBarClicked(ScrollBar *scrollBar, bool dragging) override;
+    void onDropDownClicked(DropDown *dropdown) override;
+    void knobDragStarted(Knob *knob) override;
+    void knobDragFinished(Knob *knob) override;
     void knobValueChanged(Knob *knob, float value) override;
-    void sliderValueChanged(Slider *slider, float value) override;
-    void menuClicked(Menu* menu, uint id, std::string item);
+    void onSliderValueChanged(Slider *slider, float value) override;
+    void onMenuClicked(Menu *menu, uint id, std::string item);
+    void onRadioButtonClicked(RadioButton * radio);
 
 private:
     template <class T>
@@ -59,16 +67,36 @@ private:
     }
 
     DropsPlugin *plugin;
-    ScopedPointer<TextButton> fFileOpenButton;
-    ScopedPointer<ScrollBar> fScrollBarHandle, fLoopStart, fLoopEnd, fSampleIn, fSampleOut, fScrollBarLeft, fScrollBarRight;
-    ScopedPointer<Knob> fAmpEgAttack, fAmpEgDecay, fAmpEgSustain, fAmpEgRelease;
-    ScopedPointer<DropDown> fLoopMode;
-    ScopedPointer<Menu> fLoopMenu;
-    ScopedPointer<Slider>fSlider;
-    ScopedPointer<HBox> box_layout_,box_tabs;
-    ScopedPointer<VBox> vbox;
+    ScopedPointer<FileOpenButton> fileopen_button;
+    ScopedPointer<TextButton> button_sample, button_amp, button_pitch, button_filter;
+    ScopedPointer<ScrollBar> fScrollBarHandle, fLoopStart, fLoopEnd, fSampleIn,
+        fSampleOut, fScrollBarLeft, fScrollBarRight;
+
+    ScopedPointer<HBox> box_tabs;
+    // sample tab
+    ScopedPointer<VBox> box_sample;
+    ScopedPointer<HBox> box_sample_row_1, box_sample_row_2, box_sample_row_3;
+    ScopedPointer<Slider> fSampleXFade, fSampleTune;
+    ScopedPointer<DropDown> fSampleNormalize, fSamplePitchKeyCenter,
+        fSamplePlayMode, fSamplePlayDirection;
+    ScopedPointer<Menu> fNormalizeMenu, fKeyCenterMenu, fPlayModeMenu,
+        fDirectionMenu;
+    // amp tab
+    ScopedPointer<VBox>box_amp;
+    ScopedPointer<HBox>box_amp_row_1,box_amp_row_2;
+    ScopedPointer<Knob>
+        fAmpEgAttack, fAmpEgDecay, fAmpEgSustain, fAmpEgRelease;
+    ScopedPointer<DropDown> fAmpLFOType;
+    ScopedPointer<Menu> fAmpLFOTypeMenu;
+    ScopedPointer<Slider> fAmpLFOFreq, fAmpLFODepth;
+    ScopedPointer<DropDown> fAmpLFOSync;
+    ScopedPointer<Menu> fAmpLFOSyncMenu;
+    ScopedPointer<RadioButton> fAmpLFOFreqBeat;
+        
     NanoImage imgLoopStart, imgLoopEnd;
     void initWidgets();
+    void initTabSample();
+    void initTabAmp();
     int loadSample();
     void drawWaveform();
     void drawMinimap();
@@ -99,3 +127,5 @@ private:
 };
 
 END_NAMESPACE_DISTRHO
+
+#endif

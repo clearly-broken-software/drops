@@ -6,14 +6,16 @@ START_NAMESPACE_DISTRHO
 HBox::HBox(Window &parent) noexcept
     : NanoWidget(parent),
       align_items(Align_Items::middle),
-      justify_content(Justify_Content::space_evenly)
+      justify_content(Justify_Content::space_evenly),
+      padding(0)
 {
 }
 
 HBox::HBox(Widget *widget) noexcept
     : NanoWidget(widget),
       align_items(Align_Items::middle),
-      justify_content(Justify_Content::space_evenly)
+      justify_content(Justify_Content::space_evenly),
+      padding(0)
 {
 }
 
@@ -21,12 +23,15 @@ void HBox::addWidget(Widget *widget)
 {
     items_.emplace_back(Item(widget));
 
-    uint box_height = getHeight();
-    uint wh = widget->getHeight();
+    const uint box_height = getHeight();
+    const uint wh = widget->getHeight();
     if (wh > box_height)
         setHeight(wh);
 
-    positionWidgets();
+    for (auto it = items_.begin(); it != items_.end(); it++)
+        it->height = getHeight();
+
+    // positionWidgets();
 }
 
 void HBox::setWidgetAlignment(uint id, Align_Items a_i)
@@ -81,12 +86,13 @@ void HBox::positionWidgets()
         uint step = 0;
         for (auto it = items_.begin(); it != items_.end(); it++)
         {
-
-            it->widget->setAbsoluteX(box_x + step);
+            it->x = box_x + step;
+            it->widget->setAbsoluteX(it->x);
+            it->widget->setAbsoluteY(box_y);
             const uint ww = it->widget->getWidth();
             step += ww;
+            step += padding;
             it->width = ww;
-            it->x = box_x + step;
         }
         break;
     }
@@ -101,6 +107,7 @@ void HBox::positionWidgets()
         for (auto it = items_.begin(); it != items_.end(); it++)
         {
             it->widget->setAbsoluteX(startX);
+            it->widget->setAbsoluteY(box_y);
             it->x = startX;
             const uint ww = it->widget->getWidth();
             startX += ww;
@@ -120,6 +127,7 @@ void HBox::positionWidgets()
         for (auto it = items_.begin(); it != items_.end(); it++)
         {
             it->widget->setAbsoluteX(startX);
+            it->widget->setAbsoluteY(box_y);
             it->x = startX;
             const uint ww = it->widget->getWidth();
             startX += ww;
@@ -151,6 +159,7 @@ void HBox::positionWidgets()
                 break;
             }
             it->x = box_x + step;
+            it->widget->setAbsoluteY(box_y);
             it->width = item_width;
             step += item_width;
         }
@@ -236,12 +245,6 @@ void HBox::onNanoDisplay()
     fillColor(1.0f, 1.0f, 1.0f, 0.1f);
     strokeColor(1.0f, 0.f, 0.f, .5f);
     strokeWidth(stroke_width);
-    uint step = 0;
-    beginPath();
-    rect(0, 0, width, height);
-    fill();
-    stroke();
-    closePath();
 
     for (auto it = items_.begin(); it != items_.end(); it++)
     {
@@ -249,11 +252,11 @@ void HBox::onNanoDisplay()
         beginPath();
         const uint x = it->x - box_x;
         const uint y = 0;
-        rect(x, y, it->width, height);
+        rect(x, y, it->width, it->height);
         fill();
         stroke();
         closePath();
-    }
+      }
 #endif
 }
 

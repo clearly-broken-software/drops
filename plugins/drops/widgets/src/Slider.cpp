@@ -31,6 +31,36 @@ Slider::Slider(Window &parent) noexcept
     fill_color_ = foreground_color;
 }
 
+Slider::Slider(Widget* widget) noexcept
+    : NanoWidget(widget)
+{
+    loadSharedResources();
+    dragging_ = false;
+    has_mouse_ = false;
+    value_ = 0.f;
+    value_tmp_ = 0.f;
+    max_value = 1.0f;
+    min_value = 0.0f;
+    using_log_ = false;
+    font_size = 14.0f;
+    fontFace(NANOVG_DEJAVU_SANS_TTF);
+    font_ = findFont(NANOVG_DEJAVU_SANS_TTF);
+    if (font_ == -1)
+    {
+        fprintf(stderr, "%s", "font not found\n");
+    }
+
+    setLabel("LABEL:"); /// also sets handle size
+
+    margin_ = handle_.getWidth() / 2.0f;
+    foreground_color = Color(1, 1, 1);
+    background_color = Color(0, 0, 0);
+    text_color = Color(1, 1, 1);
+    fill_color_ = foreground_color;
+}
+
+
+
 void Slider::setLabel(std::string l)
 {
     label_ = l;
@@ -99,7 +129,7 @@ bool Slider::onMotion(const MotionEvent &ev)
         has_mouse_ = true;
         repaint();
     }
-    if (!handle_.contains(ev.pos) && !dragging_)
+    if (!handle_.contains(ev.pos) && !dragging_ && has_mouse_)
     {
         has_mouse_ = false;
         repaint();
@@ -111,7 +141,7 @@ bool Slider::onMotion(const MotionEvent &ev)
     const float vper = (mx - label_width_) / slider_area_w;
     const float val = vper * (max_value - min_value);
     setValue(val);
-
+    printf("slider onMotion repaint\n");
     repaint();
     return true;
 }
@@ -154,7 +184,7 @@ void Slider::onNanoDisplay()
 
     if (has_mouse_)
     {
-        fill_color_ = highlite_color;
+        fill_color_ = highlight_color;
     }
     else
     {
@@ -180,7 +210,7 @@ void Slider::setValue(float val) noexcept
 {
     value_ = std::max(min_value, std::min(val, max_value));
     tmp_value_ = value_;
-    callback->sliderValueChanged(this, value_);
+    callback->onSliderValueChanged(this, value_);
 }
 
 float Slider::_logscale(float value) const

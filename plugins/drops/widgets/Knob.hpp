@@ -31,7 +31,7 @@ public:
     float labelSize;
     Color background_color;
     Color foreground_color;
-    Color highlite_color;
+    Color highlight_color;
     Color text_color;
     float margin;
     float default_value;

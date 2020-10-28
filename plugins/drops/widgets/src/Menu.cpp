@@ -14,6 +14,17 @@ Menu::Menu(Window &parent) noexcept
     timer = 0; // if >= 0 menu is visible
     time_out = 150;
 }
+Menu::Menu(Widget *widget) noexcept
+    : NanoWidget(widget)
+{
+    widget->getParentWindow().addIdleCallback(this);
+    loadSharedResources();
+    highlighted_item_ = -1;
+    font_size = 14;
+    margin = 2.f;
+    timer = 0; // if >= 0 menu is visible
+    time_out = 150;
+}
 
 void Menu::idleCallback()
 {
@@ -28,13 +39,18 @@ void Menu::idleCallback()
 
 bool Menu::onMouse(const MouseEvent &ev)
 {
-    if (ev.press && ev.button == 1){
-        if (contains(ev.pos)){
-            if(highlighted_item_ >= 0){
-                callback_->menuClicked(this, highlighted_item_, items_[highlighted_item_]);
+    if (ev.press && ev.button == 1)
+    {
+        if (contains(ev.pos))
+        {
+            if (highlighted_item_ >= 0)
+            {
+                callback_->onMenuClicked(this, highlighted_item_, items_[highlighted_item_]);
                 return true;
             }
-        } else {
+        }
+        else
+        {
             hide();
             return true;
         }
@@ -85,7 +101,7 @@ void Menu::onNanoDisplay()
     {
         beginPath();
         rect(0, font_size * highlighted_item_, width, font_size);
-        fillColor(highlite_color);
+        fillColor(highlight_color);
         fill();
         closePath();
         ;

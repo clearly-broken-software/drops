@@ -35,31 +35,44 @@ shamrock_green_4 { color: #006A3A }
 
 /* As RGBa codes */
 
-flame { color: rgba(235, 93, 40) }	/* Main Primary color */
+flame   { color: rgba(235, 93, 40) }	/* Main Primary color */
 flame_1 { color: rgba(255,159,124) }
 flame_2 { color: rgba(251,127, 82) }
 flame_3 { color: rgba(194, 62, 13) }
 flame_4 { color: rgba(154, 42,  0) }
 
-saffron { color: rgba(235,190, 40) }	/* Main Secondary color (1) */
+saffron   { color: rgba(235,190, 40) }	/* Main Secondary color (1) */
 saffron_1 { color: rgba(255,225,124) }
 saffron_2 { color: rgba(251,212, 82) }
 saffron_3 { color: rgba(194,153, 13) }
 saffron_4 { color: rgba(154,118,  0) }
 
-blue_pigment { color: rgba( 55, 47,164) }	/* Main Secondary color (2) */
+blue_pigment   { color: rgba( 55, 47,164) }	/* Main Secondary color (2) */
 blue_pigment_1 { color: rgba(116,110,198) }
 blue_pigment_2 { color: rgba( 81, 73,175) }
 blue_pigment_3 { color: rgba( 35, 27,135) }
 blue_pigment_4 { color: rgba( 21, 14,107) }
 
-shamrock_green { color: rgba( 28,162,101) }	/* Main shamrock_green color */
+shamrock_green   { color: rgba( 28,162,101) }	/* Main shamrock_green color */
 shamrock_green_1 { color: rgba( 95,197,151) }
 shamrock_green_2 { color: rgba( 57,173,120) }
 shamrock_green_3 { color: rgba(  9,134, 77) }
 shamrock_green_4 { color: rgba(  0,106, 58) }
 
-eerie_black = #252422 = rgb( 37, 36, 34) = rgba( 37, 36, 34,1) = rgb0(0.145,0.141,0.133)
+eerie_black   {color: rgba(37,36,34)}
+eerie_black_1 {color: rgba(154,150,140,1)}
+eerie_black_2 {color: rgba(101, 98, 92,1)}
+eerie_black_3 {color: rgba( 23, 20, 16,1)}
+eerie_black_4 {color: rgba( 26, 21, 12,1)}
+
+black_olive   {color: rgba( 64, 61, 57,1)}
+black_olive_1 {color: rgba(170,163,153,1)}
+black_olive_2 {color: rgba(120,114,107,1)}
+black_olive_3 {color: rgba( 31, 27, 22,1)}
+black_olive_4 {color: rgba( 35, 27, 17,1)}
+
+
+/* = #252422 = rgb( 37, 36, 34) = rgba( 37, 36, 34,1) = rgb0(0.145,0.141,0.133)
 shade 1 = #9A968C = rgb(154,150,140) = rgba(154,150,140,1) = rgb0(0.604,0.588,0.549)
 shade 2 = #65625C = rgb(101, 98, 92) = rgba(101, 98, 92,1) = rgb0(0.396,0.384,0.361)
 shade 3 = #171410 = rgb( 23, 20, 16) = rgba( 23, 20, 16,1) = rgb0(0.09,0.078,0.063)

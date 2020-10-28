@@ -19,9 +19,10 @@ public:
   {
   public:
     virtual ~Callback() {}
-    virtual void menuClicked(Menu *menu, uint index, std::string item) = 0;
+    virtual void onMenuClicked(Menu *menu, uint index, std::string item) = 0;
   };
   explicit Menu(Window &parent) noexcept;
+  explicit Menu(Widget *widget) noexcept;
   void addItem(std::string str);
   void setCallback(Callback *cb);
   void idleCallback();
@@ -32,7 +33,7 @@ public:
   bool dropdown_has_mouse;
   Color background_color;
   Color foreground_color;
-  Color highlite_color;
+  Color highlight_color;
   Color text_color;
 
 protected:

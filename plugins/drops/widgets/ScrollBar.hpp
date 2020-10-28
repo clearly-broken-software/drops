@@ -16,7 +16,7 @@ public:
     {
     public:
         virtual ~Callback() {}
-        virtual void scrollBarClicked(ScrollBar *scrollBar, bool dragging) = 0;
+        virtual void onScrollBarClicked(ScrollBar *scrollBar, bool dragging) = 0;
     };
     explicit ScrollBar(Window &parent) noexcept;
     void setCallback(Callback *cb);

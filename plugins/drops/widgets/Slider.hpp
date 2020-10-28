@@ -20,9 +20,10 @@ public:
         virtual ~Callback() {}
     //    virtual void sliderDragStarted(Slider *slider) = 0;
     //   virtual void sliderDragFinished(Slider *slider) = 0;
-        virtual void sliderValueChanged(Slider *slider, float value) = 0;
+        virtual void onSliderValueChanged(Slider *slider, float value) = 0;
     };
     explicit Slider(Window &parent) noexcept;
+    explicit Slider(Widget* widget) noexcept;
     void setCallback(Callback *cb);
     void setValue(float val) noexcept;
     float getValue() noexcept;
@@ -32,7 +33,7 @@ public:
     float font_size;
     Color background_color;
     Color foreground_color;
-    Color highlite_color;
+    Color highlight_color;
     Color text_color;
     
     float default_value;

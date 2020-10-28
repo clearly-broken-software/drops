@@ -19,9 +19,10 @@ public:
   {
   public:
     virtual ~Callback() {}
-    virtual void dropDownClicked(DropDown *dropDown) = 0;
+    virtual void onDropDownClicked(DropDown *dropDown) = 0;
   };
   explicit DropDown(Window &parent) noexcept;
+  explicit DropDown(Widget *widget) noexcept;
   void addOption(std::string str);
   float getMenuOffset();
   void setCallback(Callback *cb);
@@ -31,8 +32,7 @@ public:
   std::string item;
   float font_size;
   float margin;
-  Color background_color, foreground_color,text_color;
-  
+  Color background_color, foreground_color, text_color;
 
 protected:
   void onNanoDisplay() override;
@@ -42,7 +42,7 @@ protected:
 private:
   Callback *callback_;
   bool has_mouse_;
-  Menu* menu_;
+  Menu *menu_;
 
   DISTRHO_LEAK_DETECTOR(DropDown)
 };

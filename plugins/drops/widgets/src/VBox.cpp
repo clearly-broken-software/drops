@@ -9,7 +9,6 @@ VBox::VBox(Window &parent) noexcept
       justify_content(Justify_Content::center)
 {
 }
-
 VBox::VBox(Widget *widget) noexcept
     : NanoWidget(widget),
       align_items(Align_Items::space_evenly),
@@ -26,7 +25,7 @@ void VBox::addWidget(Widget *widget)
     if (ww > box_width)
         setWidth(ww);
 
-    positionWidgets();
+    // positionWidgets();
 }
 
 void VBox::setWidgetAlignment(uint id, Align_Items a_i)
@@ -36,7 +35,6 @@ void VBox::setWidgetAlignment(uint id, Align_Items a_i)
         if (it->widget->getId() == id)
         {
             it->align_self = a_i;
-            positionWidgets();
             return;
         }
     }
@@ -48,7 +46,18 @@ void VBox::setWidgetJustify_Content(uint id, Justify_Content j_c)
         if (it->widget->getId() == id)
         {
             it->justify_content = j_c;
-            positionWidgets();
+            return;
+        }
+    }
+}
+
+void VBox::setWidgetResize(uint id, bool resize)
+{
+    for (auto it = items_.begin(); it != items_.end(); it++)
+    {
+        if (it->widget->getId() == id)
+        {
+            it->can_resize = true;
             return;
         }
     }
@@ -123,7 +132,9 @@ void VBox::positionWidgets()
         for (auto it = items_.begin(); it != items_.end(); it++)
         {
             it->widget->setAbsoluteY(box_y + step);
-            step += it->widget->getHeight();
+            const uint wh = it->widget->getHeight();
+            step += wh;
+            it->height = wh;
         }
         break;
     }
@@ -137,7 +148,10 @@ void VBox::positionWidgets()
         for (auto it = items_.begin(); it != items_.end(); it++)
         {
             it->widget->setAbsoluteY(startY);
-            startY += it->widget->getHeight();
+            it->y = startY;
+            uint wh = it->widget->getHeight();
+            it->height = wh;
+            startY += wh;
         }
         break;
     }
@@ -151,7 +165,9 @@ void VBox::positionWidgets()
         for (auto it = items_.begin(); it != items_.end(); it++)
         {
             it->widget->setAbsoluteY(startY);
-            startY += it->widget->getHeight();
+            uint wh = it->widget->getHeight();
+            it->height = wh;
+            startY += wh;
         }
         break;
     }
@@ -175,8 +191,18 @@ void VBox::positionWidgets()
             case Align_Items::space_evenly:
             case Align_Items::none:
             default:
-                const uint wh = it->widget->getHeight();
-                it->widget->setAbsoluteY(box_y + step + (item_height / 2 - wh / 2));
+                if (it->can_resize)
+                {
+                    it->height = item_height;
+                    it->widget->setHeight(item_height);
+                    it->widget->setAbsoluteY(box_y + step);
+                }
+                else
+                {
+                    uint wh = it->widget->getHeight();
+                    it->widget->setAbsoluteY(box_y + step + (item_height / 2 - wh / 2));
+                }
+
                 break;
             }
             it->y = box_y + step;
@@ -224,6 +250,7 @@ bool VBox::onMotion(const MotionEvent &ev)
 
 void VBox::onNanoDisplay()
 {
+
 #ifdef DEBUG
     const uint width = getWidth();
     const uint height = getHeight();
@@ -231,23 +258,19 @@ void VBox::onNanoDisplay()
     const uint box_y = getAbsoluteY();
     const float stroke_width = 1.0f;
     const float dbl_stroke = stroke_width * 2.f;
+    const uint id = getId();
     fillColor(1.0f, 1.0f, 1.0f, 0.1f);
     strokeColor(1.0f, 0.f, 0.f, .5f);
     strokeWidth(stroke_width);
     uint step = 0;
-    beginPath();
-    rect(0, 0, width, height);
-    fill();
-    stroke();
-    closePath();
 
     for (auto it = items_.begin(); it != items_.end(); it++)
     {
 
         beginPath();
         const uint x = it->x - box_x;
-        const uint y = 0;
-        rect(x, y, it->width, height);
+        const uint y = it->y - box_y;
+        rect(x, y, it->width, it->height);
         fill();
         stroke();
         closePath();

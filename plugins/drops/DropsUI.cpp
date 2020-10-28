@@ -10,7 +10,7 @@ START_NAMESPACE_DISTRHO
 // -----------------------------------------------------------------------------
 
 DropsUI::DropsUI()
-    : UI(1000, 700)
+    : UI(UI_W, UI_H)
 {
     loadSharedResources();
     plugin = static_cast<DropsPlugin *>(getPluginInstancePointer());
@@ -42,35 +42,35 @@ DropsUI::DropsUI()
     {
         loadSample();
         std::string filename = plugin->path;
-        fFileOpenButton->setText(filename);
+        fileopen_button->setText(filename);
     }
 }
 
 void DropsUI::initWidgets()
 {
     Window &window = getParentWindow();
-    fFileOpenButton = new TextButton(window, Size<uint>(40, 40)); // FIXME: remove Size
-    fFileOpenButton->setCallback(this);
-    fFileOpenButton->setAbsolutePos(238, 0);
-    fFileOpenButton->setSize(530, 55);
-    fFileOpenButton->back_ground_color = black_olive;
-    fFileOpenButton->text_color = floral_white;
-    fFileOpenButton->font_size = 24.f;
+    fileopen_button = new FileOpenButton(window);
+    fileopen_button->setCallback(this);
+    fileopen_button->setAbsolutePos(238, 0);
+    fileopen_button->setSize(530, 55);
+    fileopen_button->background_color = black_olive;
+    fileopen_button->text_color = floral_white;
+    fileopen_button->font_size = 24.f;
 
     fScrollBarHandle = new ScrollBar(window);
-    fScrollBarHandle->setId(scrollbarHandle_id);
+    fScrollBarHandle->setId(kScrollbarHandle);
     fScrollBarHandle->setSize(display_width, minimap_height);
     fScrollBarHandle->setAbsolutePos(display_left, display_bottom);
     fScrollBarHandle->setCallback(this);
 
     fScrollBarLeft = new ScrollBar(window);
-    fScrollBarLeft->setId(scrollbarLeft_id);
+    fScrollBarLeft->setId(kScrollbarLeft);
     fScrollBarLeft->setSize(0, minimap_height);
     fScrollBarLeft->setAbsolutePos(display_left, display_bottom);
     fScrollBarLeft->setCallback(this);
 
     fScrollBarRight = new ScrollBar(window);
-    fScrollBarRight->setId(scrollbarRight_id);
+    fScrollBarRight->setId(kScrollbarRight);
     fScrollBarRight->setSize(0, minimap_height);
     fScrollBarRight->setAbsolutePos(display_right, display_bottom);
     fScrollBarRight->setCallback(this);
@@ -83,7 +83,7 @@ void DropsUI::initWidgets()
 
     fLoopEnd = new ScrollBar(window);
     fLoopEnd->setId(kSampleLoopEnd);
-    fLoopEnd->setSize(32, 32); // FIXME: hardcoded
+    fLoopEnd->setSize(32, 32);
     fLoopEnd->setCallback(this);
     fLoopEnd->hide();
 
@@ -99,83 +99,57 @@ void DropsUI::initWidgets()
     fSampleOut->setCallback(this);
     fSampleOut->hide();
 
-    const Size<uint> knobSize = Size<uint>(76, 76);
-    const uint knobSpacing = knobSize.getWidth() + 15;
+    box_tabs = new HBox(window);
 
-    fAmpEgAttack = new Knob(window);
-    fAmpEgAttack->setId(kAmpEgAttack);
-    fAmpEgAttack->setSize(knobSize);
-    fAmpEgAttack->setCallback(this);
-    //fAmpEgAttack->setAbsolutePos(100, 350);
-    fAmpEgAttack->label = "ATTACK";
-    fAmpEgAttack->foreground_color = floral_white;
-    fAmpEgAttack->background_color = black_olive;
-    fAmpEgAttack->highlite_color = flame;
-    fAmpEgAttack->text_color = floral_white;
+    button_sample = new TextButton(box_tabs);
+    button_sample->setId(kButtonSample);
+    button_sample->setCallback(this);
+    button_sample->setSize(100, 40);
+    button_sample->setText("SAMPLE");
+    button_sample->background_color = black_olive_3;
+    button_sample->foreground_color = floral_white;
+    button_sample->highlight_color = black_olive_1;
 
-    fAmpEgDecay = new Knob(window);
-    fAmpEgDecay->setId(kAmpEgDecay);
-    fAmpEgDecay->setSize(knobSize);
-    fAmpEgDecay->setCallback(this);
-    //fAmpEgDecay->setAbsolutePos(100 + 1 * knobSpacing, 350);
-    fAmpEgDecay->label = "DECAY";
-    fAmpEgDecay->foreground_color = floral_white;
-    fAmpEgDecay->background_color = black_olive;
-    fAmpEgDecay->highlite_color = flame;
-    fAmpEgDecay->text_color = floral_white;
+    button_amp = new TextButton(box_tabs);
+    button_amp->setId(kButtonAmp);
+    button_amp->setCallback(this);
+    button_amp->setSize(100, 40); //FIXME: harcoded
+    button_amp->setText("AMP");
+    button_amp->background_color = flame_3;
+    button_amp->foreground_color = floral_white;
+    button_amp->highlight_color = flame_1;
 
-    fAmpEgSustain = new Knob(window);
-    fAmpEgSustain->setId(kAmpEgSustain);
-    fAmpEgSustain->setSize(knobSize);
-    fAmpEgSustain->setCallback(this);
-    //fAmpEgSustain->setAbsolutePos(100 + 2 * knobSpacing, 350);
-    fAmpEgSustain->label = "SUSTAIN";
-    fAmpEgSustain->foreground_color = floral_white;
-    fAmpEgSustain->background_color = black_olive;
-    fAmpEgSustain->highlite_color = flame;
-    fAmpEgSustain->text_color = floral_white;
+    button_pitch = new TextButton(box_tabs);
+    button_pitch->setId(kButtonPitch);
+    button_pitch->setCallback(this);
+    button_pitch->setSize(100, 40);
+    button_pitch->setText("PITCH");
+    button_pitch->background_color = shamrock_green_4;
+    button_pitch->foreground_color = floral_white;
+    button_pitch->highlight_color = shamrock_green_1;
 
-    fAmpEgRelease = new Knob(window);
-    fAmpEgRelease->setId(kAmpEgRelease);
-    fAmpEgRelease->setSize(knobSize);
-    fAmpEgRelease->setCallback(this);
-    //fAmpEgRelease->setAbsolutePos(100 + 3 * knobSpacing, 350);
-    fAmpEgRelease->label = "RELEASE";
-    fAmpEgRelease->foreground_color = floral_white;
-    fAmpEgRelease->background_color = black_olive;
-    fAmpEgRelease->highlite_color = flame;
-    fAmpEgRelease->text_color = floral_white;
+    button_filter = new TextButton(box_tabs);
+    button_filter->setId(kButtonFilter);
+    button_filter->setCallback(this);
+    button_filter->setSize(100, 40);
+    button_filter->setText("FILTER");
+    button_filter->background_color = blue_pigment_4;
+    button_filter->foreground_color = floral_white;
+    button_filter->highlight_color = blue_pigment_1;
 
-    fLoopMode = new DropDown(window);
-    fLoopMode->setId(kSamplePlayMode);
-    fLoopMode->font_size = 16;
-    fLoopMode->setSize(216, fLoopMode->font_size + fLoopMode->margin * 2.0f);
-    fLoopMode->setCallback(this);
-    //fLoopMode->setAbsolutePos(100 + 4 * knobSpacing, 350);
-    fLoopMode->label = "LOOP MODE:";
-    fLoopMode->item = "NO LOOP";
-    fLoopMode->foreground_color = floral_white;
-    fLoopMode->background_color = black_olive;
-    fLoopMode->text_color = floral_white;
+    box_tabs->setAbsolutePos(0, display_bottom + minimap_height);
+    box_tabs->setWidth(getWidth());
+    box_tabs->justify_content = HBox::Justify_Content::left;
+    box_tabs->addWidget(button_sample);
+    box_tabs->addWidget(button_amp);
+    box_tabs->addWidget(button_pitch);
+    box_tabs->addWidget(button_filter);
+    box_tabs->positionWidgets();
 
-    fLoopMenu = new Menu(window);
-    fLoopMenu->setId(9999); // FIXME: hardcode id
-    fLoopMenu->setCallback(this);
-
-    fLoopMenu->addItem("NO LOOP");
-    fLoopMenu->addItem("ONE SHOT");
-    fLoopMenu->addItem("CONTINUOUS");
-    fLoopMenu->addItem("SUSTAIN");
-    fLoopMenu->font_size = 16;
-    fLoopMenu->hide();
-    fLoopMenu->background_color = black_olive;
-    fLoopMenu->foreground_color = floral_white;
-    fLoopMenu->highlite_color = flame;
-    fLoopMenu->text_color = floral_white;
-
-    fLoopMode->setMenu(fLoopMenu);
-
-    fSlider = new Slider(window);
+    initTabSample();
+    initTabAmp();
+ 
+   /*  fSlider = new Slider(window);
     fSlider->setId(9998);
     fSlider->setCallback(this);
     fSlider->setAbsolutePos(400, 500);
@@ -183,8 +157,8 @@ void DropsUI::initWidgets()
     fSlider->setLabel("LFO DEPTH:");
     fSlider->background_color = pale_silver;
     fSlider->foreground_color = floral_white;
-    fSlider->highlite_color = flame;
-    fSlider->text_color = floral_white;
+    fSlider->highlight_color = flame;
+    fSlider->text_color = floral_white; */
 
     /* box_layout_ = new HBox(window);
     box_layout_->setAbsolutePos(0, display_bottom + minimap_height);
@@ -198,19 +172,17 @@ void DropsUI::initWidgets()
     box_layout_->addWidget(fAmpEgRelease);
     box_layout_->addWidget(fLoopMode);
     box_layout_->setWidgetAlignment(kSamplePlayMode, HBox::Align_Items::middle);
- */
+
     const float x = fLoopMode->getMenuOffset() + fLoopMode->getAbsoluteX();
     const float y = fLoopMode->getAbsoluteY() + fLoopMode->getHeight();
-    fLoopMenu->setAbsolutePos(x, y);
-
+    fPlayModeMenu->setAbsolutePos(x, y);
     vbox = new VBox (window);
     vbox->setAbsolutePos(0,display_bottom+minimap_height);
     vbox->setHeight(getHeight() - vbox->getAbsoluteY());
     vbox->addWidget(fAmpEgAttack);
     vbox->addWidget(fAmpEgDecay);
     vbox->addWidget(fAmpEgSustain);
-    vbox->addWidget(fAmpEgRelease);
-  
+    vbox->addWidget(fAmpEgRelease); */
 }
 
 void DropsUI::parameterChanged(uint32_t index, float value)
@@ -251,7 +223,7 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         sampleLoopEnd = value * static_cast<float>(sampleLength);
         setMarkers();
         break;
-    case kAmpEgAttack:
+        /*     case kAmpEgAttack:
         fAmpEgAttack->setValue(value);
         repaint();
         break;
@@ -266,7 +238,7 @@ void DropsUI::parameterChanged(uint32_t index, float value)
     case kAmpEgRelease:
         fAmpEgRelease->setValue(value);
         repaint();
-        break;
+        break; */
 
     default:
         break;
@@ -559,7 +531,7 @@ void DropsUI::uiFileBrowserSelected(const char *filename)
     if (filename != nullptr)
     {
 
-        fFileOpenButton->setText(filename);
+        fileopen_button->setText(filename);
         setState("filepath", filename);
         repaint();
     }
@@ -811,7 +783,7 @@ bool DropsUI::onMotion(const MotionEvent &ev)
     return false;
 }
 
-void DropsUI::textButtonClicked(TextButton *textButton)
+void DropsUI::onFileOpenButtonClicked(FileOpenButton *)
 {
     DGL::Window::FileBrowserOptions opts;
     opts.title = "Load SFZ";
@@ -819,14 +791,50 @@ void DropsUI::textButtonClicked(TextButton *textButton)
     getParentWindow().openFileBrowser(opts);
 }
 
-void DropsUI::dropDownClicked(DropDown *dropDown)
+void DropsUI::onTextButtonClicked(TextButton *tb)
+{
+    const uint id = tb->getId();
+    switch (id)
+    {
+    case kButtonSample:
+        box_sample->show();
+        box_amp->hide();
+        break;
+    case kButtonAmp:
+        box_amp->show();
+        box_sample->hide();
+        break;
+    case kButtonPitch:
+        box_sample->hide();
+        printf("pitch tab clicked\n");
+        break;
+    case kButtonFilter:
+        box_sample->hide();
+        printf("filter tab clicked\n");
+        break;
+
+    default:
+        printf("wtf happened");
+        break;
+    }
+}
+
+void DropsUI::onDropDownClicked(DropDown *dropDown)
 {
     uint id = dropDown->getId();
     switch (id)
     {
-    case kSamplePlayMode:
-        fLoopMenu->show(); /* code */
+    case kSampleNormalize:
+        fNormalizeMenu->show();
         break;
+    case kSamplePitchKeyCenter:
+        fKeyCenterMenu->show();
+        break;
+    case kSamplePlayMode:
+        fPlayModeMenu->show();
+        break;
+    case kSamplePlayDirection:
+        fDirectionMenu->show();
 
     default:
         break;
@@ -863,26 +871,26 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
     repaint();
 }
 
-void DropsUI::sliderValueChanged(Slider *slider, float value)
+void DropsUI::onSliderValueChanged(Slider *slider, float value)
 {
     uint id = slider->getId();
 }
 
-void DropsUI::scrollBarClicked(ScrollBar *scrollBar, bool dragging)
+void DropsUI::onScrollBarClicked(ScrollBar *scrollBar, bool dragging)
 {
     uint id = scrollBar->getId();
     switch ((id))
     {
-    case scrollbarHandle_id:
+    case kScrollbarHandle:
         scrollbarDragging = dragging;
         break;
-    case scrollbarLeft_id:
+    case kScrollbarLeft:
         if (!dragging)
         {
             scrollWaveform(true);
         }
         break;
-    case scrollbarRight_id:
+    case kScrollbarRight:
         if (!dragging)
         {
             scrollWaveform(false);
@@ -933,11 +941,34 @@ void DropsUI::scrollBarClicked(ScrollBar *scrollBar, bool dragging)
     }
 }
 
-void DropsUI::menuClicked(Menu *, uint id, std::string item)
+void DropsUI::onMenuClicked(Menu *menu, uint menu_id, std::string item)
 {
-    fLoopMode->item = item;
-    fLoopMenu->hide();
-    setParameterValue(kSamplePlayMode, id);
+    const uint id = menu->getId();
+    switch (id)
+    {
+        /*  case kPlayModeMenu:
+        fSamplePlayMode->item = item;
+        fPlayModeMenu->hide();
+        setParameterValue(kSamplePlayMode, menu_id); */
+    case kNormalizeMenu:
+        fSampleNormalize->item = item;
+        fNormalizeMenu->hide();
+        setParameterValue(kSampleNormalize, menu_id);
+        break;
+    case kKeyCenterMenu:
+        fSamplePitchKeyCenter->item = item;
+        fKeyCenterMenu->hide();
+        setParameterValue(kSamplePitchKeyCenter, menu_id);
+        break;
+    default:
+        printf("menu_id %i, item %s\n", menu_id, item);
+        break;
+    }
+}
+
+void DropsUI::onRadioButtonClicked(RadioButton *rb)
+{
+    //
 }
 
 UI *createUI()

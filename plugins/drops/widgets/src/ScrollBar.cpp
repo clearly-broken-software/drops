@@ -14,13 +14,13 @@ bool ScrollBar::onMouse(const MouseEvent &ev)
     if (contains(ev.pos) && ev.press && ev.button == 1)
     {
         dragging = true;
-        callback->scrollBarClicked(this, dragging);
+        callback->onScrollBarClicked(this, dragging);
         return false;
     }
     else if (!ev.press && ev.button == 1 && dragging)
     {
         dragging = false;
-        callback->scrollBarClicked(this, dragging);
+        callback->onScrollBarClicked(this, dragging);
         return false;
     }
     else

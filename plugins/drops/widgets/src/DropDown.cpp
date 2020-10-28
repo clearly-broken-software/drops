@@ -13,16 +13,31 @@ DropDown::DropDown(Window &parent) noexcept
     margin = 2.f;
     parent.addIdleCallback(this);
     has_mouse_ = false;
-    background_color = Color(0.0f,0.0f,0.0f);
-    foreground_color = Color(0.5f,0.5f,0.5f);
-    text_color = Color (1.0f,1.0f,1.0f);
+    background_color = Color(0.0f, 0.0f, 0.0f);
+    foreground_color = Color(0.5f, 0.5f, 0.5f);
+    text_color = Color(1.0f, 1.0f, 1.0f);
+}
+DropDown::DropDown(Widget *widget) noexcept
+    : NanoWidget(widget)
+{
+    loadSharedResources();
+    label = "Dropdown: ";
+    item = "item";
+    font_size = 14.f;
+    margin = 2.f;
+    widget->getParentWindow().addIdleCallback(this);
+    has_mouse_ = false;
+    background_color = Color(0.0f, 0.0f, 0.0f);
+    foreground_color = Color(0.5f, 0.5f, 0.5f);
+    text_color = Color(1.0f, 1.0f, 1.0f);
 }
 
 bool DropDown::onMouse(const MouseEvent &ev)
 {
-    if (contains(ev.pos) && ev.press && ev.button == 1)
+      if (contains(ev.pos) && ev.press && ev.button == 1)
     {
-        callback_->dropDownClicked(this);
+ 
+        callback_->onDropDownClicked(this);
         return true;
     }
     else
@@ -91,6 +106,10 @@ float DropDown::getMenuOffset()
 void DropDown::setMenu(Menu *menu)
 {
     menu_ = menu;
+    // get coordinates
+    int x = getAbsoluteX() + getMenuOffset();
+    int y = getAbsoluteY() + getHeight();
+    menu_->setAbsolutePos(x,y);
 }
 
 END_NAMESPACE_DISTRHO

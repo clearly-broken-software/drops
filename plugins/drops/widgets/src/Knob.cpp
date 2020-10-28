@@ -176,7 +176,7 @@ void Knob::onNanoDisplay()
     strokeWidth(stroke_width);
     if (has_mouse_)
     {
-        fill_color_ = highlite_color;
+        fill_color_ = highlight_color;
     }
     else
     {

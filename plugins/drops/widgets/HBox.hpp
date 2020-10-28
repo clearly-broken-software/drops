@@ -34,15 +34,16 @@ public:
 
     Align_Items align_items;
     Justify_Content justify_content;
-    
+
     void addWidget(Widget *widget);
-    void setWidgetAlignment(uint id,Align_Items align_self);
-    void setWidgetJustify_Content(uint id,Justify_Content justify_content);
+    void setWidgetAlignment(uint id, Align_Items align_self);
+    void setWidgetJustify_Content(uint id, Justify_Content justify_content);
     void removeWidget(uint id);
     Color background_color;
     Color foreground_color;
-    Color highlite_color;
+    Color highlight_color;
     Color text_color;
+    void positionWidgets();
     int padding;
 
 protected:
@@ -52,15 +53,14 @@ protected:
     bool onScroll(const ScrollEvent &) override;
 
 private:
-
     struct Item
     {
-        Item( Widget *w)
+        Item(Widget *w)
         {
             widget = w;
             width = 0;
             height = 0;
-            align_self = Align_Items::none;            
+            align_self = Align_Items::none;
         }
 
         uint width;
@@ -72,7 +72,8 @@ private:
         Justify_Content justify_content;
     };
 
-    void positionWidgets();
+    Widget *parent_ = nullptr;
+
     std::vector<Item> items_;
 
     DISTRHO_LEAK_DETECTOR(HBox)

@@ -38,10 +38,12 @@ public:
     void addWidget(Widget *widget);
     void setWidgetAlignment(uint id,Align_Items align_self);
     void setWidgetJustify_Content(uint id,Justify_Content justify_content);
+    void setWidgetResize(uint id, bool can_resize);
     void removeWidget(uint id);
+    void positionWidgets();
     Color background_color;
     Color foreground_color;
-    Color highlite_color;
+    Color highlight_color;
     Color text_color;
     int padding;
 
@@ -61,7 +63,8 @@ private:
             width = 0;
             height = 0;
             justify_content = Justify_Content::none; 
-            align_self = Align_Items::none;           
+            align_self = Align_Items::none;   
+            can_resize = false;        
         }
 
         uint width;
@@ -71,9 +74,10 @@ private:
         Widget *widget;
         Align_Items align_self;
         Justify_Content justify_content;
+        bool can_resize;
     };
 
-    void positionWidgets();
+    
     std::vector<Item> items_;
 
     DISTRHO_LEAK_DETECTOR(VBox)

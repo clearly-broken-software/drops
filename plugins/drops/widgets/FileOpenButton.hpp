@@ -1,7 +1,7 @@
 /*  license  */
 
-#ifndef TEXT_BUTTON_HPP
-#define TEXT_BUTTON_HPP
+#ifndef FILE_OPEN_BUTTON_HPP
+#define FILE_OPEN_BUTTON_HPP
 
 #include "Window.hpp"
 #include "Widget.hpp"
@@ -10,39 +10,34 @@
 
 START_NAMESPACE_DISTRHO
 
-class TextButton : public NanoWidget
+class FileOpenButton : public NanoWidget
 {
 public:
   class Callback
   {
   public:
     virtual ~Callback() {}
-    virtual void onTextButtonClicked(TextButton *textButton) = 0;
+    virtual void onFileOpenButtonClicked(FileOpenButton *fileOpenButton) = 0;
   };
-  explicit TextButton(Window &parent) noexcept;
-  explicit TextButton(Widget *widget) noexcept;
+  explicit FileOpenButton(Window &parent) noexcept;
+  explicit FileOpenButton(Widget *widget) noexcept;
   void setText(std::string str);
   void setCallback(Callback *cb);
   Color background_color;
-  Color foreground_color;
-  Color highlight_color;
-
+  Color text_color;
   float font_size;
 
 protected:
   void onNanoDisplay() override;
   bool onMouse(const MouseEvent &) override;
-  bool onMotion(const MotionEvent &) override;
 
 private:
   std::string buttonText;
-  bool has_mouse_;
   Callback *callback;
-  Color fill_color_;
 
-  DISTRHO_LEAK_DETECTOR(TextButton)
+  DISTRHO_LEAK_DETECTOR(FileOpenButton)
 };
 
 END_NAMESPACE_DISTRHO
 
-#endif // TEXT_BUTTON_HPP
+#endif // FILE_OPEN_BUTTON_HPP

@@ -25,7 +25,11 @@ FILES_UI  = \
 			widgets/src/Slider.cpp \
 			widgets/src/HBox.cpp \
 			widgets/src/VBox.cpp \
-			Artwork.cpp
+			widgets/src/FileOpenButton.cpp \
+			widgets/src/RadioButton.cpp \
+			Artwork.cpp \
+			initTabAmp.cpp \
+			initTabSample.cpp 
 
 # --------------------------------------------------------------
 # Do some magic

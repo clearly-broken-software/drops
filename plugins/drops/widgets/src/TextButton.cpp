@@ -3,33 +3,34 @@
 
 START_NAMESPACE_DISTRHO
 
-TextButton::TextButton(Window &parent, Size<uint> size) noexcept
+TextButton::TextButton(Window &parent) noexcept
     : NanoWidget(parent)
 {
-    buttonText = "click to load sample";
-    back_ground_color = Color(0.8f, 0.8f, 0.8f);
-    text_color = Color(0.1f, 0.1f, 0.1f);
+    buttonText = "BUTTON";
+    background_color = Color(0.8f, 0.8f, 0.8f);
+    foreground_color = Color(0.1f, 0.1f, 0.1f);
     font_size = 16;
     loadSharedResources();
+    has_mouse_ = false;
+
 }
 
-TextButton::TextButton(Widget * widget, Size<uint> size) noexcept
+TextButton::TextButton(Widget *widget) noexcept
     : NanoWidget(widget)
 {
-    buttonText = "click to load sample";
-    back_ground_color = Color(0.8f, 0.8f, 0.8f);
-    text_color = Color(0.1f, 0.1f, 0.1f);
+    buttonText = "BUTTON";
+    background_color = Color(0.8f, 0.8f, 0.8f);
+    foreground_color = Color(0.1f, 0.1f, 0.1f);
     font_size = 16;
     loadSharedResources();
+    has_mouse_ = false;
 }
-
-
 
 bool TextButton::onMouse(const MouseEvent &ev)
 {
     if (contains(ev.pos) && ev.press && ev.button == 1)
     {
-        callback->textButtonClicked(this);
+        callback->onTextButtonClicked(this);
         return true;
     }
     else
@@ -37,39 +38,38 @@ bool TextButton::onMouse(const MouseEvent &ev)
         return false;
     }
 }
+bool TextButton::onMotion(const MotionEvent &ev)
+{
+    if (contains(ev.pos) && !has_mouse_)
+    {
+        has_mouse_ = true;
+        repaint();
+    }
+    if (!contains(ev.pos) && has_mouse_)
+    {
+        has_mouse_ = false;
+        repaint();
+    }
+    return false;
+}
 
 void TextButton::onNanoDisplay()
 {
     int width = getWidth();
     int height = getHeight();
     beginPath();
-    fillColor(back_ground_color);
+    fill_color_ = has_mouse_ ? highlight_color : background_color;
+    fillColor(fill_color_);
     rect(0, 0, width, height);
     fill();
     closePath();
 
     // text
     beginPath();
-    fillColor(text_color);
+    fillColor(foreground_color);
     fontSize(font_size);
-    textAlign(ALIGN_LEFT | ALIGN_MIDDLE);
-    Rectangle<float> bounds;
-    textBounds(0, 0, buttonText.c_str(), NULL, bounds);
-    std::string tempText = buttonText;
-    for (int i = 0; i < buttonText.size(); i++) // maybe i = 1 ??
-    {
-        textBounds(0, 0, tempText.c_str(), NULL, bounds);
-        // too large ?
-        if (bounds.getWidth() > width)
-        {
-            // remove 1st character
-            tempText = buttonText.substr(i);
-        }
-        else
-            break;
-    }
-
-    text(0, std::round(height / 2.0f), tempText.c_str(), NULL);
+    textAlign(ALIGN_CENTER | ALIGN_MIDDLE);
+    text(std::round(width / 2), std::round(height / 2.0f), buttonText.c_str(), NULL);
     closePath();
 }
 
