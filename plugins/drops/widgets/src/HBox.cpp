@@ -191,7 +191,6 @@ void HBox::positionWidgets()
         for (auto it = items_.begin(); it != items_.end(); it++)
         {
             it->widget->setAbsoluteY(box_y + height - it->height);
-            break;
         }
         break;
     }
@@ -218,46 +217,31 @@ void HBox::positionWidgets()
     }
 }
 
-bool HBox::onMouse(const MouseEvent &ev)
-{
-    return false;
-}
-
-bool HBox::onScroll(const ScrollEvent &ev)
-{
-    return false;
-}
-
-bool HBox::onMotion(const MotionEvent &ev)
-{
-    return false;
-}
-
 void HBox::onNanoDisplay()
 {
-#ifdef DEBUG
-    const uint width = getWidth();
-    const uint height = getHeight();
-    const uint box_x = getAbsoluteX();
-    const uint box_y = getAbsoluteY();
-    const float stroke_width = 1.0f;
-    const float dbl_stroke = stroke_width * 2.f;
-    fillColor(1.0f, 1.0f, 1.0f, 0.1f);
-    strokeColor(1.0f, 0.f, 0.f, .5f);
-    strokeWidth(stroke_width);
+    // #ifdef DEBUG
+    //     const uint width = getWidth();
+    //     const uint height = getHeight();
+    //     const uint box_x = getAbsoluteX();
+    //     const uint box_y = getAbsoluteY();
+    //     const float stroke_width = 1.0f;
+    //     const float dbl_stroke = stroke_width * 2.f;
+    //     fillColor(1.0f, 1.0f, 1.0f, 0.1f);
+    //     strokeColor(1.0f, 0.f, 0.f, .5f);
+    //     strokeWidth(stroke_width);
 
-    for (auto it = items_.begin(); it != items_.end(); it++)
-    {
+    //     for (auto it = items_.begin(); it != items_.end(); it++)
+    //     {
 
-        beginPath();
-        const uint x = it->x - box_x;
-        const uint y = 0;
-        rect(x, y, it->width, it->height);
-        fill();
-        stroke();
-        closePath();
-      }
-#endif
+    //         beginPath();
+    //         const uint x = it->x - box_x;
+    //         const uint y = 0;
+    //         rect(x, y, it->width, it->height);
+    //         fill();
+    //         stroke();
+    //         closePath();
+    //       }
+    // #endif
 }
 
 END_NAMESPACE_DISTRHO

@@ -252,10 +252,10 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
     case kAmpLFODepth:
         parameter.name = "Amp LFO Depth";
         parameter.symbol = "amp_lfo_depth";
-        parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 1.0f;
+        parameter.ranges.min = -1200.0f;
+        parameter.ranges.max = 1200.0f;
         parameter.ranges.def = 0.0f;
-        parameter.hints = kParameterIsAutomable;
+        parameter.hints = kParameterIsAutomable|kParameterIsInteger;
         break;
     case kAmpLFOSync:
         parameter.name = "Amp LFO Sync";

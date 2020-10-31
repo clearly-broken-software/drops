@@ -18,12 +18,12 @@ public:
     {
     public:
         virtual ~Callback() {}
-    //    virtual void sliderDragStarted(Slider *slider) = 0;
-    //   virtual void sliderDragFinished(Slider *slider) = 0;
+        //    virtual void sliderDragStarted(Slider *slider) = 0;
+        //   virtual void sliderDragFinished(Slider *slider) = 0;
         virtual void onSliderValueChanged(Slider *slider, float value) = 0;
     };
     explicit Slider(Window &parent) noexcept;
-    explicit Slider(Widget* widget) noexcept;
+    explicit Slider(Widget *widget) noexcept;
     void setCallback(Callback *cb);
     void setValue(float val) noexcept;
     float getValue() noexcept;
@@ -35,7 +35,10 @@ public:
     Color foreground_color;
     Color highlight_color;
     Color text_color;
-    
+    const char *unit;
+    const char *format_str;
+    // space for value and unit
+    float right_padding;
     float default_value;
     float min_value;
     float max_value;

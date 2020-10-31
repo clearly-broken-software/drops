@@ -6,7 +6,6 @@
 #include "Window.hpp"
 #include "Widget.hpp"
 #include "NanoVG.hpp"
-//#include <string>
 
 START_NAMESPACE_DISTRHO
 
@@ -17,13 +16,13 @@ public:
   {
   public:
     virtual ~Callback() {}
-    virtual void onRadioButtonClicked(RadioButton * rb) = 0;
+    virtual void onRadioButtonClicked(RadioButton *rb) = 0;
   };
   explicit RadioButton(Window &parent) noexcept;
   explicit RadioButton(Widget *widget) noexcept;
-  void addOption(char *opt);
+  void addOption(const char *opt);
   void setCallback(Callback *cb);
-
+  uint active_option;
   float font_size;
   float margin;
   Color background_color, foreground_color, highlight_color, text_color;
@@ -31,16 +30,15 @@ public:
 protected:
   void onNanoDisplay() override;
   bool onMouse(const MouseEvent &) override;
-  bool onMotion(const MotionEvent &) override;
 
 private:
   Callback *callback_;
-  uint active_option;
-  std::vector<char *> options;
+
+  std::vector<const char *> options;
 
   DISTRHO_LEAK_DETECTOR(RadioButton)
 };
 
 END_NAMESPACE_DISTRHO
 
-#endif 
+#endif

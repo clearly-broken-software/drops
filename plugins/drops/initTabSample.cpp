@@ -1,6 +1,8 @@
 /* license */
 #include "DropsUI.hpp"
 
+START_NAMESPACE_DISTRHO
+
 void DropsUI::initTabSample()
 {
     Window &window = getParentWindow();
@@ -18,6 +20,9 @@ void DropsUI::initTabSample()
     fSampleXFade->foreground_color = floral_white;
     fSampleXFade->highlight_color = flame;
     fSampleXFade->text_color = floral_white;
+    fSampleXFade->unit = "MS";
+    fSampleXFade->right_padding = slider_right_padding;
+    fSampleXFade->format_str = "%.2f";
 
     fSampleNormalize = new DropDown(box_sample_row_1);
     fSampleNormalize->setId(kSampleNormalize);
@@ -73,7 +78,6 @@ void DropsUI::initTabSample()
     box_sample->setAbsolutePos(tabs_x, tabs_y);
     box_sample->setWidth(getWidth());
     box_sample->setHeight(getHeight() - tabs_y);
-    //  box_sample->align_items = VBox::Align_Items::top;
 
     box_sample_row_1->setWidth(box_sample->getWidth());
     // box_sample_row_1->setHeight(100);
@@ -130,9 +134,10 @@ void DropsUI::initTabSample()
 
     fDirectionMenu = new Menu(box_sample_row_2);
     fDirectionMenu->setId(kDirectionMenu);
-    fDirectionMenu->font_size = 16;
+    fDirectionMenu->setCallback(this);
     fDirectionMenu->addItem("FORWARD");
     fDirectionMenu->addItem("REVERSE");
+    fDirectionMenu->font_size = 16;
     fDirectionMenu->hide();
     fDirectionMenu->background_color = black_olive;
     fDirectionMenu->foreground_color = floral_white;
@@ -141,15 +146,13 @@ void DropsUI::initTabSample()
 
     box_sample_row_2->setWidth(box_sample->getWidth() * 2 / 3);
     box_sample_row_2->align_items = HBox::Align_Items::top;
-    //box_sample_row_2->justify_content = HBox::Justify_Content::space_evenly;
 
     box_sample->addWidget(box_sample_row_2);
     box_sample->setWidgetResize(kHBoxSampleRow2, true);
-    box_sample->justify_content = VBox::Justify_Content::left;
 
     box_sample_row_2->addWidget(fSamplePlayMode);
     box_sample_row_2->addWidget(fSamplePlayDirection);
-    
+
     box_sample->positionWidgets();
     box_sample_row_1->positionWidgets();
     box_sample_row_2->positionWidgets();
@@ -159,3 +162,31 @@ void DropsUI::initTabSample()
     fSamplePitchKeyCenter->setMenu(fKeyCenterMenu);
     fSampleNormalize->setMenu(fNormalizeMenu);
 }
+
+void DropsUI::hideTabSample()
+{
+    box_sample->hide();
+    box_sample_row_1->hide();
+    box_sample_row_2->hide();
+    fSampleXFade->hide();
+    //fSampleTune->hide(); FIXME:
+    fSampleNormalize->hide();
+    fSamplePitchKeyCenter->hide();
+    fSamplePlayMode->hide();
+    fSamplePlayDirection->hide();
+}
+
+void DropsUI::showTabSample()
+{
+    box_sample->show();
+    box_sample_row_1->show();
+    box_sample_row_2->show();
+    fSampleXFade->show();
+    //fSampleTune->show();
+    fSampleNormalize->show();
+    fSamplePitchKeyCenter->show();
+    fSamplePlayMode->show();
+    fSamplePlayDirection->show();
+}
+
+END_NAMESPACE_DISTRHO

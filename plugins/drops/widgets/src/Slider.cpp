@@ -31,7 +31,7 @@ Slider::Slider(Window &parent) noexcept
     fill_color_ = foreground_color;
 }
 
-Slider::Slider(Widget* widget) noexcept
+Slider::Slider(Widget *widget) noexcept
     : NanoWidget(widget)
 {
     loadSharedResources();
@@ -57,9 +57,8 @@ Slider::Slider(Widget* widget) noexcept
     background_color = Color(0, 0, 0);
     text_color = Color(1, 1, 1);
     fill_color_ = foreground_color;
+    unit = nullptr;
 }
-
-
 
 void Slider::setLabel(std::string l)
 {
@@ -72,6 +71,7 @@ void Slider::setLabel(std::string l)
     label_height_ = bounds.getHeight();
     handle_.setSize(font_size, font_size);
     handle_.setPos(label_width_ + margin_, getHeight() - handle_.getHeight());
+    unit = nullptr;
 }
 
 float Slider::getValue() noexcept
@@ -137,11 +137,10 @@ bool Slider::onMotion(const MotionEvent &ev)
     if (!dragging_)
         return false;
     const float mx = static_cast<float>(ev.pos.getX());
-    const float slider_area_w = static_cast<float>(getWidth() - label_width_ - 2 * margin_);
+    const float slider_area_w = static_cast<float>(getWidth() - label_width_ - 2 * margin_ - right_padding);
     const float vper = (mx - label_width_) / slider_area_w;
-    const float val = vper * (max_value - min_value);
+    const float val = min_value + vper * (max_value - min_value);
     setValue(val);
-    printf("slider onMotion repaint\n");
     repaint();
     return true;
 }
@@ -151,13 +150,6 @@ void Slider::onNanoDisplay()
     const float height = getHeight();
     const float width = getWidth();
     const float stroke_width = 2.f; // FIXME: hard coded
-    /* beginPath();
-    fillColor(1.0f, 1.0f, 1.0f, 0.1f);
-    rect(0, 0, width, height);
-    fill();
-    closePath();
-     */
-
     // label
     const float label_x = 0.0f;
     const float label_y = height - label_height_;
@@ -171,7 +163,7 @@ void Slider::onNanoDisplay()
     //Line
     const float line_x = label_width_ + margin_;
     const float line_y = height - stroke_width / 2.f;
-    const float line_end_x = width - margin_;
+    const float line_end_x = width - margin_ - right_padding;
     beginPath();
     strokeColor(background_color);
     strokeWidth(stroke_width);
@@ -190,7 +182,8 @@ void Slider::onNanoDisplay()
     {
         fill_color_ = foreground_color;
     }
-    float normalized_X = line_x + (line_end_x - line_x) * value_;
+    float normalized_val = (value_ - min_value) / (max_value - min_value);
+    float normalized_X = line_x + (line_end_x - line_x) * normalized_val;
     const float hw = handle_.getWidth();
     const float hh = handle_.getHeight();
     handle_.setX(normalized_X - hw / 2.f);
@@ -203,6 +196,27 @@ void Slider::onNanoDisplay()
     lineTo(hx + hw / 2, height);
     lineTo(hx, height - hh);
     fill();
+    closePath();
+
+    // value
+    const float val_x = width - right_padding;
+    const float val_y = label_y;
+    char val_str[10];
+    sprintf(val_str, format_str, getValue());
+    fillColor(text_color);
+    beginPath();
+    text(val_x, val_y, val_str, nullptr);
+    closePath();
+
+    //unit
+    Rectangle<float> bounds;
+    textBounds(0.0f, 0.0f, unit, nullptr, bounds);
+    const float unit_w = bounds.getWidth();
+    const float unit_x = width - unit_w;
+    const float unit_y = label_y;
+
+    beginPath();
+    text(unit_x, unit_y, unit, nullptr);
     closePath();
 }
 

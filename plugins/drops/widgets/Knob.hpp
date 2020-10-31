@@ -23,10 +23,11 @@ public:
         virtual void knobValueChanged(Knob *knob, float value) = 0;
     };
     explicit Knob(Window &parent) noexcept;
+    explicit Knob(Widget *widget) noexcept;
     void setCallback(Callback *cb);
     void setValue(float val) noexcept;
     float getValue() noexcept;
-   
+
     std::string label; // public, no getter or setter
     float labelSize;
     Color background_color;
@@ -35,7 +36,7 @@ public:
     Color text_color;
     float margin;
     float default_value;
-    float step_value; 
+    float step_value;
     float minimum_value;
     float maximum_value;
 
@@ -55,11 +56,10 @@ private:
     Color fill_color_;
     bool has_mouse_;
 
-   
     float tmp_value_;
     bool using_default_;
     bool using_log_;
- 
+
     int last_mouse_x_;
     int last_mouse_y_;
     bool is_ready_;

@@ -46,13 +46,13 @@ bool Menu::onMouse(const MouseEvent &ev)
             if (highlighted_item_ >= 0)
             {
                 callback_->onMenuClicked(this, highlighted_item_, items_[highlighted_item_]);
-                return true;
+                return false;
             }
         }
         else
         {
             hide();
-            return true;
+            return false;
         }
     }
     return false;
@@ -95,6 +95,7 @@ void Menu::onNanoDisplay()
     fillColor(background_color);
     rect(0, 0, width, height);
     fill();
+    stroke();
     closePath();
     fontSize(font_size);
     if (highlighted_item_ >= 0)

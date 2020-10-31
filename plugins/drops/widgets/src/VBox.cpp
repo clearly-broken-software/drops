@@ -233,21 +233,6 @@ void VBox::positionWidgets()
     } */
 }
 
-bool VBox::onMouse(const MouseEvent &ev)
-{
-    return false;
-}
-
-bool VBox::onScroll(const ScrollEvent &ev)
-{
-    return false;
-}
-
-bool VBox::onMotion(const MotionEvent &ev)
-{
-    return false;
-}
-
 void VBox::onNanoDisplay()
 {
 

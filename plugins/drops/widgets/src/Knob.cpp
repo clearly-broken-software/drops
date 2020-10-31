@@ -28,12 +28,42 @@ Knob::Knob(Window &parent) noexcept
     text_color = Color(1, 1, 1);
     fill_color_ = foreground_color;
 }
+
+Knob::Knob(Widget * parent) noexcept
+    : NanoWidget(parent)
+{
+    loadSharedResources();
+    dragging_ = false;
+    has_mouse_ = false;
+    value_ = 0.f;
+    value_tmp_ = 0.f;
+    maximum_value = 1.0f;
+    minimum_value = 0.0f;
+    using_log_ = false;
+    labelSize = 14.0f;
+    label = "label";
+    margin = 4.0f;
+    fontFace(NANOVG_DEJAVU_SANS_TTF);
+    font_ = findFont(NANOVG_DEJAVU_SANS_TTF);
+    if (font_ == -1)
+    {
+        fprintf(stderr, "%s", "font not found\n");
+    }
+    foreground_color = Color(1, 1, 1);
+    background_color = Color(0, 0, 0);
+    text_color = Color(1, 1, 1);
+    fill_color_ = foreground_color;
+}
+
+
+
 float Knob::getValue() noexcept
 {
     return value_;
 }
 bool Knob::onMouse(const MouseEvent &ev)
 {
+    
     if (ev.button != 1)
         return false;
 

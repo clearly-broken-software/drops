@@ -8,7 +8,7 @@ RadioButton::RadioButton(Window &parent) noexcept
 {
     loadSharedResources();
     font_size = 14.f;
-    margin = 2.f;
+    margin = 4.f;
     background_color = Color(0.0f, 0.0f, 0.0f);
     foreground_color = Color(0.5f, 0.5f, 0.5f);
     highlight_color = Color(1.0f, 0.0f, 0.0f);
@@ -20,7 +20,7 @@ RadioButton::RadioButton(Widget *widget) noexcept
 {
     loadSharedResources();
     font_size = 14.f;
-    margin = 2.f;
+    margin = 4.f;
     background_color = Color(0.0f, 0.0f, 0.0f);
     foreground_color = Color(0.5f, 0.5f, 0.5f);
     highlight_color = Color(1.0f, 0.0f, 0.0f);
@@ -32,8 +32,20 @@ bool RadioButton::onMouse(const MouseEvent &ev)
 {
     if (contains(ev.pos) && ev.press && ev.button == 1)
     {
-
-        callback_->onRadioButtonClicked(this);
+        const int lineHeight = font_size + 2 * margin;
+        const int mouseY = ev.pos.getY();
+        int step = 0;
+        const uint old_option = active_option;
+        for (int i = 0; i < options.size(); i++)
+        {
+            if ((mouseY >= i * lineHeight) && (mouseY < (i * lineHeight + lineHeight)))
+                active_option = i;
+        }
+        if (old_option != active_option)
+        {
+            callback_->onRadioButtonClicked(this);
+            repaint();
+        }
         return true;
     }
     else
@@ -42,18 +54,12 @@ bool RadioButton::onMouse(const MouseEvent &ev)
     }
 }
 
-bool RadioButton::onMotion(const MotionEvent &ev)
-{
-    return false;
-}
-
 void RadioButton::onNanoDisplay()
 {
     const float width = getWidth();
     const float height = getHeight();
     const uint x = getAbsoluteX();
     const uint y = getAbsoluteY();
-    printf("x %i,y %i, w %f, h %f\n",x,y,width,height);
     // background
     beginPath();
     fillColor(background_color);
@@ -71,23 +77,27 @@ void RadioButton::onNanoDisplay()
     for (int i = 0; i < options.size(); i++)
     {
         beginPath();
-        circle(cx, cy, font_size / 2.0f);
+        circle(cx, cy + step_y, font_size / 2.0f);
         fill_color = i == active_option ? highlight_color : background_color;
         fillColor(fill_color);
-        stroke();
         fill();
         closePath();
+        beginPath();
+        circle(cx, cy + step_y, (font_size / 2.0f) - margin / 2.0f);
+        stroke();
+        closePath();
+        
         fillColor(text_color);
         fontSize(font_size);
         textAlign(ALIGN_LEFT | ALIGN_MIDDLE);
         beginPath();
-        text(lineHeight, step_y + lineHeight / 2.0f, options[i], nullptr);
+        text(lineHeight + margin, step_y + lineHeight / 2.0f + margin, options[i], nullptr);
         closePath();
         step_y += lineHeight;
     }
 }
 
-void RadioButton::addOption(char *op)
+void RadioButton::addOption(const char *op)
 {
     options.push_back(op);
 }

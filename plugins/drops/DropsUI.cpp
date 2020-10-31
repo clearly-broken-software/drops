@@ -148,41 +148,7 @@ void DropsUI::initWidgets()
 
     initTabSample();
     initTabAmp();
- 
-   /*  fSlider = new Slider(window);
-    fSlider->setId(9998);
-    fSlider->setCallback(this);
-    fSlider->setAbsolutePos(400, 500);
-    fSlider->setSize(300, 20);
-    fSlider->setLabel("LFO DEPTH:");
-    fSlider->background_color = pale_silver;
-    fSlider->foreground_color = floral_white;
-    fSlider->highlight_color = flame;
-    fSlider->text_color = floral_white; */
-
-    /* box_layout_ = new HBox(window);
-    box_layout_->setAbsolutePos(0, display_bottom + minimap_height);
-    box_layout_->setWidth(getWidth()-50);
-    //box_layout_->setHeight(300);
-    box_layout_->align_items = HBox::Align_Items::top;
-    box_layout_->justify_content = HBox::Justify_Content::space_evenly;
-    box_layout_->addWidget(fAmpEgAttack);
-    box_layout_->addWidget(fAmpEgDecay);
-    box_layout_->addWidget(fAmpEgSustain);
-    box_layout_->addWidget(fAmpEgRelease);
-    box_layout_->addWidget(fLoopMode);
-    box_layout_->setWidgetAlignment(kSamplePlayMode, HBox::Align_Items::middle);
-
-    const float x = fLoopMode->getMenuOffset() + fLoopMode->getAbsoluteX();
-    const float y = fLoopMode->getAbsoluteY() + fLoopMode->getHeight();
-    fPlayModeMenu->setAbsolutePos(x, y);
-    vbox = new VBox (window);
-    vbox->setAbsolutePos(0,display_bottom+minimap_height);
-    vbox->setHeight(getHeight() - vbox->getAbsoluteY());
-    vbox->addWidget(fAmpEgAttack);
-    vbox->addWidget(fAmpEgDecay);
-    vbox->addWidget(fAmpEgSustain);
-    vbox->addWidget(fAmpEgRelease); */
+    showTabSample();
 }
 
 void DropsUI::parameterChanged(uint32_t index, float value)
@@ -797,12 +763,12 @@ void DropsUI::onTextButtonClicked(TextButton *tb)
     switch (id)
     {
     case kButtonSample:
-        box_sample->show();
-        box_amp->hide();
+        showTabSample();
+        hideTabAmp();
         break;
     case kButtonAmp:
-        box_amp->show();
-        box_sample->hide();
+        showTabAmp();
+        hideTabSample();
         break;
     case kButtonPitch:
         box_sample->hide();
@@ -835,6 +801,11 @@ void DropsUI::onDropDownClicked(DropDown *dropDown)
         break;
     case kSamplePlayDirection:
         fDirectionMenu->show();
+        break;
+    case kAmpLFOType:
+    {
+        fAmpLFOTypeMenu->show();
+    }
 
     default:
         break;
@@ -946,10 +917,11 @@ void DropsUI::onMenuClicked(Menu *menu, uint menu_id, std::string item)
     const uint id = menu->getId();
     switch (id)
     {
-        /*  case kPlayModeMenu:
+    case kPlayModeMenu:
         fSamplePlayMode->item = item;
         fPlayModeMenu->hide();
-        setParameterValue(kSamplePlayMode, menu_id); */
+        setParameterValue(kSamplePlayMode, menu_id);
+        break;
     case kNormalizeMenu:
         fSampleNormalize->item = item;
         fNormalizeMenu->hide();
@@ -960,6 +932,16 @@ void DropsUI::onMenuClicked(Menu *menu, uint menu_id, std::string item)
         fKeyCenterMenu->hide();
         setParameterValue(kSamplePitchKeyCenter, menu_id);
         break;
+    case kDirectionMenu:
+        fSamplePlayDirection->item = item;
+        fDirectionMenu->hide();
+        setParameterValue(kSamplePlayDirection, menu_id);
+        break;
+    case kAmpLFOTypeMenu:
+        fAmpLFOType->item = item;
+        fAmpLFOTypeMenu->hide();
+        setParameterValue(kAmpLFOTypeMenu, menu_id);
+        break;
     default:
         printf("menu_id %i, item %s\n", menu_id, item);
         break;
@@ -968,7 +950,16 @@ void DropsUI::onMenuClicked(Menu *menu, uint menu_id, std::string item)
 
 void DropsUI::onRadioButtonClicked(RadioButton *rb)
 {
-    //
+    const uint id = rb->getId();
+    switch (id)
+    {
+    case kAmpLFOFreqBeat:
+        printf("active_option %i\n", rb->active_option);
+        break;
+
+    default:
+        break;
+    }
 }
 
 UI *createUI()

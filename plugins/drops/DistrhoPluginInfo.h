@@ -101,7 +101,9 @@ enum Widgets
    kHBoxSampleRow2,
    kVBoxAmp,
    kHBoxAmpRow1,
-   kHBoxAmpRow2
+   kHBoxAmpRow2,
+   kAmpLFOFreqBeat,
+   kAmpLFOTypeMenu
 };
 
 static constexpr unsigned int UI_W = 1000;
@@ -121,4 +123,6 @@ static constexpr unsigned int tabs_x = 0;
 static constexpr unsigned int tabs_y = display_bottom + minimap_height + tab_button_height;
 static constexpr unsigned int tabs_w = UI_W;
 static constexpr unsigned int tabs_h = UI_H - tabs_y;
+
+static constexpr float slider_right_padding = 60.f;
 #endif

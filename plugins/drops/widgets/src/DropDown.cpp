@@ -34,11 +34,11 @@ DropDown::DropDown(Widget *widget) noexcept
 
 bool DropDown::onMouse(const MouseEvent &ev)
 {
-      if (contains(ev.pos) && ev.press && ev.button == 1)
+    if (contains(ev.pos) && ev.press && ev.button == 1)
     {
- 
+
         callback_->onDropDownClicked(this);
-        return true;
+        return false;
     }
     else
     {
@@ -109,7 +109,7 @@ void DropDown::setMenu(Menu *menu)
     // get coordinates
     int x = getAbsoluteX() + getMenuOffset();
     int y = getAbsoluteY() + getHeight();
-    menu_->setAbsolutePos(x,y);
+    menu_->setAbsolutePos(x, y);
 }
 
 END_NAMESPACE_DISTRHO

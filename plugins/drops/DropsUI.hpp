@@ -57,9 +57,11 @@ protected:
     void knobValueChanged(Knob *knob, float value) override;
     void onSliderValueChanged(Slider *slider, float value) override;
     void onMenuClicked(Menu *menu, uint id, std::string item);
-    void onRadioButtonClicked(RadioButton * radio);
+    void onRadioButtonClicked(RadioButton *radio);
 
 private:
+
+
     template <class T>
     const T &clamp(const T &x, const T &upper, const T &lower)
     {
@@ -82,8 +84,8 @@ private:
     ScopedPointer<Menu> fNormalizeMenu, fKeyCenterMenu, fPlayModeMenu,
         fDirectionMenu;
     // amp tab
-    ScopedPointer<VBox>box_amp;
-    ScopedPointer<HBox>box_amp_row_1,box_amp_row_2;
+    ScopedPointer<VBox> box_amp;
+    ScopedPointer<HBox> box_amp_row_1, box_amp_row_2;
     ScopedPointer<Knob>
         fAmpEgAttack, fAmpEgDecay, fAmpEgSustain, fAmpEgRelease;
     ScopedPointer<DropDown> fAmpLFOType;
@@ -92,11 +94,15 @@ private:
     ScopedPointer<DropDown> fAmpLFOSync;
     ScopedPointer<Menu> fAmpLFOSyncMenu;
     ScopedPointer<RadioButton> fAmpLFOFreqBeat;
-        
+
     NanoImage imgLoopStart, imgLoopEnd;
     void initWidgets();
     void initTabSample();
     void initTabAmp();
+    void hideTabSample();
+    void hideTabAmp();
+    void showTabSample();
+    void showTabAmp();
     int loadSample();
     void drawWaveform();
     void drawMinimap();
