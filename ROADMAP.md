@@ -2,7 +2,7 @@
 
 Each checkbox represents a possible release target. Development adds functionality.
 
-- [ ] waveform editor:
+- [x] waveform editor:
 	- in/out points
 	- loop in/out points
 	- plugin state restore
