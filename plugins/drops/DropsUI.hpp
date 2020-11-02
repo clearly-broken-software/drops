@@ -3,11 +3,15 @@
 #ifndef DROPSUI_HPP_INCLUDED
 #define DROPSUI_HPP_INCLUDED
 
+#include "external/src/nanosvg.h"
+
+
 #include "DistrhoPluginInfo.h"
 #include "DistrhoUI.hpp"
 #include "NanoVG.hpp"
 #include "Window.hpp"
 #include <vector>
+
 
 #include "DropsPlugin.hpp"
 #include "TextButton.hpp"
@@ -39,6 +43,7 @@ class DropsUI : public UI,
 {
 public:
     DropsUI();
+    ~DropsUI();
 
 protected:
     void parameterChanged(uint32_t index, float value) override;
@@ -61,12 +66,13 @@ protected:
 
 private:
 
-
     template <class T>
     const T &clamp(const T &x, const T &upper, const T &lower)
     {
         return std::min(upper, std::max(x, lower));
     }
+
+    struct NSVGimage * svg_image;
 
     DropsPlugin *plugin;
     ScopedPointer<FileOpenButton> fileopen_button;

@@ -3,6 +3,11 @@ license here
 */
 
 #include "DropsUI.hpp"
+#include <iostream>
+
+#define NANOSVG_IMPLEMENTATION
+#include "external/src/nanosvg.h"
+
 using namespace artwork;
 
 START_NAMESPACE_DISTRHO
@@ -12,6 +17,7 @@ START_NAMESPACE_DISTRHO
 DropsUI::DropsUI()
     : UI(UI_W, UI_H)
 {
+
     loadSharedResources();
     plugin = static_cast<DropsPlugin *>(getPluginInstancePointer());
     waveForm = &plugin->waveForm;
@@ -31,6 +37,7 @@ DropsUI::DropsUI()
 
     imgLoopStart = createImageFromMemory((uchar *)artwork::loopstartData, artwork::loopstartDataSize, 1);
     imgLoopEnd = createImageFromMemory((uchar *)artwork::loopendData, artwork::loopendDataSize, 1);
+
     /* for testing */
     sampleLoopStart = 0;
     sampleLoopEnd = 0;
@@ -44,6 +51,11 @@ DropsUI::DropsUI()
         std::string filename = plugin->path;
         fileopen_button->setText(filename);
     }
+}
+
+DropsUI::~DropsUI()
+{
+    nsvgDelete(svg_image);
 }
 
 void DropsUI::initWidgets()
@@ -267,6 +279,77 @@ void DropsUI::onNanoDisplay()
         drawMinimap();
         drawLoopMarkers();
         drawInOutMarkers();
+    }
+
+    // draw icon
+    NSVGshape *shape;
+    NSVGpath *path;
+    svg_image = nsvgParseFromFile("icon.svg", "px", 96);
+    strokeColor(floral_white);
+    fillColor(blue_pigment_1);
+    strokeWidth(5.f);
+    float x_offset = 150;
+    float y_offset = 150;
+    float scale = 5.0f;
+    for (shape = svg_image->shapes; shape != NULL; shape = shape->next)
+    {
+        beginPath();
+        int k = 0;
+        for (path = shape->paths; path != NULL; path = path->next)
+        {
+
+            for (int i = 0; i < path->npts - 1; i += 3)
+            {
+                float *p = &path->pts[i * 2];
+                if (i == 0)
+                {
+                    moveTo(p[0] * scale + x_offset, p[1] * scale + y_offset);
+                }
+                bezierTo(p[2] * scale + x_offset, p[3] * scale + y_offset,
+                         p[4] * scale + x_offset, p[5] * scale + y_offset,
+                         p[6] * scale + x_offset, p[7] * scale + y_offset);
+            }
+            if (k == 0)
+                pathWinding(CW);
+            k++;
+        }
+        stroke();
+        fill();
+        closePath();
+    }
+    x_offset = 250;
+    y_offset = 150;
+    scale = 1.f;
+    svg_image = nsvgParseFromFile("clearly_broken.svg", "px", 96);
+    printf("widht %f, height %f", svg_image->width, svg_image->height);
+    for (shape = svg_image->shapes; shape != NULL; shape = shape->next)
+    {
+        beginPath();
+        int k = 0;
+        for (path = shape->paths; path != NULL; path = path->next)
+
+        {
+
+            std::cout << k << std::endl;
+
+            for (int i = 0; i < path->npts - 1; i += 3)
+            {
+                float *p = &path->pts[i * 2];
+                if (i == 0)
+                {
+                    moveTo(p[0] * scale + x_offset, p[1] * scale + y_offset);
+                }
+                bezierTo(p[2] * scale + x_offset, p[3] * scale + y_offset,
+                         p[4] * scale + x_offset, p[5] * scale + y_offset,
+                         p[6] * scale + x_offset, p[7] * scale + y_offset);
+            }
+            k++;
+        }
+        strokeWidth(1.0f);
+        fillColor(flame_4);
+        //stroke();
+        fill();
+        closePath();
     }
 }
 
