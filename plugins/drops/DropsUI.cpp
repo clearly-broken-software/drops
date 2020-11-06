@@ -6,7 +6,9 @@ license here
 #include <iostream>
 
 #define NANOSVG_IMPLEMENTATION
-#include "external/src/nanosvg.h"
+#include "nanosvg.h"
+#define NANOSVGRAST_IMPLEMENTATION
+#include "nanosvgrast.h"
 
 using namespace artwork;
 
@@ -17,7 +19,6 @@ START_NAMESPACE_DISTRHO
 DropsUI::DropsUI()
     : UI(UI_W, UI_H)
 {
-
     loadSharedResources();
     plugin = static_cast<DropsPlugin *>(getPluginInstancePointer());
     waveForm = &plugin->waveForm;
@@ -35,8 +36,8 @@ DropsUI::DropsUI()
     mouseX = 0;
     mouseY = 0;
 
-    imgLoopStart = createImageFromMemory((uchar *)artwork::loopstartData, artwork::loopstartDataSize, 1);
-    imgLoopEnd = createImageFromMemory((uchar *)artwork::loopendData, artwork::loopendDataSize, 1);
+    // imgLoopStart = createImageFromMemory((uchar *)artwork::loopstartData, artwork::loopstartDataSize, 1);
+    // imgLoopEnd = createImageFromMemory((uchar *)artwork::loopendData, artwork::loopendDataSize, 1);
 
     /* for testing */
     sampleLoopStart = 0;
@@ -44,6 +45,9 @@ DropsUI::DropsUI()
     sampleIn = 0;
     sampleOut = 0;
     /* ----------- */
+
+    scale = 1.0f;
+    makeIcons();
     initWidgets();
     if (plugin->loadedSample)
     {
@@ -55,7 +59,6 @@ DropsUI::DropsUI()
 
 DropsUI::~DropsUI()
 {
-    nsvgDelete(svg_image);
 }
 
 void DropsUI::initWidgets()
@@ -161,6 +164,11 @@ void DropsUI::initWidgets()
     initTabSample();
     initTabAmp();
     showTabSample();
+}
+
+void DropsUI::makeIcons()
+{
+    test = new SVGImage(svg1, 1.0f);
 }
 
 void DropsUI::parameterChanged(uint32_t index, float value)
@@ -281,76 +289,20 @@ void DropsUI::onNanoDisplay()
         drawInOutMarkers();
     }
 
-    // draw icon
-    NSVGshape *shape;
-    NSVGpath *path;
-    svg_image = nsvgParseFromFile("icon.svg", "px", 96);
-    strokeColor(floral_white);
-    fillColor(blue_pigment_1);
-    strokeWidth(5.f);
-    float x_offset = 150;
-    float y_offset = 150;
-    float scale = 5.0f;
-    for (shape = svg_image->shapes; shape != NULL; shape = shape->next)
-    {
-        beginPath();
-        int k = 0;
-        for (path = shape->paths; path != NULL; path = path->next)
-        {
+    // draw logo
 
-            for (int i = 0; i < path->npts - 1; i += 3)
-            {
-                float *p = &path->pts[i * 2];
-                if (i == 0)
-                {
-                    moveTo(p[0] * scale + x_offset, p[1] * scale + y_offset);
-                }
-                bezierTo(p[2] * scale + x_offset, p[3] * scale + y_offset,
-                         p[4] * scale + x_offset, p[5] * scale + y_offset,
-                         p[6] * scale + x_offset, p[7] * scale + y_offset);
-            }
-            if (k == 0)
-                pathWinding(CW);
-            k++;
-        }
-        stroke();
-        fill();
-        closePath();
-    }
-    x_offset = 250;
-    y_offset = 150;
-    scale = 1.f;
-    svg_image = nsvgParseFromFile("clearly_broken.svg", "px", 96);
-    printf("widht %f, height %f", svg_image->width, svg_image->height);
-    for (shape = svg_image->shapes; shape != NULL; shape = shape->next)
-    {
-        beginPath();
-        int k = 0;
-        for (path = shape->paths; path != NULL; path = path->next)
+    beginPath();
 
-        {
-
-            std::cout << k << std::endl;
-
-            for (int i = 0; i < path->npts - 1; i += 3)
-            {
-                float *p = &path->pts[i * 2];
-                if (i == 0)
-                {
-                    moveTo(p[0] * scale + x_offset, p[1] * scale + y_offset);
-                }
-                bezierTo(p[2] * scale + x_offset, p[3] * scale + y_offset,
-                         p[4] * scale + x_offset, p[5] * scale + y_offset,
-                         p[6] * scale + x_offset, p[7] * scale + y_offset);
-            }
-            k++;
-        }
-        strokeWidth(1.0f);
-        fillColor(flame_4);
-        //stroke();
-        fill();
-        closePath();
-    }
+    const uint iw = 141;
+    const uint ih = 32;
+    Paint logopaint = imagePattern(100, 100,
+                                   iw, ih,
+                                   0,
+                                   test->image, 1.0f);
+    rect(100, 100, iw, ih);
+    fillPaint(logopaint);
+    fill();
+    closePath();
 }
 
 void DropsUI::drawWaveform()
@@ -530,7 +482,7 @@ void DropsUI::drawLoopMarkers()
         Paint loopstartpaint = imagePattern(loopStartPixel - 26, display_bottom - 26,
                                             18, 16,
                                             0,
-                                            imgLoopStart, 1.0f);
+                                            imgLoopLeft, 1.0f);
         rect(loopStartPixel - 26, display_bottom - 26, 18, 16);
         fillPaint(loopstartpaint);
         fill();
@@ -564,7 +516,7 @@ void DropsUI::drawLoopMarkers()
         Paint loopendpaint = imagePattern(loopEndPixel, display_bottom - 26,
                                           18, 16,
                                           0,
-                                          imgLoopEnd, 1.0f);
+                                          imgLoopRight, 1.0f);
         rect(loopEndPixel, display_bottom - 26, 18, 16);
         fillPaint(loopendpaint);
         fill();

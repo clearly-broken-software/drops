@@ -4,14 +4,13 @@
 #define DROPSUI_HPP_INCLUDED
 
 #include "external/src/nanosvg.h"
-
+#include "external/src/nanosvgrast.h"
 
 #include "DistrhoPluginInfo.h"
 #include "DistrhoUI.hpp"
 #include "NanoVG.hpp"
 #include "Window.hpp"
 #include <vector>
-
 
 #include "DropsPlugin.hpp"
 #include "TextButton.hpp"
@@ -26,6 +25,8 @@
 #include "VBox.hpp"
 #include "Artwork.hpp"
 #include "DropsColors.hpp"
+#include "svg_images.hpp"
+#include "SVGImage.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -65,14 +66,13 @@ protected:
     void onRadioButtonClicked(RadioButton *radio);
 
 private:
-
     template <class T>
     const T &clamp(const T &x, const T &upper, const T &lower)
     {
         return std::min(upper, std::max(x, lower));
     }
 
-    struct NSVGimage * svg_image;
+    struct NSVGimage *svg_image;
 
     DropsPlugin *plugin;
     ScopedPointer<FileOpenButton> fileopen_button;
@@ -101,14 +101,21 @@ private:
     ScopedPointer<Menu> fAmpLFOSyncMenu;
     ScopedPointer<RadioButton> fAmpLFOFreqBeat;
 
-    NanoImage imgLoopStart, imgLoopEnd;
-    void initWidgets();
+    NanoImage imgDropsLogo, imgLoopLeft, imgLoopRight, imgZoomFitAll, imgZoomIn, 
+    imgZoomLoop, imgZoomOut;
+     unsigned char * dataDropsLogo, dataLoopLeft, dataLoopRight, dataZoomFitAll, dataZoomIn, 
+     dataZoomLoop, dataZoomOut;
+    ScopedPointer<SVGImage> test;
+
+    void
+    initWidgets();
     void initTabSample();
     void initTabAmp();
     void hideTabSample();
     void hideTabAmp();
     void showTabSample();
     void showTabAmp();
+    void makeIcons();
     int loadSample();
     void drawWaveform();
     void drawMinimap();
@@ -124,6 +131,7 @@ private:
     sf_count_t sampleLength;
     int sampleChannels;
     int file_samplerate;
+    float scale;
     // sample
     sf_count_t sampleIn, sampleOut, sampleLoopStart, sampleLoopEnd;
 
