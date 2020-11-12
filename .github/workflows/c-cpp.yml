@@ -16,7 +16,7 @@ jobs:
       with:
         submodules: 'recursive'
     - name: deps
-      run: apt install libgl1-mesa-dev libx11-dev libsamplerate0-dev libsndfile1-dev
+      run: sudo apt-get install libgl1-mesa-dev libx11-dev libsamplerate0-dev libsndfile1-dev
 
     - name: make
       run: make
