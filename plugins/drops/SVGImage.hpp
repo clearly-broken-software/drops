@@ -10,11 +10,10 @@ START_NAMESPACE_DISTRHO
 class SVGImage : public NanoVG
 {
 public:
-    SVGImage(char *svg, float scale);
+    SVGImage(NanoWidget *parent, char *svg, float scale);
 
     ~SVGImage();
 
-    NanoImage image;
     Size<uint> getSize()
     {
         return Size<uint>(width, height);
@@ -32,12 +31,18 @@ public:
         scale = s;
     };
 
+    void drawAt(int x, int y);
+    
+    NanoImage image;
+
 private:
     unsigned char *imgData;
     Size<uint> size;
     uint width;
     uint height;
+    Paint paint;
     float scale;
+
 };
 
 END_NAMESPACE_DISTRHO

@@ -1,7 +1,7 @@
 #include "SVGImage.hpp"
- 
 
-SVGImage::SVGImage(char *svgData, float scale)
+SVGImage::SVGImage(NanoWidget *parent, char *svgData, float scale)
+    : NanoVG(parent)
 {
     NSVGimage *svg = nsvgParse(svgData, "px", 96.0f);
     if (svg == nullptr)
@@ -9,8 +9,8 @@ SVGImage::SVGImage(char *svgData, float scale)
         printf("Could not open SVG Image.\n");
         return;
     }
-    width = static_cast<uint>(svg->width);
-    height = static_cast<uint>(svg->height);
+    width = static_cast<uint>(svg->width * scale + 0.5f);
+    height = static_cast<uint>(svg->height * scale + 0.5f);
     size_t s = width * height * 4;
     imgData = new unsigned char[s];
     NSVGrasterizer *rast;
@@ -30,5 +30,15 @@ SVGImage::SVGImage(char *svgData, float scale)
 
 SVGImage::~SVGImage()
 {
-    delete imgData;
+    delete[] imgData;
+}
+
+void SVGImage::drawAt(int x, int y)
+{
+    paint = imagePattern(x, y, width, height, 0, image, 1.0f);
+    beginPath();
+    rect(x, y, width, height);
+    fillPaint(paint);
+    fill();
+    closePath();
 }

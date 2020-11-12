@@ -27,11 +27,12 @@ FILES_UI  = \
 			widgets/src/VBox.cpp \
 			widgets/src/FileOpenButton.cpp \
 			widgets/src/RadioButton.cpp \
+			widgets/src/SVGButton.cpp \
 			SVGImage.cpp \
 			Artwork.cpp \
 			initTabAmp.cpp \
 			initTabSample.cpp \
-			svg_images.cpp 
+			SVG_Icons.cpp 
 
 # --------------------------------------------------------------
 # Do some magic

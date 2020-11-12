@@ -21,11 +21,13 @@
 #include "Menu.hpp"
 #include "Slider.hpp"
 #include "RadioButton.hpp"
+#include "SVGButton.hpp"
 #include "HBox.hpp"
 #include "VBox.hpp"
+#include "SVGImage.hpp"
 #include "Artwork.hpp"
 #include "DropsColors.hpp"
-#include "svg_images.hpp"
+#include "SVG_Icons.hpp"
 #include "SVGImage.hpp"
 
 START_NAMESPACE_DISTRHO
@@ -40,7 +42,8 @@ class DropsUI : public UI,
                 public Menu::Callback,
                 public Slider::Callback,
                 public FileOpenButton::Callback,
-                public RadioButton::Callback
+                public RadioButton::Callback,
+                public SVGButton::Callback
 {
 public:
     DropsUI();
@@ -64,6 +67,7 @@ protected:
     void onSliderValueChanged(Slider *slider, float value) override;
     void onMenuClicked(Menu *menu, uint id, std::string item);
     void onRadioButtonClicked(RadioButton *radio);
+    void onSVGButtonClicked(SVGButton *button);
 
 private:
     template <class T>
@@ -71,8 +75,6 @@ private:
     {
         return std::min(upper, std::max(x, lower));
     }
-
-    struct NSVGimage *svg_image;
 
     DropsPlugin *plugin;
     ScopedPointer<FileOpenButton> fileopen_button;
@@ -101,14 +103,12 @@ private:
     ScopedPointer<Menu> fAmpLFOSyncMenu;
     ScopedPointer<RadioButton> fAmpLFOFreqBeat;
 
-    NanoImage imgDropsLogo, imgLoopLeft, imgLoopRight, imgZoomFitAll, imgZoomIn, 
-    imgZoomLoop, imgZoomOut;
-     unsigned char * dataDropsLogo, dataLoopLeft, dataLoopRight, dataZoomFitAll, dataZoomIn, 
-     dataZoomLoop, dataZoomOut;
-    ScopedPointer<SVGImage> test;
+    ScopedPointer<SVGImage> dropsLogo, clearlyBrokenLogo, loopLeft, loopRight,
+        zoomIn, zoomOut, zoomAll, zoomLoop;
+    ScopedPointer<HBox> hbox_zoom_icons;
+    ScopedPointer<SVGButton> fZoomOut,fZoomIn,fZoomAll,fZoomInOut;
 
-    void
-    initWidgets();
+    void initWidgets();
     void initTabSample();
     void initTabAmp();
     void hideTabSample();
@@ -124,6 +124,7 @@ private:
     void scrollWaveform(bool leftright);
     void setMarkers();
     void setScrollbarWidgets();
+    void zoomButtons(float zoom_delta);
     bool scrollbarDragging, loopstartDragging, loopendDragging, sampleInDragging, sampleOutDragging;
     bool sig_sampleLoaded;
     bool showWaveForm;
