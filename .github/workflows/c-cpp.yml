@@ -15,5 +15,8 @@ jobs:
     - uses: actions/checkout@v2
       with:
         submodules: 'recursive'
+    - name: deps
+      run: apt install libgl1-mesa-dev libx11-dev libsamplerate0-dev libsndfile1-dev
+
     - name: make
       run: make
