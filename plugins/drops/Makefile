@@ -27,9 +27,12 @@ FILES_UI  = \
 			widgets/src/VBox.cpp \
 			widgets/src/FileOpenButton.cpp \
 			widgets/src/RadioButton.cpp \
+			widgets/src/SVGButton.cpp \
+			SVGImage.cpp \
 			Artwork.cpp \
 			initTabAmp.cpp \
-			initTabSample.cpp 
+			initTabSample.cpp \
+			SVG_Icons.cpp 
 
 # --------------------------------------------------------------
 # Do some magic
@@ -42,7 +45,7 @@ include ../../sfizz/dpf.mk
 BUILD_C_FLAGS += $(SFIZZ_C_FLAGS)
 BUILD_CXX_FLAGS += $(SFIZZ_CXX_FLAGS)
 LINK_FLAGS += $(SFIZZ_LINK_FLAGS)
-BASE_FLAGS += -I. -I./widgets
+BASE_FLAGS += -I. -I./widgets -I./external/src
 #LINK_FLAGS += $(shell pkg-config --libs sfizz)
 
 # --------------------------------------------------------------
@@ -60,7 +63,7 @@ else
 TARGETS += lv2_dsp
 endif
 
-TARGETS += vst
+# TARGETS += vst
 
 all: $(TARGETS)
 

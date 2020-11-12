@@ -3,6 +3,13 @@ license here
 */
 
 #include "DropsUI.hpp"
+#include <iostream>
+
+#define NANOSVG_IMPLEMENTATION
+#include "nanosvg.h"
+#define NANOSVGRAST_IMPLEMENTATION
+#include "nanosvgrast.h"
+
 using namespace artwork;
 
 START_NAMESPACE_DISTRHO
@@ -29,14 +36,15 @@ DropsUI::DropsUI()
     mouseX = 0;
     mouseY = 0;
 
-    imgLoopStart = createImageFromMemory((uchar *)artwork::loopstartData, artwork::loopstartDataSize, 1);
-    imgLoopEnd = createImageFromMemory((uchar *)artwork::loopendData, artwork::loopendDataSize, 1);
     /* for testing */
     sampleLoopStart = 0;
     sampleLoopEnd = 0;
     sampleIn = 0;
     sampleOut = 0;
     /* ----------- */
+
+    scale = 1.0f;
+    makeIcons();
     initWidgets();
     if (plugin->loadedSample)
     {
@@ -44,6 +52,10 @@ DropsUI::DropsUI()
         std::string filename = plugin->path;
         fileopen_button->setText(filename);
     }
+}
+
+DropsUI::~DropsUI()
+{
 }
 
 void DropsUI::initWidgets()
@@ -77,25 +89,25 @@ void DropsUI::initWidgets()
 
     fLoopStart = new ScrollBar(window);
     fLoopStart->setId(kSampleLoopStart);
-    fLoopStart->setSize(32, 32); // FIXME: hardcoded
+    fLoopStart->setSize(35, 35); // FIXME: hardcoded
     fLoopStart->setCallback(this);
     fLoopStart->hide();
 
     fLoopEnd = new ScrollBar(window);
     fLoopEnd->setId(kSampleLoopEnd);
-    fLoopEnd->setSize(32, 32);
+    fLoopEnd->setSize(35, 35);
     fLoopEnd->setCallback(this);
     fLoopEnd->hide();
 
     fSampleIn = new ScrollBar(window);
     fSampleIn->setId(kSampleIn);
-    fSampleIn->setSize(32, 32);
+    fSampleIn->setSize(35, 35);
     fSampleIn->setCallback(this);
     fSampleIn->hide();
 
     fSampleOut = new ScrollBar(window);
     fSampleOut->setId(kSampleOut);
-    fSampleOut->setSize(32, 32);
+    fSampleOut->setSize(35, 35);
     fSampleOut->setCallback(this);
     fSampleOut->hide();
 
@@ -146,15 +158,50 @@ void DropsUI::initWidgets()
     box_tabs->addWidget(button_filter);
     box_tabs->positionWidgets();
 
+    hbox_zoom_icons = new HBox(this);
+    hbox_zoom_icons->setId(kHboxZoomIcons);
+    hbox_zoom_icons->setAbsolutePos(15, 70);
+    hbox_zoom_icons->setWidth(150);
+
+    fZoomOut = new SVGButton(hbox_zoom_icons, zoom_out, zoom_out_hl);
+    fZoomOut->setId(kZoomOut);
+    fZoomOut->setCallback(this);
+
+    fZoomIn = new SVGButton(hbox_zoom_icons, zoom_in, zoom_in_hl);
+    fZoomIn->setId(kZoomIn);
+    fZoomIn->setCallback(this);
+
+    fZoomAll = new SVGButton(hbox_zoom_icons, zoom_all, zoom_all_hl);
+    fZoomAll->setId(kZoomAll);
+    fZoomAll->setCallback(this);
+
+    fZoomInOut = new SVGButton(hbox_zoom_icons, zoom_in_out, zoom_in_out_hl);
+    fZoomInOut->setId(kZoomInOut);
+    fZoomInOut->setCallback(this);
+
+    hbox_zoom_icons->addWidget(fZoomOut);
+    hbox_zoom_icons->addWidget(fZoomIn);
+    hbox_zoom_icons->addWidget(fZoomAll);
+    hbox_zoom_icons->addWidget(fZoomInOut);
+
+    hbox_zoom_icons->positionWidgets();
+
     initTabSample();
     initTabAmp();
     showTabSample();
 }
 
+void DropsUI::makeIcons()
+{
+    dropsLogo = new SVGImage(this, drops_logo, 1.0f);
+    loopLeft = new SVGImage(this, loop_left, 1.0f);
+    loopRight = new SVGImage(this, loop_right, 1.0f);
+    clearlyBrokenLogo = new SVGImage(this, artwork::clearly_broken_logo, 0.8f);
+}
 void DropsUI::parameterChanged(uint32_t index, float value)
 {
 #ifdef DEBUG
-    printf("parameterChanged(%i,%f)\n", index, value);
+    //   printf("parameterChanged(%i,%f)\n", index, value);
 #endif
     switch (index)
     {
@@ -231,9 +278,9 @@ int DropsUI::loadSample()
     float sampleInPixel = static_cast<float>(sampleIn) / samples_per_pixel + static_cast<float>(display_left);
     float sampleOutPixel = static_cast<float>(sampleOut) / samples_per_pixel + static_cast<float>(display_left);
 
-    fLoopStart->setAbsolutePos(loopStartPixel - 32, display_bottom - 32);
-    fLoopEnd->setAbsolutePos(loopEndPixel, display_bottom - 32);
-    fSampleIn->setAbsolutePos(sampleInPixel - 32, display_top);
+    fLoopStart->setAbsolutePos(loopStartPixel - 35 - 1, display_bottom - 35);
+    fLoopEnd->setAbsolutePos(loopEndPixel, display_bottom - 35);
+    fSampleIn->setAbsolutePos(sampleInPixel - 35 - 1, display_top);
     fSampleOut->setAbsolutePos(sampleOutPixel, display_top);
     fLoopStart->show();
     fLoopEnd->show();
@@ -268,6 +315,19 @@ void DropsUI::onNanoDisplay()
         drawLoopMarkers();
         drawInOutMarkers();
     }
+
+    // draw logos
+    uint w = dropsLogo->getWidth();
+    uint h = dropsLogo->getHeight();
+    int x = fileopen_button->getAbsoluteX() / 2 - w / 2;
+    int y = fileopen_button->getHeight() / 2 - h / 2;
+    dropsLogo->drawAt(x, y);
+    const int fo_right = fileopen_button->getAbsoluteX() + fileopen_button->getWidth();
+    const int half_right_space = (width - fo_right) / 2;
+    const int half_cb_logo = clearlyBrokenLogo->getWidth() / 2;
+    x = fo_right + half_right_space - half_cb_logo;
+    y = fileopen_button->getHeight() / 2 - clearlyBrokenLogo->getHeight() / 2;
+    clearlyBrokenLogo->drawAt(x, y);
 }
 
 void DropsUI::drawWaveform()
@@ -364,11 +424,11 @@ void DropsUI::drawInOutMarkers()
         closePath();
         // handle
         beginPath();
-        roundedRect(sampleInPixel - 32.f, display_top, 32.f, 32.f, 32.f);
+        roundedRect(sampleInPixel - 35.f, display_top, 35.f, 35.f, 35.f);
         fill();
         closePath();
         beginPath();
-        rect(sampleInPixel - 16.f, display_top, 16.f, 32.f);
+        rect(sampleInPixel - 35.f * .5f, display_top, 35 * .5f, 35.f);
         fill();
         closePath();
         // IN text
@@ -397,12 +457,12 @@ void DropsUI::drawInOutMarkers()
         closePath();
         // handle
         beginPath();
-        roundedRect(sampleOutPixel, display_top, 32.f, 32.f, 32.f);
+        roundedRect(sampleOutPixel, display_top, 35.f, 35.f, 35.f);
         fill();
         closePath();
 
         beginPath();
-        rect(sampleOutPixel, display_top, 16.f, 32.f);
+        rect(sampleOutPixel, display_top, 35.f * .5f, 35.f);
         fill();
         closePath();
         // text OUT
@@ -411,7 +471,7 @@ void DropsUI::drawInOutMarkers()
         fillColor(eerie_black);
         fontSize(sample_inout_font_size);
         textAlign(ALIGN_CENTER | ALIGN_MIDDLE);
-        text(sampleOutPixel + 16.f, display_top + 16.f, "OUT", NULL);
+        text(sampleOutPixel + 35.f * 0.5f, display_top + 35.f * .5f, "OUT", NULL);
         closePath();
     }
 }
@@ -427,7 +487,7 @@ void DropsUI::drawLoopMarkers()
         // sample to pixel
         double sample_per_pixel = pow(viewMaxZoom, viewZoom);
         float loopStartPixel = (sampleLoopStart / sample_per_pixel) - (viewStart / sample_per_pixel) + static_cast<float>(display_left);
-        ;
+
         // line
         beginPath();
         moveTo(loopStartPixel, display_bottom);
@@ -435,23 +495,8 @@ void DropsUI::drawLoopMarkers()
         stroke();
         closePath();
         // handle
-        beginPath();
-        roundedRect(loopStartPixel - 32.f, display_bottom - 32.f, 32.f, 32.f, 32.f);
-        fill();
-        closePath();
-        beginPath();
-        rect(loopStartPixel - 16.f, display_bottom - 32.f, 16.f, 32.f);
-        fill();
-        closePath();
-        beginPath();
-        Paint loopstartpaint = imagePattern(loopStartPixel - 26, display_bottom - 26,
-                                            18, 16,
-                                            0,
-                                            imgLoopStart, 1.0f);
-        rect(loopStartPixel - 26, display_bottom - 26, 18, 16);
-        fillPaint(loopstartpaint);
-        fill();
-        closePath();
+
+        loopLeft->drawAt(loopStartPixel - 35, display_bottom - 35);
     }
 
     if (sampleLoopEnd <= viewEnd && sampleLoopEnd >= viewStart)
@@ -469,23 +514,7 @@ void DropsUI::drawLoopMarkers()
         stroke();
         closePath();
         // handle
-        beginPath();
-        roundedRect(loopEndPixel, display_bottom - 32.f, 32.f, 32.f, 32.f);
-        fill();
-        closePath();
-        beginPath();
-        rect(loopEndPixel, display_bottom - 32.f, 16.f, 32.f);
-        fill();
-        closePath();
-        beginPath();
-        Paint loopendpaint = imagePattern(loopEndPixel, display_bottom - 26,
-                                          18, 16,
-                                          0,
-                                          imgLoopEnd, 1.0f);
-        rect(loopEndPixel, display_bottom - 26, 18, 16);
-        fillPaint(loopendpaint);
-        fill();
-        closePath();
+        loopRight->drawAt(loopEndPixel, display_bottom - 35);
     }
 
     // do stuff
@@ -558,12 +587,12 @@ void DropsUI::setMarkers()
     float samples_per_pixel = pow(viewMaxZoom, viewZoom);
     float loopStartPixel = static_cast<float>(sampleLoopStart - viewStart) / samples_per_pixel + static_cast<float>(display_left);
     float loopEndPixel = static_cast<float>(sampleLoopEnd - viewStart) / samples_per_pixel + static_cast<float>(display_left);
-    fLoopStart->setAbsoluteX(loopStartPixel - 32);
+    fLoopStart->setAbsoluteX(loopStartPixel - 35); //FIXME: hardcoded offset
     fLoopEnd->setAbsoluteX(loopEndPixel);
 
     float sampleInPixel = static_cast<float>(sampleIn - viewStart) / samples_per_pixel + static_cast<float>(display_left);
     float sampleOutPixel = static_cast<float>(sampleOut - viewStart) / samples_per_pixel + static_cast<float>(display_left);
-    fSampleIn->setAbsoluteX(sampleInPixel - 32);
+    fSampleIn->setAbsoluteX(sampleInPixel - 35); //FIXME: hardcoded offset
     fSampleOut->setAbsoluteX(sampleOutPixel);
 }
 
@@ -596,6 +625,7 @@ bool DropsUI::onScroll(const ScrollEvent &ev)
 
     // left-right scroll factor
     float scroll_delta = -ev.delta.getX();
+    printf("scroll delta x %f\n", scroll_delta);
     // zoom factor
     float zoom_delta = -ev.delta.getY() * 0.05f;
 
@@ -694,7 +724,7 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         sampleLoopStart = static_cast<float>(sampleLoopStart) + distance * samples_per_pixel;
         //sampleLoopStart = clamp<sf_count_t>(sampleLoopStart, sampleLoopEnd - 1, sampleIn);
         float loopStartPixel = static_cast<float>(sampleLoopStart - viewStart) / samples_per_pixel + static_cast<float>(display_left);
-        fLoopStart->setAbsoluteX(loopStartPixel - 32);
+        fLoopStart->setAbsoluteX(loopStartPixel - 35);
         /*
         float value = static_cast<float>(sampleLoopStart) / static_cast<float>(waveForm->size());
         setParameterValue(kSampleLoopStart, value);
@@ -726,7 +756,7 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         sampleIn = static_cast<float>(sampleIn) + distance * samples_per_pixel;
         sampleIn = clamp<sf_count_t>(sampleIn, sampleOut - 1, 0);
         float sampleInPixel = static_cast<float>(sampleIn - viewStart) / samples_per_pixel + static_cast<float>(display_left);
-        fSampleIn->setAbsoluteX(sampleInPixel - 32);
+        fSampleIn->setAbsoluteX(sampleInPixel - 35);
         // float value = static_cast<float>(sampleIn) / static_cast<float>(waveForm->size());
         // setParameterValue(kSampleIn, value);
         repaint();
@@ -960,6 +990,89 @@ void DropsUI::onRadioButtonClicked(RadioButton *rb)
     default:
         break;
     }
+}
+
+void DropsUI::onSVGButtonClicked(SVGButton *svgb)
+{
+    const uint id = svgb->getId();
+    switch (id)
+    {
+    case kZoomOut:
+        zoomButtons(0.05f);
+        break;
+    case kZoomIn:
+        zoomButtons(-0.05f);
+        break;
+    case kZoomAll:
+        viewStart = 0;
+        viewEnd = sampleLength;
+        viewZoom = 1.0f;
+        setScrollbarWidgets();
+        setMarkers();
+        repaint();
+        break;
+    case kZoomInOut:
+    {
+        viewStart = sampleIn;
+        viewEnd = sampleOut;
+        viewEnd = clamp<sf_count_t>(viewEnd, sampleLength, sampleIn + display_width);
+        const float inOutLength = static_cast<float>(sampleOut - sampleIn);
+        const float samples_pp = inOutLength / static_cast<float>(display_width);
+        const float l2_spp = log2(samples_pp);
+        const float l2_vmz = log2(viewMaxZoom);
+        viewZoom = l2_spp / l2_vmz;
+        viewZoom = clamp<float>(viewZoom, 1.0f, 0.0f);
+        setScrollbarWidgets();
+        setMarkers();
+        repaint();
+        break;
+    }
+
+    default:
+        printf("some svg button clicked\n");
+        break;
+    }
+}
+
+void DropsUI::zoomButtons(float zoom_delta)
+{
+    if (waveForm->size() <= display_width)
+        return; // can't zoom anyway
+
+    int x = getWidth() / 2; // off set in pixels, center screen
+
+    // we use a signed int to be able to handle temporary negative starts.
+    int start;
+    float samples_per_pixel;
+
+    // We either zoom in/out, or ...
+    // old zoom factor
+    uint center = int(pow(viewMaxZoom, viewZoom) * (float(x)) + float(viewStart));
+    viewZoom += zoom_delta;
+    if (viewZoom < 0.0f)
+    {
+        viewZoom = 0.0f;
+    }
+    if (viewZoom > 1.0f)
+    {
+        viewZoom = 1.0f;
+    }
+    samples_per_pixel = pow(viewMaxZoom, viewZoom);
+    start = int(float(center) - (float(x) * samples_per_pixel));
+
+    // and ensure we stay in view.
+    uint length = int(samples_per_pixel * float(display_width));
+    viewEnd = start + length;
+    if (viewEnd > waveForm->size())
+    {
+        viewEnd = waveForm->size();
+        start = viewEnd - length;
+    }
+    samples_per_pixel = pow(viewMaxZoom, viewZoom);
+    viewStart = start < 0 ? 0 : start;
+    setScrollbarWidgets();
+    setMarkers();
+    repaint();
 }
 
 UI *createUI()

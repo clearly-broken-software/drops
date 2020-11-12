@@ -3,6 +3,9 @@
 #ifndef DROPSUI_HPP_INCLUDED
 #define DROPSUI_HPP_INCLUDED
 
+#include "external/src/nanosvg.h"
+#include "external/src/nanosvgrast.h"
+
 #include "DistrhoPluginInfo.h"
 #include "DistrhoUI.hpp"
 #include "NanoVG.hpp"
@@ -18,10 +21,14 @@
 #include "Menu.hpp"
 #include "Slider.hpp"
 #include "RadioButton.hpp"
+#include "SVGButton.hpp"
 #include "HBox.hpp"
 #include "VBox.hpp"
+#include "SVGImage.hpp"
 #include "Artwork.hpp"
 #include "DropsColors.hpp"
+#include "SVG_Icons.hpp"
+#include "SVGImage.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -35,10 +42,12 @@ class DropsUI : public UI,
                 public Menu::Callback,
                 public Slider::Callback,
                 public FileOpenButton::Callback,
-                public RadioButton::Callback
+                public RadioButton::Callback,
+                public SVGButton::Callback
 {
 public:
     DropsUI();
+    ~DropsUI();
 
 protected:
     void parameterChanged(uint32_t index, float value) override;
@@ -58,10 +67,9 @@ protected:
     void onSliderValueChanged(Slider *slider, float value) override;
     void onMenuClicked(Menu *menu, uint id, std::string item);
     void onRadioButtonClicked(RadioButton *radio);
+    void onSVGButtonClicked(SVGButton *button);
 
 private:
-
-
     template <class T>
     const T &clamp(const T &x, const T &upper, const T &lower)
     {
@@ -95,7 +103,11 @@ private:
     ScopedPointer<Menu> fAmpLFOSyncMenu;
     ScopedPointer<RadioButton> fAmpLFOFreqBeat;
 
-    NanoImage imgLoopStart, imgLoopEnd;
+    ScopedPointer<SVGImage> dropsLogo, clearlyBrokenLogo, loopLeft, loopRight,
+        zoomIn, zoomOut, zoomAll, zoomLoop;
+    ScopedPointer<HBox> hbox_zoom_icons;
+    ScopedPointer<SVGButton> fZoomOut,fZoomIn,fZoomAll,fZoomInOut;
+
     void initWidgets();
     void initTabSample();
     void initTabAmp();
@@ -103,6 +115,7 @@ private:
     void hideTabAmp();
     void showTabSample();
     void showTabAmp();
+    void makeIcons();
     int loadSample();
     void drawWaveform();
     void drawMinimap();
@@ -111,6 +124,7 @@ private:
     void scrollWaveform(bool leftright);
     void setMarkers();
     void setScrollbarWidgets();
+    void zoomButtons(float zoom_delta);
     bool scrollbarDragging, loopstartDragging, loopendDragging, sampleInDragging, sampleOutDragging;
     bool sig_sampleLoaded;
     bool showWaveForm;
@@ -118,6 +132,7 @@ private:
     sf_count_t sampleLength;
     int sampleChannels;
     int file_samplerate;
+    float scale;
     // sample
     sf_count_t sampleIn, sampleOut, sampleLoopStart, sampleLoopEnd;
 

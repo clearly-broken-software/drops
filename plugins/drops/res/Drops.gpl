@@ -1,0 +1,46 @@
+GIMP Palette
+Name: Drops Colors
+#
+# Colors for Drops pcplugin
+#
+
+235  93  40 flame
+255 159 124 flame_1
+251 127  82 flame_2
+194  62  13 flame_3
+154  42   0 flame_4
+235 190  40 saffron
+255 225 124 saffron_1
+251 212  82 saffron_2
+194 153  13 saffron_3
+154 118   0 saffron_4
+55  47  164 blue_pigment
+116 110 198 blue_pigment_1
+81  73  175 blue_pigment_2
+35  27  135 blue_pigment_3
+21  14  107 blue_pigment_4
+28  162 101 shamrock_green
+95  197 151 shamrock_green_1
+57  173 120 shamrock_green_2
+9   134 77  shamrock_green_3
+0   106 58  shamrock_green_4
+37  36  34  eerie_black
+154 150 140 eerie_black_1
+101 98  92  eerie_black_2
+23  20  16  eerie_black_3
+26  21  12  eerie_black_4
+64  61  57  black_olive
+170 163 153 black_olive_1
+120 114 107 black_olive_2
+31  27  22  black_olive_3
+35  27  17  black_olive_4
+255 252 242 floral_white
+255 255 255 floral_white_1
+255 254 252 floral_white_2
+217 211 192 floral_white_3
+184 175 144 floral_white_4
+204 197 185 pale_silver
+  0   0   0 pale_silver_1
+245 241 234 pale_silver_2
+169 159 142 pale_silver_3
+136 123 102 pale_silver_4

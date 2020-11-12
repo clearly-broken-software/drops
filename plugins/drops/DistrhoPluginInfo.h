@@ -103,12 +103,17 @@ enum Widgets
    kHBoxAmpRow1,
    kHBoxAmpRow2,
    kAmpLFOFreqBeat,
-   kAmpLFOTypeMenu
+   kAmpLFOTypeMenu,
+   kHboxZoomIcons,
+   kZoomOut,
+   kZoomIn,
+   kZoomAll,
+   kZoomInOut,
 };
 
 static constexpr unsigned int UI_W = 1000;
 static constexpr unsigned int UI_H = 700;
-static constexpr unsigned int display_left = 32;
+static constexpr unsigned int display_left = 35;
 static constexpr unsigned int display_top = 100;
 static constexpr unsigned int display_width = UI_W - 2 * display_left;
 static constexpr unsigned int display_right = display_left + display_width;
