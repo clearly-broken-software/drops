@@ -21,4 +21,4 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: binaries
-          path: /home/runner/work/drops/bin/
+          path: /home/runner/work/drops/drops/bin/
