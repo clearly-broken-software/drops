@@ -2,21 +2,23 @@ name: C/C++ CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: 'recursive'
-    - name: deps
-      run: sudo apt-get install libgl1-mesa-dev libx11-dev libsamplerate0-dev libsndfile1-dev
-
-    - name: make
-      run: make
+      - uses: actions/checkout@v2
+        with:
+          submodules: "recursive"
+      - name: deps
+        run: sudo apt-get install libgl1-mesa-dev libx11-dev libsamplerate0-dev libsndfile1-dev
+      - name: make
+        run: make
+      - uses: actions/upload-artifact@v2
+        with:
+          name: binaries
+          path: /home/runner/work/drops/bin/
