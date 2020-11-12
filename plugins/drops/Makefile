@@ -63,7 +63,7 @@ else
 TARGETS += lv2_dsp
 endif
 
-# TARGETS += vst
+TARGETS += vst
 
 all: $(TARGETS)
 
