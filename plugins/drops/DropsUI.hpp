@@ -131,7 +131,6 @@ private:
     char *filepath;
     sf_count_t sampleLength;
     int sampleChannels;
-    int file_samplerate;
     float scale;
     // sample
     sf_count_t sampleIn, sampleOut, sampleLoopStart, sampleLoopEnd;
@@ -142,7 +141,7 @@ private:
     sf_count_t viewEnd;
     float viewZoom;
     float viewMaxZoom;
-    int mouseX, mouseY;
+    int mouseX;
     Rectangle<int> display;
     DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DropsUI)
 };

@@ -21,6 +21,16 @@ DropsUI::DropsUI()
 {
     loadSharedResources();
     plugin = static_cast<DropsPlugin *>(getPluginInstancePointer());
+
+    viewStart = 0;
+    viewEnd = 0;
+    viewZoom = 0;
+    viewMaxZoom = 0;
+    mouseX = 0;
+
+    sampleChannels = 0;
+    sampleLength = 0;
+    filepath = "";
     waveForm = &plugin->waveForm;
     miniMap = &plugin->miniMap;
     sig_sampleLoaded = false;
@@ -33,8 +43,7 @@ DropsUI::DropsUI()
     display.setSize(display_width, display_height);
     display.setPos(display_left, display_top);
     scrollbarDragging = false;
-    mouseX = 0;
-    mouseY = 0;
+
 
     /* for testing */
     sampleLoopStart = 0;

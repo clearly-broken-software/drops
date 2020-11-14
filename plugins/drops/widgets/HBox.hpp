@@ -58,6 +58,7 @@ private:
             width = 0;
             height = 0;
             align_self = Align_Items::none;
+            justify_content = Justify_Content::none;
         }
 
         uint width;
