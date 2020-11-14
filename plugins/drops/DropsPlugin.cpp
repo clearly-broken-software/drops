@@ -255,7 +255,7 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.ranges.min = -1200.0f;
         parameter.ranges.max = 1200.0f;
         parameter.ranges.def = 0.0f;
-        parameter.hints = kParameterIsAutomable|kParameterIsInteger;
+        parameter.hints = kParameterIsAutomable | kParameterIsInteger;
         break;
     case kAmpLFOSync:
         parameter.name = "Amp LFO Sync";
@@ -753,13 +753,19 @@ void DropsPlugin::setState(const char *key, const char *value)
 
 String DropsPlugin::getState(const char *key) const
 {
+    String retString = String("describe it");
 #ifdef DEBUG
     printf("getState(%s)\n", key);
 #endif
     if (strcmp(key, "filepath"))
     {
-        return String(path.c_str());
+        retString = path.c_str();
     }
+    if (strcmp(key, "ui_sample_loaded"))
+    {
+        retString = "ui_sample_loaded yes/no";
+    }
+    return retString;
 };
 
 void DropsPlugin::initState(unsigned int index, String &stateKey, String &defaultStateValue)
