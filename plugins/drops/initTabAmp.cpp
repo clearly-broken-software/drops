@@ -13,7 +13,6 @@ void DropsUI::initTabAmp()
     box_amp_row_1->setId(kHBoxAmpRow1);
 
     const Size<uint> knobSize = Size<uint>(76, 76);
-    const uint knobSpacing = knobSize.getWidth() + 15;
 
     fAmpEgAttack = new Knob(box_amp_row_1);
     fAmpEgAttack->setId(kAmpEgAttack);
@@ -74,16 +73,16 @@ void DropsUI::initTabAmp()
 
     box_amp_row_1->setWidth(box_amp->getWidth());
     box_amp->addWidget(box_amp_row_1);
-    box_amp->setWidgetResize(kHBoxSampleRow1, true);
+    box_amp->setWidgetResize(kHBoxAmpRow1, true);
 
     box_amp_row_1->addWidget(fAmpEgAttack);
     box_amp_row_1->addWidget(fAmpEgDecay);
     box_amp_row_1->addWidget(fAmpEgSustain);
     box_amp_row_1->addWidget(fAmpEgRelease);
 
+    // row 2
     box_amp_row_2 = new HBox(box_amp);
-    box_amp_row_2->setWidth(box_amp->getWidth());
-    box_amp->setWidgetResize(kHBoxAmpRow2, true);
+    box_amp_row_2->setId(kHBoxAmpRow2);
 
     fAmpLFOType = new DropDown(box_amp_row_2);
     fAmpLFOType->setId(kAmpLFOType);
@@ -98,20 +97,22 @@ void DropsUI::initTabAmp()
     fAmpLFOType->text_color = floral_white;
 
     fAmpLFOTypeMenu = new Menu(box_amp_row_2);
+    fAmpLFOTypeMenu->max_view_items = 4;
     fAmpLFOTypeMenu->setId(kAmpLFOTypeMenu);
     fAmpLFOTypeMenu->setCallback(this);
-    fAmpLFOTypeMenu->addItem("TRIANGLE");
-    fAmpLFOTypeMenu->addItem("SINE");
-    fAmpLFOTypeMenu->addItem("75% PULSE");
-    fAmpLFOTypeMenu->addItem("SQUARE");
-    fAmpLFOTypeMenu->addItem("25% PULSE");
-    fAmpLFOTypeMenu->addItem("12.5% PULSE");
-    fAmpLFOTypeMenu->addItem("SAW UP");
-    fAmpLFOTypeMenu->addItem("SAW DOWN");
+    fAmpLFOTypeMenu->addItems({"TRIANGLE",
+                               "SINE",
+                               "75% PULSE",
+                               "SQUARE",
+                               "25% PULSE",
+                               "12.5% PULSE",
+                               "SAW UP",
+                               "SAW DOWN"});
+
     fAmpLFOTypeMenu->font_size = 16;
     fAmpLFOTypeMenu->hide();
     fAmpLFOTypeMenu->background_color = black_olive;
-    fAmpLFOTypeMenu->foreground_color = floral_white;
+    fAmpLFOTypeMenu->foreground_color = black_olive_2;
     fAmpLFOTypeMenu->highlight_color = flame;
     fAmpLFOTypeMenu->text_color = floral_white;
 
@@ -140,8 +141,8 @@ void DropsUI::initTabAmp()
     fAmpLFODepth->foreground_color = floral_white;
     fAmpLFODepth->highlight_color = flame;
     fAmpLFODepth->text_color = floral_white;
-    fAmpLFODepth->unit="DB";
-    fAmpLFODepth->right_padding= slider_right_padding;
+    fAmpLFODepth->unit = "DB";
+    fAmpLFODepth->right_padding = slider_right_padding;
     fAmpLFODepth->format_str = "%.2f";
 
     // fAmpLFOSync = new DropDown(box_amp_row_2);
@@ -155,12 +156,16 @@ void DropsUI::initTabAmp()
     // fAmpLFOSync->foreground_color = floral_white;
     // fAmpLFOSync->background_color = black_olive;
     // fAmpLFOSync->text_color = floral_white;
+    box_amp_row_2->setWidth(box_amp->getWidth());
+    box_amp_row_2->align_items = HBox::Align_Items::top;
+
+    box_amp->addWidget(box_amp_row_2);
+    box_amp->setWidgetResize(kHBoxAmpRow2, true);
 
     box_amp_row_2->addWidget(fAmpLFOType);
     box_amp_row_2->addWidget(fAmpLFOFreq);
     box_amp_row_2->addWidget(fAmpLFODepth);
     //  box_sample_row_2->addWidget(fAmpLFOSync);
-    box_amp->addWidget(box_amp_row_2);
 
     box_amp->positionWidgets();
     box_amp_row_1->positionWidgets();
