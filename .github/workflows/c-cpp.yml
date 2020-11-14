@@ -15,10 +15,21 @@ jobs:
         with:
           submodules: "recursive"
       - name: deps
-        run: sudo apt-get install libgl1-mesa-dev libx11-dev libsamplerate0-dev libsndfile1-dev
+        run: sudo apt-get install libgl1-mesa-dev libx11-dev libsamplerate0-dev libsndfile1-dev libjack-jackd2-dev
       - name: make
-        run: make
+        run: make -j2
       - uses: actions/upload-artifact@v2
         with:
-          name: binaries
+          name: drops-binaries
           path: /home/runner/work/drops/drops/bin/
+      - name: clean
+        run: make dist-clean
+      - name: make-debug
+        run: make -j2 DEBUG=true
+      - uses: actions/upload-artifact@v2
+        with:
+          name: drops-binaries-debug
+          path: /home/runner/work/drops/drops/bin
+        
+      
+      
