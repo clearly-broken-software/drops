@@ -50,6 +50,7 @@ protected:
     bool onScroll(const ScrollEvent &) override;
 
 private:
+   
     Callback *callback;
     Rectangle<int> handle_;
     std::string label_;

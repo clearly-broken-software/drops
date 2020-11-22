@@ -44,7 +44,6 @@ DropsUI::DropsUI()
     display.setPos(display_left, display_top);
     scrollbarDragging = false;
 
-
     /* for testing */
     sampleLoopStart = 0;
     sampleLoopEnd = 0;
@@ -842,11 +841,14 @@ void DropsUI::onDropDownClicked(DropDown *dropDown)
         fDirectionMenu->show();
         break;
     case kAmpLFOType:
-    {
         fAmpLFOTypeMenu->show();
-    }
+        break;
+    case kAmpLFOSync:
+        fAmpLFOSyncMenu->show();
+        break;
 
     default:
+        printf("dropdown %i clicked\n", id);
         break;
     }
 }
@@ -981,8 +983,13 @@ void DropsUI::onMenuClicked(Menu *menu, uint menu_id, std::string item)
         fAmpLFOTypeMenu->hide();
         setParameterValue(kAmpLFOTypeMenu, menu_id);
         break;
+    case kAmpLFOSyncMenu:
+        fAmpLFOSync->item = item;
+        fAmpLFOSyncMenu->hide();
+        setParameterValue(kAmpLFOSync, menu_id);
+        break;
     default:
-        printf("menu_id %i, item %s\n", menu_id, item);
+        printf("menu %i ,menu_id %i, item %s\n", id, menu_id, item.c_str());
         break;
     }
 }

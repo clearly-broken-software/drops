@@ -70,7 +70,8 @@ void Slider::setLabel(std::string l)
     label_width_ = bounds.getWidth();
     label_height_ = bounds.getHeight();
     handle_.setSize(font_size, font_size);
-    handle_.setPos(label_width_ + margin_, getHeight() - handle_.getHeight());
+    handle_.setPos(label_width_ + margin_,
+                   getHeight() / 2.0f - label_height_ / 2.0f);
     unit = nullptr;
 }
 
@@ -150,9 +151,17 @@ void Slider::onNanoDisplay()
     const float height = getHeight();
     const float width = getWidth();
     const float stroke_width = 2.f; // FIXME: hard coded
+
+    // background
+    beginPath();
+    fillColor(background_color);
+    rect(0, 0, width, height);
+    fill();
+    closePath();
+
     // label
     const float label_x = 0.0f;
-    const float label_y = height - label_height_;
+    const float label_y = height / 2.0f - label_height_ / 2.0f;
     beginPath();
     fillColor(text_color);
     fontSize(font_size);
@@ -162,10 +171,10 @@ void Slider::onNanoDisplay()
 
     //Line
     const float line_x = label_width_ + margin_;
-    const float line_y = height - stroke_width / 2.f;
+    const float line_y = label_y + label_height_ + stroke_width / 2.f;
     const float line_end_x = width - margin_ - right_padding;
     beginPath();
-    strokeColor(background_color);
+    strokeColor(foreground_color);
     strokeWidth(stroke_width);
     moveTo(line_x, line_y);
     lineTo(line_end_x, line_y);
@@ -191,10 +200,10 @@ void Slider::onNanoDisplay()
     const float hy = handle_.getY();
     fillColor(fill_color_);
     beginPath();
-    moveTo(hx, height - hh);
-    lineTo(hx + hw, height - hh);
-    lineTo(hx + hw / 2, height);
-    lineTo(hx, height - hh);
+    moveTo(hx, hy);
+    lineTo(hx + hw, hy);
+    lineTo(hx + hw / 2, line_y);
+    lineTo(hx, hy);
     fill();
     closePath();
 

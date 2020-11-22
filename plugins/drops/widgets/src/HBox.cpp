@@ -30,8 +30,6 @@ void HBox::addWidget(Widget *widget)
 
     for (auto it = items_.begin(); it != items_.end(); it++)
         it->height = getHeight();
-
-    // positionWidgets();
 }
 
 void HBox::setWidgetAlignment(uint id, Align_Items a_i)
@@ -123,7 +121,8 @@ void HBox::positionWidgets()
         {
             combined_widget_width += it->widget->getWidth();
         }
-        uint startX = width / 2 - combined_widget_width / 2;
+        
+        int startX = box_x + width / 2 - combined_widget_width / 2;
         for (auto it = items_.begin(); it != items_.end(); it++)
         {
             it->widget->setAbsoluteX(startX);
@@ -197,6 +196,7 @@ void HBox::positionWidgets()
     default:
         break;
     }
+
     for (auto it = items_.begin(); it != items_.end(); it++)
     {
         switch (it->align_self)
@@ -215,33 +215,55 @@ void HBox::positionWidgets()
             break;
         }
     }
+
+    for (auto it = items_.begin(); it != items_.end(); it++)
+    {
+        uint item_x = it->x;
+        uint item_w = it->width;
+        switch (it->justify_content)
+        {
+        case Justify_Content::left:
+            it->widget->setAbsoluteX(item_x);
+            break;
+        case Justify_Content::right:
+            it->widget->setAbsoluteX(item_x + item_w - it->widget->getWidth());
+            /* code */
+            break;
+        // case Justify_Content::center:
+        // case Justify_Content::space_evenly:
+        // case Justify_Content::none:
+        default:
+
+            break;
+        }
+    }
 }
 
 void HBox::onNanoDisplay()
 {
-    // #ifdef DEBUG
-    //     const uint width = getWidth();
-    //     const uint height = getHeight();
-    //     const uint box_x = getAbsoluteX();
-    //     const uint box_y = getAbsoluteY();
-    //     const float stroke_width = 1.0f;
-    //     const float dbl_stroke = stroke_width * 2.f;
-    //     fillColor(1.0f, 1.0f, 1.0f, 0.1f);
-    //     strokeColor(1.0f, 0.f, 0.f, .5f);
-    //     strokeWidth(stroke_width);
+#ifdef DEBUG
+    const uint width = getWidth();
+    const uint height = getHeight();
+    const uint box_x = getAbsoluteX();
+    const uint box_y = getAbsoluteY();
+    const float stroke_width = 1.0f;
+    const float dbl_stroke = stroke_width * 2.f;
+    fillColor(1.0f, 1.0f, 1.0f, 0.1f);
+    strokeColor(1.0f, 0.f, 0.f, .5f);
+    strokeWidth(stroke_width);
 
-    //     for (auto it = items_.begin(); it != items_.end(); it++)
-    //     {
+    for (auto it = items_.begin(); it != items_.end(); it++)
+    {
 
-    //         beginPath();
-    //         const uint x = it->x - box_x;
-    //         const uint y = 0;
-    //         rect(x, y, it->width, it->height);
-    //         fill();
-    //         stroke();
-    //         closePath();
-    //       }
-    // #endif
+        beginPath();
+        const uint x = it->x - box_x;
+        const uint y = 0;
+        rect(x, y, it->width, it->height);
+        fill();
+        stroke();
+        closePath();
+    }
+#endif
 }
 
 END_NAMESPACE_DISTRHO

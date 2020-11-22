@@ -92,8 +92,8 @@ private:
     ScopedPointer<Menu> fNormalizeMenu, fKeyCenterMenu, fPlayModeMenu,
         fDirectionMenu;
     // amp tab
-    ScopedPointer<VBox> box_amp;
-    ScopedPointer<HBox> box_amp_row_1, box_amp_row_2;
+    ScopedPointer<VBox> box_amp,vbox_amp_lfo;
+    ScopedPointer<HBox> box_amp_row_1, box_amp_row_2, box_sync;
     ScopedPointer<Knob>
         fAmpEgAttack, fAmpEgDecay, fAmpEgSustain, fAmpEgRelease;
     ScopedPointer<DropDown> fAmpLFOType;

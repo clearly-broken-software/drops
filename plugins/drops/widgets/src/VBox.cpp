@@ -110,11 +110,12 @@ void VBox::positionWidgets()
     }
     case Justify_Content::center:
     {
+        uint thisX = getAbsoluteX();
         for (auto it = items_.begin(); it != items_.end(); it++)
         {
             const uint half_width = it->widget->getWidth() / 2;
             const uint center = width / 2;
-            it->widget->setAbsoluteX(center - half_width);
+            it->widget->setAbsoluteX(thisX + center - half_width);
             it->x = box_x;
             it->width = width;
         }
@@ -132,6 +133,7 @@ void VBox::positionWidgets()
         for (auto it = items_.begin(); it != items_.end(); it++)
         {
             it->widget->setAbsoluteY(box_y + step);
+            it->y = box_y + step;
             const uint wh = it->widget->getHeight();
             step += wh;
             it->height = wh;
@@ -244,8 +246,8 @@ void VBox::onNanoDisplay()
     const float stroke_width = 1.0f;
     const float dbl_stroke = stroke_width * 2.f;
     const uint id = getId();
-    fillColor(1.0f, 1.0f, 1.0f, 0.1f);
-    strokeColor(1.0f, 0.f, 0.f, .5f);
+    fillColor(0.0f, 1.0f, 1.0f, 0.1f);
+    strokeColor(1.0f, 1.f, 0.f, .5f);
     strokeWidth(stroke_width);
     uint step = 0;
 

@@ -16,7 +16,7 @@ void DropsUI::initTabSample()
     fSampleXFade->setCallback(this);
     fSampleXFade->setSize(300, 20);
     fSampleXFade->setLabel("X-FADE :");
-    fSampleXFade->background_color = pale_silver;
+    fSampleXFade->background_color = black_olive;
     fSampleXFade->foreground_color = floral_white;
     fSampleXFade->highlight_color = flame;
     fSampleXFade->text_color = floral_white;
