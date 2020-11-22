@@ -133,6 +133,10 @@ private:
         "no_loop", "one_shot",
         "loop_continuous",
         "loop_sustain"};
+    const char *direction_[2]{
+        "forward",
+        "reverse"};
+
     std::unordered_map<std::string, std::string>
         opcodes;
 

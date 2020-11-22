@@ -199,6 +199,12 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.ranges.min = 0.0f;
         parameter.ranges.max = 1.0f;
         parameter.ranges.def = 0.0f;
+        parameter.enumValues.count = 2;
+        parameter.enumValues.restrictedMode = true;
+        parameter.enumValues.values = new ParameterEnumerationValue[2]{
+            ParameterEnumerationValue(0.0f, "forward"),
+            ParameterEnumerationValue(1.0f, "reverse"),
+        };
         parameter.hints = kParameterIsAutomable;
         break;
     case kAmpEgAttack:
@@ -640,6 +646,7 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         break;
     case kSamplePlayDirection:
         fSamplePlayDirection = value;
+        makeSFZ();
         break;
     case kAmpEgAttack:
         fAmpEGAttack = value;
@@ -908,6 +915,7 @@ void DropsPlugin::initSFZ()
     opcodes["pitch_keycenter"] = "c4";
     opcodes["offset"] = "0";
     opcodes["end"] = "4294967296";
+    opcodes["direction"] = "forward";
 }
 
 void DropsPlugin::makeSFZ()
@@ -922,6 +930,7 @@ void DropsPlugin::makeSFZ()
     opcodes["loop_end"] = std::to_string(loopEndInFrames);
     opcodes["offset"] = std::to_string(sampleInInFrames);
     opcodes["end"] = std::to_string(sampleOutInFrames);
+    opcodes["direction"] = direction_[static_cast<uint>(fSamplePlayDirection)];
 
     std::stringstream buffer;
     // amp ADSR
@@ -970,7 +979,8 @@ void DropsPlugin::makeSFZ()
     buffer << "sample=" << opcodes["sample"] << "\n";
     // buffer << "lokey=0\n";
     // buffer << "hikey=127\n";
-    // buffer << "pitch_keycenter=c4\n";
+    buffer << "pitch_keycenter=" << opcodes["pitch_keycenter"] << "\n";
+    buffer << "direction=" << opcodes["direction"] << "\n";
 
 #ifdef DEBUG
     std::cout << "----------------- SFZ FILE ------------------\n";
