@@ -165,17 +165,17 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.name = "Key Center";
         parameter.symbol = "pitch_center";
         parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 1.0f;
-        parameter.ranges.def = 0.0f;
-        parameter.hints = kParameterIsAutomable;
+        parameter.ranges.max = 127.0f;
+        parameter.ranges.def = 60.0f;
+        parameter.hints = kParameterIsAutomable | kParameterIsInteger;
         break;
     case kSampleTune:
         parameter.name = "Tune";
         parameter.symbol = "tune";
-        parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 1.0f;
+        parameter.ranges.min = -100.0f;
+        parameter.ranges.max = 100.0f;
         parameter.ranges.def = 0.0f;
-        parameter.hints = kParameterIsAutomable;
+        parameter.hints = kParameterIsAutomable | kParameterIsInteger;
         break;
     case kSamplePlayMode:
         parameter.name = "Playmode";
@@ -245,13 +245,26 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.ranges.min = 0.0f;
         parameter.ranges.max = 1.0f;
         parameter.ranges.def = 0.0f;
+        parameter.enumValues.count = 8;
+        parameter.enumValues.restrictedMode = true;
+        parameter.enumValues.values = new ParameterEnumerationValue[8]{
+            ParameterEnumerationValue(0.0f, "sine"),
+            ParameterEnumerationValue(1.0f, "triangle"),
+            ParameterEnumerationValue(2.0f, "75% pulse"),
+            ParameterEnumerationValue(3.0f, "square (50% pulse)"),
+            ParameterEnumerationValue(4.0f, "25% pulse"),
+            ParameterEnumerationValue(5.0f, "12:5% pulse"),
+            ParameterEnumerationValue(6.0f, "saw going up"),
+            ParameterEnumerationValue(7.0f, "saw going down"),
+        };
         parameter.hints = kParameterIsAutomable;
         break;
+
     case kAmpLFOFreq:
         parameter.name = "Amp LFO Freq";
         parameter.symbol = "amp_lfo_freq";
         parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 1.0f;
+        parameter.ranges.max = 20.0f;
         parameter.ranges.def = 0.0f;
         parameter.hints = kParameterIsAutomable;
         break;
@@ -267,9 +280,31 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.name = "Amp LFO Sync";
         parameter.symbol = "amp_lfo_sync";
         parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 1.0f;
+        parameter.ranges.max = 17.0f;
         parameter.ranges.def = 0.0f;
         parameter.hints = kParameterIsAutomable;
+        parameter.enumValues.count = 18;
+        parameter.enumValues.restrictedMode = true;
+        parameter.enumValues.values = new ParameterEnumerationValue[18]{
+            ParameterEnumerationValue(0.0f, "1/16"),
+            ParameterEnumerationValue(1.0f, "1/8"),
+            ParameterEnumerationValue(2.0f, "1/4"),
+            ParameterEnumerationValue(3.0f, "1/2"),
+            ParameterEnumerationValue(4.0f, "1/1"),
+            ParameterEnumerationValue(5.0f, "2/1"),
+            ParameterEnumerationValue(6.0f, "1/16T"),
+            ParameterEnumerationValue(7.0f, "1/8T"),
+            ParameterEnumerationValue(8.0f, "1/4T"),
+            ParameterEnumerationValue(9.0f, "1/2T"),
+            ParameterEnumerationValue(10.0f, "1/1T"),
+            ParameterEnumerationValue(11.0f, "2/1T"),
+            ParameterEnumerationValue(12.0f, "1/16."),
+            ParameterEnumerationValue(13.0f, "1/8."),
+            ParameterEnumerationValue(14.0f, "1/4."),
+            ParameterEnumerationValue(15.0f, "1/2."),
+            ParameterEnumerationValue(16.0f, "1/1."),
+            ParameterEnumerationValue(17.0f, "2/1."),
+        };
         break;
     case kPitchEGAttack:
         parameter.name = "Pitch Attack";
@@ -603,6 +638,7 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
 {
     switch (index)
     {
+
     case kPitchBendDepth:
         fPitchBendDepth = value;
         break;
