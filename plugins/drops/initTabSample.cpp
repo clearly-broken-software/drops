@@ -6,12 +6,12 @@ START_NAMESPACE_DISTRHO
 void DropsUI::initTabSample()
 {
     Window &window = getParentWindow();
-    box_sample = new VBox(window);
-    box_sample->setId(kVBoxSample);
-    box_sample_row_1 = new HBox(box_sample);
-    box_sample_row_1->setId(kHBoxSampleRow1);
+    vbox_sample = new VBox(window);
+    vbox_sample->setId(kVBoxSample);
+    hbox_sample_row_1 = new HBox(vbox_sample);
+    hbox_sample_row_1->setId(kHBoxSampleRow1);
 
-    fSampleXFade = new Slider(box_sample_row_1);
+    fSampleXFade = new Slider(hbox_sample_row_1);
     fSampleXFade->setId(kSampleXFade);
     fSampleXFade->setCallback(this);
     fSampleXFade->setSize(300, 20);
@@ -24,7 +24,7 @@ void DropsUI::initTabSample()
     fSampleXFade->right_padding = slider_right_padding;
     fSampleXFade->format_str = "%.2f";
 
-    fSampleNormalize = new DropDown(box_sample_row_1);
+    fSampleNormalize = new DropDown(hbox_sample_row_1);
     fSampleNormalize->setId(kSampleNormalize);
     fSampleNormalize->font_size = 16;
     fSampleNormalize->setSize(300,
@@ -36,7 +36,7 @@ void DropsUI::initTabSample()
     fSampleNormalize->background_color = black_olive;
     fSampleNormalize->text_color = floral_white;
 
-    fNormalizeMenu = new Menu(box_sample_row_1);
+    fNormalizeMenu = new Menu(hbox_sample_row_1);
     fNormalizeMenu->setId(kNormalizeMenu);
     fNormalizeMenu->setCallback(this);
     fNormalizeMenu->addItems({"NONE", "SAMPLE", "ACTIVE REGION"});
@@ -47,7 +47,7 @@ void DropsUI::initTabSample()
     fNormalizeMenu->highlight_color = flame;
     fNormalizeMenu->text_color = floral_white;
 
-    fSamplePitchKeyCenter = new DropDown(box_sample_row_1);
+    fSamplePitchKeyCenter = new DropDown(hbox_sample_row_1);
     fSamplePitchKeyCenter->setId(kSamplePitchKeyCenter);
     fSamplePitchKeyCenter->font_size = 16;
     fSamplePitchKeyCenter->setSize(300,
@@ -60,7 +60,7 @@ void DropsUI::initTabSample()
     fSamplePitchKeyCenter->background_color = black_olive;
     fSamplePitchKeyCenter->text_color = floral_white;
 
-    fKeyCenterMenu = new Menu(box_sample_row_1);
+    fKeyCenterMenu = new Menu(hbox_sample_row_1);
     fKeyCenterMenu->setId(kKeyCenterMenu);
     fKeyCenterMenu->setCallback(this);
     fKeyCenterMenu->addItems({
@@ -203,24 +203,24 @@ void DropsUI::initTabSample()
     fKeyCenterMenu->item_view_last = 63;
     fKeyCenterMenu->max_view_items = 4;
 
-    box_sample->setAbsolutePos(tabs_x, tabs_y);
-    box_sample->setWidth(getWidth());
-    box_sample->setHeight(getHeight() - tabs_y);
+    vbox_sample->setAbsolutePos(tabs_x, tabs_y);
+    vbox_sample->setWidth(getWidth());
+    vbox_sample->setHeight(getHeight() - tabs_y);
 
-    box_sample_row_1->setWidth(box_sample->getWidth());
+    hbox_sample_row_1->setWidth(vbox_sample->getWidth());
     // box_sample_row_1->setHeight(100);
-    box_sample->addWidget(box_sample_row_1);
-    box_sample->setWidgetResize(kHBoxSampleRow1, true);
+    vbox_sample->addWidget(hbox_sample_row_1);
+    vbox_sample->setWidgetResize(kHBoxSampleRow1, true);
 
-    box_sample_row_1->addWidget(fSampleXFade);
-    box_sample_row_1->addWidget(fSampleNormalize);
-    box_sample_row_1->addWidget(fSamplePitchKeyCenter);
+    hbox_sample_row_1->addWidget(fSampleXFade);
+    hbox_sample_row_1->addWidget(fSampleNormalize);
+    hbox_sample_row_1->addWidget(fSamplePitchKeyCenter);
 
     // row 2
-    box_sample_row_2 = new HBox(box_sample);
-    box_sample_row_2->setId(kHBoxSampleRow2);
+    hbox_sample_row_2 = new HBox(vbox_sample);
+    hbox_sample_row_2->setId(kHBoxSampleRow2);
 
-    fSamplePlayMode = new DropDown(box_sample_row_2);
+    fSamplePlayMode = new DropDown(hbox_sample_row_2);
     fSamplePlayMode->setId(kSamplePlayMode);
     fSamplePlayMode->font_size = 16;
     fSamplePlayMode->setSize(216,
@@ -233,7 +233,7 @@ void DropsUI::initTabSample()
     fSamplePlayMode->background_color = black_olive;
     fSamplePlayMode->text_color = floral_white;
 
-    fPlayModeMenu = new Menu(box_sample_row_2);
+    fPlayModeMenu = new Menu(hbox_sample_row_2);
     fPlayModeMenu->setId(kPlayModeMenu);
     fPlayModeMenu->setCallback(this);
     fPlayModeMenu->addItems({"NO LOOP","ONE SHOT","CONTINUOUS","SUSTAIN"});
@@ -244,7 +244,7 @@ void DropsUI::initTabSample()
     fPlayModeMenu->highlight_color = flame;
     fPlayModeMenu->text_color = floral_white;
 
-    fSamplePlayDirection = new DropDown(box_sample_row_2);
+    fSamplePlayDirection = new DropDown(hbox_sample_row_2);
     fSamplePlayDirection->setId(kSamplePlayDirection);
     fSamplePlayDirection->font_size = 16;
     fSamplePlayDirection->setSize(216,
@@ -257,7 +257,7 @@ void DropsUI::initTabSample()
     fSamplePlayDirection->background_color = black_olive;
     fSamplePlayDirection->text_color = floral_white;
 
-    fDirectionMenu = new Menu(box_sample_row_2);
+    fDirectionMenu = new Menu(hbox_sample_row_2);
     fDirectionMenu->setId(kDirectionMenu);
     fDirectionMenu->setCallback(this);
     fDirectionMenu->addItems({"FORWARD","REVERSE"});
@@ -268,18 +268,18 @@ void DropsUI::initTabSample()
     fDirectionMenu->highlight_color = flame;
     fDirectionMenu->text_color = floral_white;
 
-    box_sample_row_2->setWidth(box_sample->getWidth() * 2 / 3);
-    box_sample_row_2->align_items = HBox::Align_Items::top;
+    hbox_sample_row_2->setWidth(vbox_sample->getWidth() * 2 / 3);
+    hbox_sample_row_2->align_items = HBox::Align_Items::top;
 
-    box_sample->addWidget(box_sample_row_2);
-    box_sample->setWidgetResize(kHBoxSampleRow2, true);
+    vbox_sample->addWidget(hbox_sample_row_2);
+    vbox_sample->setWidgetResize(kHBoxSampleRow2, true);
 
-    box_sample_row_2->addWidget(fSamplePlayMode);
-    box_sample_row_2->addWidget(fSamplePlayDirection);
+    hbox_sample_row_2->addWidget(fSamplePlayMode);
+    hbox_sample_row_2->addWidget(fSamplePlayDirection);
 
-    box_sample->positionWidgets();
-    box_sample_row_1->positionWidgets();
-    box_sample_row_2->positionWidgets();
+    vbox_sample->positionWidgets();
+    hbox_sample_row_1->positionWidgets();
+    hbox_sample_row_2->positionWidgets();
 
     fSamplePlayDirection->setMenu(fDirectionMenu);
     fSamplePlayMode->setMenu(fPlayModeMenu);
@@ -289,9 +289,9 @@ void DropsUI::initTabSample()
 
 void DropsUI::hideTabSample()
 {
-    box_sample->hide();
-    box_sample_row_1->hide();
-    box_sample_row_2->hide();
+    vbox_sample->hide();
+    hbox_sample_row_1->hide();
+    hbox_sample_row_2->hide();
     fSampleXFade->hide();
     //fSampleTune->hide(); FIXME:
     fSampleNormalize->hide();
@@ -302,9 +302,9 @@ void DropsUI::hideTabSample()
 
 void DropsUI::showTabSample()
 {
-    box_sample->show();
-    box_sample_row_1->show();
-    box_sample_row_2->show();
+    vbox_sample->show();
+    hbox_sample_row_1->show();
+    hbox_sample_row_2->show();
     fSampleXFade->show();
     //fSampleTune->show();
     fSampleNormalize->show();

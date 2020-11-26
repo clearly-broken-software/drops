@@ -32,6 +32,7 @@ FILES_UI  = \
 			Artwork.cpp \
 			initTabAmp.cpp \
 			initTabSample.cpp \
+			initTabPitch.cpp \
 			SVG_Icons.cpp 
 
 # --------------------------------------------------------------
