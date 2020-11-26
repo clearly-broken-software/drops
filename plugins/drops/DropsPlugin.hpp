@@ -140,6 +140,8 @@ private:
     std::unordered_map<std::string, std::string>
         opcodes;
 
+        const float amp_lfo_depth = 20.0f;
+
     friend class DropsUI;
     /*
      * Set our plugin class as non-copyable and add a leak detector just in case.

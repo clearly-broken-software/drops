@@ -26,6 +26,9 @@ default_path=
   ampeg_sustain_oncc203=-100
   ampeg_release=1
   ampeg_release_oncc204=10
+
+  lfo06_freq=4
+  lfo06_pitch=0
   
   // filter
   fil_type=lpf_2p         // One of the many filter types available

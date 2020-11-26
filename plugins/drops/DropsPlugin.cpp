@@ -264,7 +264,7 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.name = "Amp LFO Freq";
         parameter.symbol = "amp_lfo_freq";
         parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 20.0f;
+        parameter.ranges.max = 1.0f;
         parameter.ranges.def = 0.0f;
         parameter.hints = kParameterIsAutomable;
         break;
@@ -306,7 +306,7 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
             ParameterEnumerationValue(17.0f, "2/1."),
         };
         break;
-    case kPitchEGAttack:
+    case kPitchEgAttack:
         parameter.name = "Pitch Attack";
         parameter.symbol = "pitch_attack";
         parameter.ranges.min = 0.0f;
@@ -558,7 +558,7 @@ float DropsPlugin::getParameterValue(uint32_t index) const
     case kAmpLFOSync:
         val = fAmpLFOSync;
         break;
-    case kPitchEGAttack:
+    case kPitchEgAttack:
         val = fPitchEGAttack;
         break;
     case kPitchEgDecay:
@@ -698,17 +698,21 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         break;
     case kAmpLFOType:
         fAmpLFOType = value;
+        makeSFZ();
         break;
     case kAmpLFOFreq:
         fAmpLFOFreq = value;
+        makeSFZ();
         break;
     case kAmpLFODepth:
         fAmpLFODepth = value;
+        makeSFZ();
         break;
     case kAmpLFOSync:
         fAmpLFOSync = value;
+        makeSFZ();
         break;
-    case kPitchEGAttack:
+    case kPitchEgAttack:
         fPitchEGAttack = value;
         break;
     case kPitchEgDecay:
@@ -725,15 +729,19 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         break;
     case kPitchLFOType:
         fPitchLFOType = value;
+        makeSFZ();
         break;
     case kPitchLFOFreq:
         fPitchLFOFreq = value;
+        makeSFZ();
         break;
     case kPitchLFODepth:
         fPitchLFODepth = value;
+        makeSFZ();
         break;
     case kPitchLFOSync:
         fPitchLFOSync = value;
+        makeSFZ();
         break;
     case kFilterType:
         fFilterType = value;
@@ -918,6 +926,8 @@ void DropsPlugin::initSFZ()
     opcodes["ampeg_sustain_oncc203"] = "-100";
     opcodes["ampeg_release"] = "1";
     opcodes["ampeg_release_oncc204"] = "10";
+    opcodes["lfo01_freq"] = "0";
+    opcodes["lfo01_volume"] = "0";
     opcodes["fil_type"] = "lpf_2p";
     opcodes["cutoff"] = "20";
     opcodes["cutoff_oncc310"] = "9600";
@@ -941,6 +951,9 @@ void DropsPlugin::initSFZ()
     opcodes["pitcheg_sustain_oncc403"] = "100";
     opcodes["pitcheg_release"] = "0.001";
     opcodes["pitcheg_release_oncc404"] = "10";
+    opcodes["lfo2_freq"] = "0";
+    opcodes["lfo02_pitch"] = "0";
+
     opcodes["trigger"] = "attack";
     opcodes["loop_mode"] = "no_loop";
     opcodes["loop_start"] = "0";
@@ -967,6 +980,10 @@ void DropsPlugin::makeSFZ()
     opcodes["offset"] = std::to_string(sampleInInFrames);
     opcodes["end"] = std::to_string(sampleOutInFrames);
     opcodes["direction"] = direction_[static_cast<uint>(fSamplePlayDirection)];
+    opcodes["lfo01_freq"] = std::to_string(fAmpLFOFreq);
+    opcodes["lfo01_volume"]=std::to_string(fAmpLFODepth);
+    
+    
 
     std::stringstream buffer;
     // amp ADSR
@@ -983,6 +1000,8 @@ void DropsPlugin::makeSFZ()
     buffer << "ampeg_sustain_oncc203=100\n";
     buffer << "ampeg_release=0.001\n";
     buffer << "ampeg_release_oncc204=10\n";
+    buffer << "lfo01_freq=" << opcodes["lfo01_freq"] << "\n";
+    buffer << "lfo01_volume=" << opcodes["lfo01_volume"] << "\n";
     // buffer << "fil_type=lpf_2p\n";
     // buffer << "cutoff=" << sampleRate / 2 << "\n";
     // buffer << "cutoff_oncc310=9600\n";
@@ -1049,6 +1068,8 @@ void DropsPlugin::run(
     synth.hdcc(0, 202, fAmpEgDecay);
     synth.hdcc(0, 203, fAmpEgSustain);
     synth.hdcc(0, 204, fAmpEgRelease);
+  //  synth.hdcc(0, 210, fAmpLFODepth);
+  //  synth.hdcc(0, 211, fAmpLFOFreq);
 
     synth.hdcc(0, 310, fFilterCutOff);
     synth.hdcc(0, 311, fFilterResonance);

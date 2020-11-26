@@ -29,7 +29,7 @@ Knob::Knob(Window &parent) noexcept
     fill_color_ = foreground_color;
 }
 
-Knob::Knob(Widget * parent) noexcept
+Knob::Knob(Widget *parent) noexcept
     : NanoWidget(parent)
 {
     loadSharedResources();
@@ -55,15 +55,15 @@ Knob::Knob(Widget * parent) noexcept
     fill_color_ = foreground_color;
 }
 
-
-
 float Knob::getValue() noexcept
 {
     return value_;
 }
 bool Knob::onMouse(const MouseEvent &ev)
 {
-    
+    if (!isVisible())
+        return false;
+
     if (ev.button != 1)
         return false;
 
@@ -104,6 +104,8 @@ bool Knob::onMouse(const MouseEvent &ev)
 
 bool Knob::onScroll(const ScrollEvent &ev)
 {
+    if (!isVisible())
+        return false;
     if (!contains(ev.pos))
         return false;
 
@@ -127,6 +129,8 @@ bool Knob::onScroll(const ScrollEvent &ev)
 
 bool Knob::onMotion(const MotionEvent &ev)
 {
+    if (!isVisible())
+        return false;
     if (contains(ev.pos) && !has_mouse_)
     {
         has_mouse_ = true;

@@ -238,31 +238,31 @@ void VBox::positionWidgets()
 void VBox::onNanoDisplay()
 {
 
-#ifdef DEBUG
-    const uint width = getWidth();
-    const uint height = getHeight();
-    const uint box_x = getAbsoluteX();
-    const uint box_y = getAbsoluteY();
-    const float stroke_width = 1.0f;
-    const float dbl_stroke = stroke_width * 2.f;
-    const uint id = getId();
-    fillColor(0.0f, 1.0f, 1.0f, 0.1f);
-    strokeColor(1.0f, 1.f, 0.f, .5f);
-    strokeWidth(stroke_width);
-    uint step = 0;
+// #ifdef DEBUG
+//     const uint width = getWidth();
+//     const uint height = getHeight();
+//     const uint box_x = getAbsoluteX();
+//     const uint box_y = getAbsoluteY();
+//     const float stroke_width = 1.0f;
+//     const float dbl_stroke = stroke_width * 2.f;
+//     const uint id = getId();
+//     fillColor(0.0f, 1.0f, 1.0f, 0.1f);
+//     strokeColor(1.0f, 1.f, 0.f, .5f);
+//     strokeWidth(stroke_width);
+//     uint step = 0;
 
-    for (auto it = items_.begin(); it != items_.end(); it++)
-    {
+//     for (auto it = items_.begin(); it != items_.end(); it++)
+//     {
 
-        beginPath();
-        const uint x = it->x - box_x;
-        const uint y = it->y - box_y;
-        rect(x, y, it->width, it->height);
-        fill();
-        stroke();
-        closePath();
-    }
-#endif
+//         beginPath();
+//         const uint x = it->x - box_x;
+//         const uint y = it->y - box_y;
+//         rect(x, y, it->width, it->height);
+//         fill();
+//         stroke();
+//         closePath();
+//     }
+// #endif
 }
 
 END_NAMESPACE_DISTRHO

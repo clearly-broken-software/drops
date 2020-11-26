@@ -49,6 +49,8 @@ void Menu::idleCallback()
 
 bool Menu::onMouse(const MouseEvent &ev)
 {
+    if (!isVisible())
+        return false;
     if (ev.press && ev.button == 1)
     {
         if (contains(ev.pos))
@@ -81,6 +83,8 @@ bool Menu::onMouse(const MouseEvent &ev)
 
 bool Menu::onMotion(const MotionEvent &ev)
 {
+    if (!isVisible())
+        return false;
     if (contains(ev.pos))
     {
         int offset_y = max_size_reached_ ? 1 : 0;
@@ -117,6 +121,8 @@ bool Menu::onMotion(const MotionEvent &ev)
 
 bool Menu::onScroll(const ScrollEvent &ev)
 {
+    if (!isVisible())
+        return false;
     if (!contains(ev.pos))
         return false;
     if (max_size_reached_)

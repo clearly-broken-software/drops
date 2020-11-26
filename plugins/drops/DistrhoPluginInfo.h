@@ -53,7 +53,7 @@ enum Parameters
    kAmpLFOSync,   //
 
    /*  pitch tab */
-   kPitchEGAttack,  // pitcheg_attack
+   kPitchEgAttack,  // pitcheg_attack
    kPitchEgDecay,   // pitcheg_decay
    kPitchEgSustain, // pitcheg_sustain
    kPitchEgRelease, // pitcheg_release
@@ -107,6 +107,16 @@ enum Widgets
    kAmpLFOFreqBeat,
    kAmpLFOTypeMenu,
    kAmpLFOSyncMenu,
+
+   kVBoxPitch,
+   kHBoxPitchRow1,
+   kHBoxPitchRow2,
+   kHBoxPitchSync,
+   kVBoxPitchLfo,
+   kPitchLFOFreqBeat,
+   kPitchLFOTypeMenu,
+   kPitchLFOSyncMenu,
+
    kHboxZoomIcons,
    kZoomOut,
    kZoomIn,

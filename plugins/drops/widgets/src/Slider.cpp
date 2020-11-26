@@ -81,7 +81,8 @@ float Slider::getValue() noexcept
 }
 bool Slider::onMouse(const MouseEvent &ev)
 {
-
+    if (!isVisible())
+        return false;
     bool handle_has_mouse = handle_.contains(ev.pos);
     if (ev.press == 1 && handle_has_mouse)
     {
@@ -92,6 +93,7 @@ bool Slider::onMouse(const MouseEvent &ev)
     }
     else if (dragging_)
     {
+        callback->onSliderValueChanged(this, value_);
         has_mouse_ = false;
         dragging_ = false;
         return false;
@@ -101,6 +103,8 @@ bool Slider::onMouse(const MouseEvent &ev)
 
 bool Slider::onScroll(const ScrollEvent &ev)
 {
+    if (!isVisible())
+        return false;
     if (!contains(ev.pos))
         return false;
 
@@ -119,12 +123,16 @@ bool Slider::onScroll(const ScrollEvent &ev)
         tmp_value_ = value = max_value;
     }
     setValue(value);
+    callback->onSliderValueChanged(this, value_);
+
     repaint();
     return true;
 }
 
 bool Slider::onMotion(const MotionEvent &ev)
 {
+    if (!isVisible())
+        return false;
     if (handle_.contains(ev.pos) && !has_mouse_)
     {
         has_mouse_ = true;
@@ -233,7 +241,6 @@ void Slider::setValue(float val) noexcept
 {
     value_ = std::max(min_value, std::min(val, max_value));
     tmp_value_ = value_;
-    callback->onSliderValueChanged(this, value_);
 }
 
 float Slider::_logscale(float value) const

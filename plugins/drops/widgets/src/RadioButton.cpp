@@ -30,6 +30,9 @@ RadioButton::RadioButton(Widget *widget) noexcept
 
 bool RadioButton::onMouse(const MouseEvent &ev)
 {
+    if (!isVisible())
+        return false;
+
     if (contains(ev.pos) && ev.press && ev.button == 1)
     {
         const int lineHeight = font_size + 2 * margin;
@@ -86,7 +89,7 @@ void RadioButton::onNanoDisplay()
         circle(cx, cy + step_y, (font_size / 2.0f) - margin / 2.0f);
         stroke();
         closePath();
-        
+
         fillColor(text_color);
         fontSize(font_size);
         textAlign(ALIGN_LEFT | ALIGN_MIDDLE);

@@ -60,6 +60,7 @@ DropsUI::DropsUI()
         std::string filename = plugin->path;
         fileopen_button->setText(filename);
     }
+    tab_background = sample_tab_background;
 }
 
 DropsUI::~DropsUI()
@@ -196,6 +197,7 @@ void DropsUI::initWidgets()
 
     initTabSample();
     initTabAmp();
+    initTabPitch();
     showTabSample();
 }
 
@@ -336,6 +338,13 @@ void DropsUI::onNanoDisplay()
     x = fo_right + half_right_space - half_cb_logo;
     y = fileopen_button->getHeight() / 2 - clearlyBrokenLogo->getHeight() / 2;
     clearlyBrokenLogo->drawAt(x, y);
+
+    // tab background
+    beginPath();
+    fillPaint(tab_background);
+    rect(tabs_x, tabs_y, tabs_w, tabs_h);
+    fill();
+    closePath();
 }
 
 void DropsUI::drawWaveform()
@@ -803,18 +812,27 @@ void DropsUI::onTextButtonClicked(TextButton *tb)
     case kButtonSample:
         showTabSample();
         hideTabAmp();
+        hideTabPitch();
+        tab_background = sample_tab_background;
         break;
     case kButtonAmp:
-        showTabAmp();
         hideTabSample();
+        showTabAmp();
+        hideTabPitch();
+        tab_background = amp_tab_background;
         break;
     case kButtonPitch:
-        box_sample->hide();
-        printf("pitch tab clicked\n");
+        hideTabSample();
+        hideTabAmp();
+        showTabPitch();
+        tab_background = pitch_tab_background;
         break;
     case kButtonFilter:
-        box_sample->hide();
-        printf("filter tab clicked\n");
+        hideTabSample();
+        hideTabAmp();
+        hideTabPitch();
+        tab_background = filter_tab_background;
+  
         break;
 
     default:
@@ -854,15 +872,19 @@ void DropsUI::onDropDownClicked(DropDown *dropDown)
 }
 void DropsUI::knobDragStarted(Knob *knob)
 {
-    int id = knob->getId();
+    const uint id = knob->getId();
+    printf("%i , drag started\n", id);
 }
 void DropsUI::knobDragFinished(Knob *knob)
 {
     int id = knob->getId();
+    printf("%i , drag finished\n", id);
 }
 void DropsUI::knobValueChanged(Knob *knob, float value)
 {
     uint id = knob->getId();
+    printf("knobValueChanged(%i, %f)\n", id, value);
+
     switch (id)
     {
     case kAmpEgAttack:
@@ -886,12 +908,27 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
 void DropsUI::onSliderValueChanged(Slider *slider, float value)
 {
     uint id = slider->getId();
+    printf("slider %i, value %f\n", id, value);
+    switch (id)
+    {
+    case kAmpLFOFreq:
+    {
+        setParameterValue(kAmpLFOFreq, value);
+        break;
+    }
+    case kAmpLFODepth:
+        setParameterValue(kAmpLFODepth, value);
+        break;
+    default:
+
+        break;
+    }
 }
 
 void DropsUI::onScrollBarClicked(ScrollBar *scrollBar, bool dragging)
 {
     uint id = scrollBar->getId();
-    switch ((id))
+    switch (id)
     {
     case kScrollbarHandle:
         scrollbarDragging = dragging;

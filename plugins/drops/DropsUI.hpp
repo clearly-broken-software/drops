@@ -84,16 +84,16 @@ private:
 
     ScopedPointer<HBox> box_tabs;
     // sample tab
-    ScopedPointer<VBox> box_sample;
-    ScopedPointer<HBox> box_sample_row_1, box_sample_row_2, box_sample_row_3;
+    ScopedPointer<VBox> vbox_sample;
+    ScopedPointer<HBox> hbox_sample_row_1, hbox_sample_row_2, hbox_sample_row_3;
     ScopedPointer<Slider> fSampleXFade, fSampleTune;
     ScopedPointer<DropDown> fSampleNormalize, fSamplePitchKeyCenter,
         fSamplePlayMode, fSamplePlayDirection;
     ScopedPointer<Menu> fNormalizeMenu, fKeyCenterMenu, fPlayModeMenu,
         fDirectionMenu;
     // amp tab
-    ScopedPointer<VBox> box_amp,vbox_amp_lfo;
-    ScopedPointer<HBox> box_amp_row_1, box_amp_row_2, box_sync;
+    ScopedPointer<VBox> vbox_amp, vbox_amp_lfo;
+    ScopedPointer<HBox> hbox_amp_row_1, hbox_amp_row_2, box_sync;
     ScopedPointer<Knob>
         fAmpEgAttack, fAmpEgDecay, fAmpEgSustain, fAmpEgRelease;
     ScopedPointer<DropDown> fAmpLFOType;
@@ -103,18 +103,37 @@ private:
     ScopedPointer<Menu> fAmpLFOSyncMenu;
     ScopedPointer<RadioButton> fAmpLFOFreqBeat;
 
+    // pitch tab
+    ScopedPointer<VBox> vbox_pitch, vbox_pitch_lfo;
+    ScopedPointer<HBox> hbox_pitch_row_1, hbox_pitch_row_2, hbox_pitch_sync;
+    ScopedPointer<Knob>
+        fPitchEgAttack, fPitchEgDecay, fPitchEgSustain, fPitchEgRelease;
+    ScopedPointer<DropDown> fPitchLFOType;
+    ScopedPointer<Menu> fPitchLFOTypeMenu;
+    ScopedPointer<Slider> fPitchLFOFreq, fPitchLFODepth;
+    ScopedPointer<DropDown> fPitchLFOSync;
+    ScopedPointer<Menu> fPitchLFOSyncMenu;
+    ScopedPointer<RadioButton> fPitchLFOFreqBeat;
+
     ScopedPointer<SVGImage> dropsLogo, clearlyBrokenLogo, loopLeft, loopRight,
         zoomIn, zoomOut, zoomAll, zoomLoop;
     ScopedPointer<HBox> hbox_zoom_icons;
-    ScopedPointer<SVGButton> fZoomOut,fZoomIn,fZoomAll,fZoomInOut;
+    ScopedPointer<SVGButton> fZoomOut, fZoomIn, fZoomAll, fZoomInOut;
 
     void initWidgets();
+
     void initTabSample();
-    void initTabAmp();
-    void hideTabSample();
-    void hideTabAmp();
     void showTabSample();
+    void hideTabSample();
+
+    void initTabAmp();
     void showTabAmp();
+    void hideTabAmp();
+
+    void initTabPitch();
+    void showTabPitch();
+    void hideTabPitch();
+
     void makeIcons();
     int loadSample();
     void drawWaveform();
@@ -143,6 +162,13 @@ private:
     float viewMaxZoom;
     int mouseX;
     Rectangle<int> display;
+
+    const Paint sample_tab_background = linearGradient(tabs_x,tabs_y,tabs_x,UI_H, black_olive_3,    black_olive_1);
+    const Paint amp_tab_background =    linearGradient(tabs_x,tabs_y,tabs_x,UI_H, flame_3,          flame_1);
+    const Paint pitch_tab_background =  linearGradient(tabs_x,tabs_y,tabs_x,UI_H, shamrock_green_4, shamrock_green_1);
+    const Paint filter_tab_background = linearGradient(tabs_x,tabs_y,tabs_x,UI_H, blue_pigment_4,   blue_pigment_1);
+    Paint tab_background;
+    
     DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DropsUI)
 };
 

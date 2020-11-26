@@ -34,6 +34,8 @@ DropDown::DropDown(Widget *widget) noexcept
 
 bool DropDown::onMouse(const MouseEvent &ev)
 {
+    if (!isVisible())
+        return false;
     if (contains(ev.pos) && ev.press && ev.button == 1)
     {
 
