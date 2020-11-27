@@ -33,6 +33,7 @@ FILES_UI  = \
 			initTabAmp.cpp \
 			initTabSample.cpp \
 			initTabPitch.cpp \
+			initTabFilter.cpp \
 			SVG_Icons.cpp 
 
 # --------------------------------------------------------------

@@ -11,13 +11,12 @@
 #define DISTRHO_PLUGIN_IS_RT_SAFE 1
 #define DISTRHO_PLUGIN_NUM_INPUTS 0
 #define DISTRHO_PLUGIN_NUM_OUTPUTS 2
-#define DISTRHO_PLUGIN_WANT_TIMEPOS 0
+#define DISTRHO_PLUGIN_WANT_TIMEPOS 1
 #define DISTRHO_PLUGIN_WANT_STATE 1
 #define DISTRHO_PLUGIN_WANT_FULL_STATE 1
 #define DISTRHO_UI_USE_NANOVG 1
 #define DISTRHO_PLUGIN_WANT_MIDI_INPUT 1
 #define DISTRHO_PLUGIN_WANT_DIRECT_ACCESS 1
-
 #define DISTRHO_PLUGIN_LV2_CATEGORY "lv2:InstrumentPlugin"
 
 /*    line comments are opcodes        */
@@ -67,7 +66,7 @@ enum Parameters
    kFilterType,      // fil_type
    kFilterCutOff,    // cutoff , cutoff_oncc200
    kFilterResonance, // resonance
-   kFilterEGAttack,  // fileg_attack
+   kFilterEgAttack,  // fileg_attack
    kFilterEgDecay,   // fileg_decay
    kFilterEgSustain, // fileg_sustain
    kFilterEgRelease, // fileg_release
@@ -116,6 +115,13 @@ enum Widgets
    kPitchLFOFreqBeat,
    kPitchLFOTypeMenu,
    kPitchLFOSyncMenu,
+
+   kVBoxFilter,
+   kHBoxFilterRow1,
+   kHBoxFilterRow2,
+   kHBoxFilterSync,
+   kVBoxFilterLfo,
+   kFilterLFOTypeMenu,
 
    kHboxZoomIcons,
    kZoomOut,

@@ -79,6 +79,7 @@ DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 2)
     fFilterLFOFreq = 0.0f;
     fFilterLFODepth = 0.0f;
     fFilterLFOSync = 0.0f;
+    bpm = 120;
     initSFZ();
 }
 
@@ -243,7 +244,7 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.name = "Amp LFO Type";
         parameter.symbol = "amp_lfo_type";
         parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 1.0f;
+        parameter.ranges.max = 7.0f;
         parameter.ranges.def = 0.0f;
         parameter.enumValues.count = 8;
         parameter.enumValues.restrictedMode = true;
@@ -271,8 +272,8 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
     case kAmpLFODepth:
         parameter.name = "Amp LFO Depth";
         parameter.symbol = "amp_lfo_depth";
-        parameter.ranges.min = -1200.0f;
-        parameter.ranges.max = 1200.0f;
+        parameter.ranges.min = 0.0f;
+        parameter.ranges.max = 12.0f;
         parameter.ranges.def = 0.0f;
         parameter.hints = kParameterIsAutomable | kParameterIsInteger;
         break;
@@ -350,15 +351,27 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.name = "Pitch LFO Type";
         parameter.symbol = "pitch_lfo_type";
         parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 1.0f;
+        parameter.ranges.max = 7.0f;
         parameter.ranges.def = 0.0f;
+        parameter.enumValues.count = 8;
+        parameter.enumValues.restrictedMode = true;
+        parameter.enumValues.values = new ParameterEnumerationValue[8]{
+            ParameterEnumerationValue(0.0f, "sine"),
+            ParameterEnumerationValue(1.0f, "triangle"),
+            ParameterEnumerationValue(2.0f, "75% pulse"),
+            ParameterEnumerationValue(3.0f, "square (50% pulse)"),
+            ParameterEnumerationValue(4.0f, "25% pulse"),
+            ParameterEnumerationValue(5.0f, "12:5% pulse"),
+            ParameterEnumerationValue(6.0f, "saw going up"),
+            ParameterEnumerationValue(7.0f, "saw going down"),
+        };
         parameter.hints = kParameterIsAutomable;
         break;
     case kPitchLFOFreq:
         parameter.name = "Pitch LFO Freq";
         parameter.symbol = "pitch_lfo_freq";
         parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 1.0f;
+        parameter.ranges.max = 20.0f;
         parameter.ranges.def = 0.0f;
         parameter.hints = kParameterIsAutomable;
         break;
@@ -366,7 +379,7 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.name = "Pitch LFO Depth";
         parameter.symbol = "pitch_lfo_depth";
         parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 1.0f;
+        parameter.ranges.max = 1200.0f;
         parameter.ranges.def = 0.0f;
         parameter.hints = kParameterIsAutomable;
         break;
@@ -402,7 +415,7 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.ranges.def = 0.0f;
         parameter.hints = kParameterIsAutomable;
         break;
-    case kFilterEGAttack:
+    case kFilterEgAttack:
         parameter.name = "Filter Attack";
         parameter.symbol = "filter_attack";
         parameter.ranges.min = 0.0f;
@@ -594,7 +607,7 @@ float DropsPlugin::getParameterValue(uint32_t index) const
     case kFilterResonance:
         val = fFilterResonance;
         break;
-    case kFilterEGAttack:
+    case kFilterEgAttack:
         val = fFilterEGAttack;
         break;
     case kFilterEgDecay:
@@ -752,7 +765,7 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
     case kFilterResonance:
         fFilterResonance = value;
         break;
-    case kFilterEGAttack:
+    case kFilterEgAttack:
         fFilterEGAttack = value;
         break;
     case kFilterEgDecay:
@@ -951,7 +964,7 @@ void DropsPlugin::initSFZ()
     opcodes["pitcheg_sustain_oncc403"] = "100";
     opcodes["pitcheg_release"] = "0.001";
     opcodes["pitcheg_release_oncc404"] = "10";
-    opcodes["lfo2_freq"] = "0";
+    opcodes["lfo02_freq"] = "0";
     opcodes["lfo02_pitch"] = "0";
 
     opcodes["trigger"] = "attack";
@@ -980,10 +993,12 @@ void DropsPlugin::makeSFZ()
     opcodes["offset"] = std::to_string(sampleInInFrames);
     opcodes["end"] = std::to_string(sampleOutInFrames);
     opcodes["direction"] = direction_[static_cast<uint>(fSamplePlayDirection)];
+    opcodes["lfo01_wave"] = std::to_string(static_cast<int>(fAmpLFOType));
     opcodes["lfo01_freq"] = std::to_string(fAmpLFOFreq);
-    opcodes["lfo01_volume"]=std::to_string(fAmpLFODepth);
-    
-    
+    opcodes["lfo01_volume"] = std::to_string(fAmpLFODepth);
+    opcodes["lfo02_wave"] = std::to_string(static_cast<int>(fPitchLFOType));
+    opcodes["lfo02_freq"] = std::to_string(fPitchLFOFreq);
+    opcodes["lfo02_pitch"] = std::to_string(fPitchLFODepth);
 
     std::stringstream buffer;
     // amp ADSR
@@ -1000,6 +1015,7 @@ void DropsPlugin::makeSFZ()
     buffer << "ampeg_sustain_oncc203=100\n";
     buffer << "ampeg_release=0.001\n";
     buffer << "ampeg_release_oncc204=10\n";
+    buffer << "lfo01_wave=" << opcodes["lfo01_wave"] << "\n";
     buffer << "lfo01_freq=" << opcodes["lfo01_freq"] << "\n";
     buffer << "lfo01_volume=" << opcodes["lfo01_volume"] << "\n";
     // buffer << "fil_type=lpf_2p\n";
@@ -1016,15 +1032,19 @@ void DropsPlugin::makeSFZ()
     // buffer << "fileg_sustain_oncc303=-100 \n";
     // buffer << "fileg_release=10 \n";
     // buffer << "fileg_release_oncc304=-10\n";
-    // buffer << "pitcheg_depth=1200\n";
-    // buffer << "pitcheg_attack=0 \n";
-    // buffer << "pitcheg_attack_oncc401=10\n";
-    // buffer << "pitcheg_decay=0\n";
-    // buffer << "pitcheg_decay_oncc402=10\n";
-    // buffer << "pitcheg_sustain=0\n";
-    // buffer << "pitcheg_sustain_oncc403=100\n";
-    // buffer << "pitcheg_release=0.001\n";
-    // buffer << "pitcheg_release_oncc404=10\n";
+    buffer << "pitcheg_depth=1200\n";
+    buffer << "pitcheg_attack=0 \n";
+    buffer << "pitcheg_attack_oncc401=10\n";
+    buffer << "pitcheg_decay=0\n";
+    buffer << "pitcheg_decay_oncc402=10\n";
+    buffer << "pitcheg_sustain=0\n";
+    buffer << "pitcheg_sustain_oncc403=100\n";
+    buffer << "pitcheg_release=0.001\n";
+    buffer << "pitcheg_release_oncc404=10\n";
+    buffer << "lfo02_wave=" << opcodes["lfo02_wave"] << "\n";
+    buffer << "lfo02_freq=" << opcodes["lfo02_freq"] << "\n";
+    buffer << "lfo02_pitch=" << opcodes["lfo02_pitch"] << "\n";
+
     // buffer << "trigger=attack\n";
     buffer << "offset=" << opcodes["offset"] << "\n";
     buffer << "end=" << opcodes["end"] << "\n";
@@ -1059,6 +1079,9 @@ void DropsPlugin::run(
     // output ports, stereo
     //float *const outL = outputs[0];
     //float *const outR = outputs[1];
+    const TimePosition &timePos(getTimePosition());
+    if (timePos.bbt.valid)
+        bpm = timePos.bbt.beatsPerMinute;
 
     uint32_t framesDone = 0;
     uint32_t curEventIndex = 0; // index for midi event to process
@@ -1068,8 +1091,8 @@ void DropsPlugin::run(
     synth.hdcc(0, 202, fAmpEgDecay);
     synth.hdcc(0, 203, fAmpEgSustain);
     synth.hdcc(0, 204, fAmpEgRelease);
-  //  synth.hdcc(0, 210, fAmpLFODepth);
-  //  synth.hdcc(0, 211, fAmpLFOFreq);
+    //  synth.hdcc(0, 210, fAmpLFODepth);
+    //  synth.hdcc(0, 211, fAmpLFOFreq);
 
     synth.hdcc(0, 310, fFilterCutOff);
     synth.hdcc(0, 311, fFilterResonance);

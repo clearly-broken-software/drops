@@ -127,7 +127,7 @@ void DropsUI::initWidgets()
     button_sample->setCallback(this);
     button_sample->setSize(100, 40);
     button_sample->setText("SAMPLE");
-    button_sample->background_color = black_olive_3;
+    button_sample->background_color = black_olive_4;
     button_sample->foreground_color = floral_white;
     button_sample->highlight_color = black_olive_1;
 
@@ -136,7 +136,7 @@ void DropsUI::initWidgets()
     button_amp->setCallback(this);
     button_amp->setSize(100, 40); //FIXME: harcoded
     button_amp->setText("AMP");
-    button_amp->background_color = flame_3;
+    button_amp->background_color = flame_4;
     button_amp->foreground_color = floral_white;
     button_amp->highlight_color = flame_1;
 
@@ -198,6 +198,7 @@ void DropsUI::initWidgets()
     initTabSample();
     initTabAmp();
     initTabPitch();
+    initTabFilter();
     showTabSample();
 }
 
@@ -813,26 +814,30 @@ void DropsUI::onTextButtonClicked(TextButton *tb)
         showTabSample();
         hideTabAmp();
         hideTabPitch();
+        hideTabFilter();
         tab_background = sample_tab_background;
         break;
     case kButtonAmp:
         hideTabSample();
         showTabAmp();
         hideTabPitch();
+        hideTabFilter();
         tab_background = amp_tab_background;
         break;
     case kButtonPitch:
         hideTabSample();
         hideTabAmp();
         showTabPitch();
+        hideTabFilter();
         tab_background = pitch_tab_background;
         break;
     case kButtonFilter:
         hideTabSample();
         hideTabAmp();
         hideTabPitch();
+        showTabFilter();
         tab_background = filter_tab_background;
-  
+
         break;
 
     default:
@@ -861,9 +866,11 @@ void DropsUI::onDropDownClicked(DropDown *dropDown)
     case kAmpLFOType:
         fAmpLFOTypeMenu->show();
         break;
-    case kAmpLFOSync:
-        fAmpLFOSyncMenu->show();
-        break;
+        // case kAmpLFOSync:
+        //     fAmpLFOSyncMenu->show();
+        //     break;
+        case kPitchLFOType:
+        fPitchLFOTypeMenu->show();
 
     default:
         printf("dropdown %i clicked\n", id);
@@ -899,6 +906,21 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
     case kAmpEgRelease:
         setParameterValue(kAmpEgRelease, value);
         break;
+
+    case kPitchEgAttack:
+        setParameterValue(kPitchEgAttack, value);
+        break;
+    case kPitchEgDecay:
+        setParameterValue(kPitchEgDecay, value);
+        break;
+    case kPitchEgSustain:
+        setParameterValue(kPitchEgSustain, value);
+        break;
+    case kPitchEgRelease:
+        setParameterValue(kPitchEgRelease, value);
+        break;
+
+
     default:
         break;
     }
@@ -912,12 +934,16 @@ void DropsUI::onSliderValueChanged(Slider *slider, float value)
     switch (id)
     {
     case kAmpLFOFreq:
-    {
         setParameterValue(kAmpLFOFreq, value);
         break;
-    }
     case kAmpLFODepth:
         setParameterValue(kAmpLFODepth, value);
+        break;
+    case kPitchLFOFreq:
+        setParameterValue(kPitchLFOFreq, value);
+        break;
+    case kPitchLFODepth:
+        setParameterValue(kPitchLFODepth, value);
         break;
     default:
 
@@ -993,6 +1019,7 @@ void DropsUI::onScrollBarClicked(ScrollBar *scrollBar, bool dragging)
 void DropsUI::onMenuClicked(Menu *menu, uint menu_id, std::string item)
 {
     const uint id = menu->getId();
+    printf("menu %i ,menu_id %i, item %s\n", id, menu_id, item.c_str());
     switch (id)
     {
     case kPlayModeMenu:
@@ -1000,11 +1027,11 @@ void DropsUI::onMenuClicked(Menu *menu, uint menu_id, std::string item)
         fPlayModeMenu->hide();
         setParameterValue(kSamplePlayMode, menu_id);
         break;
-    case kNormalizeMenu:
-        fSampleNormalize->item = item;
-        fNormalizeMenu->hide();
-        setParameterValue(kSampleNormalize, menu_id);
-        break;
+    // case kNormalizeMenu:
+    //     fSampleNormalize->item = item;
+    //     fNormalizeMenu->hide();
+    //     setParameterValue(kSampleNormalize, menu_id);
+    //     break;
     case kKeyCenterMenu:
         fSamplePitchKeyCenter->item = item;
         fKeyCenterMenu->hide();
@@ -1018,32 +1045,37 @@ void DropsUI::onMenuClicked(Menu *menu, uint menu_id, std::string item)
     case kAmpLFOTypeMenu:
         fAmpLFOType->item = item;
         fAmpLFOTypeMenu->hide();
-        setParameterValue(kAmpLFOTypeMenu, menu_id);
+        setParameterValue(kAmpLFOType, menu_id);
         break;
-    case kAmpLFOSyncMenu:
-        fAmpLFOSync->item = item;
-        fAmpLFOSyncMenu->hide();
-        setParameterValue(kAmpLFOSync, menu_id);
+    // case kAmpLFOSyncMenu:
+    //     fAmpLFOSync->item = item;
+    //     fAmpLFOSyncMenu->hide();
+    //     setParameterValue(kAmpLFOSync, menu_id);
+    //     break;
+    case kPitchLFOTypeMenu:
+        fPitchLFOType->item = item;
+        fPitchLFOTypeMenu->hide();
+        setParameterValue(kPitchLFOType, menu_id);
         break;
     default:
-        printf("menu %i ,menu_id %i, item %s\n", id, menu_id, item.c_str());
+
         break;
     }
 }
 
-void DropsUI::onRadioButtonClicked(RadioButton *rb)
-{
-    const uint id = rb->getId();
-    switch (id)
-    {
-    case kAmpLFOFreqBeat:
-        printf("active_option %i\n", rb->active_option);
-        break;
+// void DropsUI::onRadioButtonClicked(RadioButton *rb)
+// {
+//     const uint id = rb->getId();
+//     switch (id)
+//     {
+//     case kAmpLFOFreqBeat:
+//         printf("active_option %i\n", rb->active_option);
+//         break;
 
-    default:
-        break;
-    }
-}
+//     default:
+//         break;
+//     }
+// }
 
 void DropsUI::onSVGButtonClicked(SVGButton *svgb)
 {

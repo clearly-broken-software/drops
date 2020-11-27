@@ -20,7 +20,7 @@
 #include "DropDown.hpp"
 #include "Menu.hpp"
 #include "Slider.hpp"
-#include "RadioButton.hpp"
+// #include "RadioButton.hpp"
 #include "SVGButton.hpp"
 #include "HBox.hpp"
 #include "VBox.hpp"
@@ -42,7 +42,7 @@ class DropsUI : public UI,
                 public Menu::Callback,
                 public Slider::Callback,
                 public FileOpenButton::Callback,
-                public RadioButton::Callback,
+               // public RadioButton::Callback,
                 public SVGButton::Callback
 {
 public:
@@ -66,7 +66,7 @@ protected:
     void knobValueChanged(Knob *knob, float value) override;
     void onSliderValueChanged(Slider *slider, float value) override;
     void onMenuClicked(Menu *menu, uint id, std::string item);
-    void onRadioButtonClicked(RadioButton *radio);
+   // void onRadioButtonClicked(RadioButton *radio);
     void onSVGButtonClicked(SVGButton *button);
 
 private:
@@ -86,8 +86,10 @@ private:
     // sample tab
     ScopedPointer<VBox> vbox_sample;
     ScopedPointer<HBox> hbox_sample_row_1, hbox_sample_row_2, hbox_sample_row_3;
-    ScopedPointer<Slider> fSampleXFade, fSampleTune;
-    ScopedPointer<DropDown> fSampleNormalize, fSamplePitchKeyCenter,
+   // ScopedPointer<Slider> fSampleXFade;
+    ScopedPointer<Slider> fSampleTune;
+    // ScopedPointer<DropDown> fSampleNormalize;
+    ScopedPointer<DropDown> fSamplePitchKeyCenter,
         fSamplePlayMode, fSamplePlayDirection;
     ScopedPointer<Menu> fNormalizeMenu, fKeyCenterMenu, fPlayModeMenu,
         fDirectionMenu;
@@ -99,9 +101,9 @@ private:
     ScopedPointer<DropDown> fAmpLFOType;
     ScopedPointer<Menu> fAmpLFOTypeMenu;
     ScopedPointer<Slider> fAmpLFOFreq, fAmpLFODepth;
-    ScopedPointer<DropDown> fAmpLFOSync;
-    ScopedPointer<Menu> fAmpLFOSyncMenu;
-    ScopedPointer<RadioButton> fAmpLFOFreqBeat;
+    // ScopedPointer<DropDown> fAmpLFOSync;
+    // ScopedPointer<Menu> fAmpLFOSyncMenu;
+    //ScopedPointer<RadioButton> fAmpLFOFreqBeat;
 
     // pitch tab
     ScopedPointer<VBox> vbox_pitch, vbox_pitch_lfo;
@@ -111,9 +113,21 @@ private:
     ScopedPointer<DropDown> fPitchLFOType;
     ScopedPointer<Menu> fPitchLFOTypeMenu;
     ScopedPointer<Slider> fPitchLFOFreq, fPitchLFODepth;
-    ScopedPointer<DropDown> fPitchLFOSync;
-    ScopedPointer<Menu> fPitchLFOSyncMenu;
-    ScopedPointer<RadioButton> fPitchLFOFreqBeat;
+    // ScopedPointer<DropDown> fPitchLFOSync;
+    // ScopedPointer<Menu> fPitchLFOSyncMenu;
+    // ScopedPointer<RadioButton> fPitchLFOFreqBeat;
+    
+    // filter tab
+    ScopedPointer<VBox> vbox_filter, vbox_filter_lfo;
+    ScopedPointer<HBox> hbox_filter_row_1, hbox_filter_row_2, hbox_filter_sync;
+    ScopedPointer<Knob>
+        fFilterEgAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease;
+    ScopedPointer<DropDown> fFilterLFOType, fFilterType;
+    ScopedPointer<Menu> fFilterLFOTypeMenu;
+    ScopedPointer<Slider> fFilterLFOFreq, fFilterLFODepth,fFilterCutOff,fFilterDepth;
+    // ScopedPointer<DropDown> fFilterLFOSync;
+    // ScopedPointer<Menu> fFilterLFOSyncMenu;
+    // ScopedPointer<RadioButton> fFilterLFOFreqBeat;
 
     ScopedPointer<SVGImage> dropsLogo, clearlyBrokenLogo, loopLeft, loopRight,
         zoomIn, zoomOut, zoomAll, zoomLoop;
@@ -133,6 +147,10 @@ private:
     void initTabPitch();
     void showTabPitch();
     void hideTabPitch();
+
+    void initTabFilter();
+    void showTabFilter();
+    void hideTabFilter();
 
     void makeIcons();
     int loadSample();
@@ -163,12 +181,12 @@ private:
     int mouseX;
     Rectangle<int> display;
 
-    const Paint sample_tab_background = linearGradient(tabs_x,tabs_y,tabs_x,UI_H, black_olive_3,    black_olive_1);
-    const Paint amp_tab_background =    linearGradient(tabs_x,tabs_y,tabs_x,UI_H, flame_3,          flame_1);
-    const Paint pitch_tab_background =  linearGradient(tabs_x,tabs_y,tabs_x,UI_H, shamrock_green_4, shamrock_green_1);
-    const Paint filter_tab_background = linearGradient(tabs_x,tabs_y,tabs_x,UI_H, blue_pigment_4,   blue_pigment_1);
+    const Paint sample_tab_background = linearGradient(tabs_x, tabs_y, tabs_x, UI_H, black_olive_4, black_olive_2);
+    const Paint amp_tab_background = linearGradient(tabs_x, tabs_y, tabs_x, UI_H, flame_4, flame_2);
+    const Paint pitch_tab_background = linearGradient(tabs_x, tabs_y, tabs_x, UI_H, shamrock_green_4, shamrock_green_2);
+    const Paint filter_tab_background = linearGradient(tabs_x, tabs_y, tabs_x, UI_H, blue_pigment_4, blue_pigment_2);
     Paint tab_background;
-    
+
     DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DropsUI)
 };
 

@@ -141,6 +141,7 @@ private:
         opcodes;
 
         const float amp_lfo_depth = 20.0f;
+        double bpm;
 
     friend class DropsUI;
     /*

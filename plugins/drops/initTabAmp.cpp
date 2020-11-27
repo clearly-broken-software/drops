@@ -54,18 +54,18 @@ void DropsUI::initTabAmp()
     fAmpEgRelease->highlight_color = saffron;
     fAmpEgRelease->text_color = floral_white;
 
-    fAmpLFOFreqBeat = new RadioButton(hbox_amp_row_1);
-    fAmpLFOFreqBeat->setId(kAmpLFOFreqBeat);
-    fAmpLFOFreqBeat->setCallback(this);
-    fAmpLFOFreqBeat->font_size = 16.f;
-    fAmpLFOFreqBeat->margin = 2.0f;
-    fAmpLFOFreqBeat->addOption(" ");
-    fAmpLFOFreqBeat->addOption(" ");
-    fAmpLFOFreqBeat->setSize(20 + 2, 40); // font_size + 2 * margin
-    fAmpLFOFreqBeat->background_color = black_olive;
-    fAmpLFOFreqBeat->text_color = floral_white;
-    fAmpLFOFreqBeat->foreground_color = pale_silver;
-    fAmpLFOFreqBeat->highlight_color = saffron;
+    // fAmpLFOFreqBeat = new RadioButton(hbox_amp_row_1);
+    // fAmpLFOFreqBeat->setId(kAmpLFOFreqBeat);
+    // fAmpLFOFreqBeat->setCallback(this);
+    // fAmpLFOFreqBeat->font_size = 16.f;
+    // fAmpLFOFreqBeat->margin = 2.0f;
+    // fAmpLFOFreqBeat->addOption(" ");
+    // fAmpLFOFreqBeat->addOption(" ");
+    // fAmpLFOFreqBeat->setSize(20 + 2, 40); // font_size + 2 * margin
+    // fAmpLFOFreqBeat->background_color = black_olive;
+    // fAmpLFOFreqBeat->text_color = floral_white;
+    // fAmpLFOFreqBeat->foreground_color = pale_silver;
+    // fAmpLFOFreqBeat->highlight_color = saffron;
 
     vbox_amp->setAbsolutePos(tabs_x, tabs_y);
     vbox_amp->setWidth(tabs_w);
@@ -149,49 +149,51 @@ void DropsUI::initTabAmp()
     fAmpLFODepth->unit = "DB";
     fAmpLFODepth->right_padding = slider_right_padding;
     fAmpLFODepth->format_str = "%.2f";
+    fAmpLFODepth->min_value = 0.0f;
+    fAmpLFODepth->max_value = 12.0f;
 
-    fAmpLFOSync = new DropDown(vbox_amp_lfo);
-    fAmpLFOSync->setId(kAmpLFOSync);
-    fAmpLFOSync->font_size = 16;
-    fAmpLFOSync->setSize(300,
-                         fAmpLFOSync->font_size + fAmpLFOSync->margin * 2.0f);
-    fAmpLFOSync->setCallback(this);
-    fAmpLFOSync->label = "LFO Sync :";
-    fAmpLFOSync->item = "1/4";
-    fAmpLFOSync->foreground_color = floral_white;
-    fAmpLFOSync->background_color = black_olive;
-    fAmpLFOSync->text_color = floral_white;
+    // fAmpLFOSync = new DropDown(vbox_amp_lfo);
+    // fAmpLFOSync->setId(kAmpLFOSync);
+    // fAmpLFOSync->font_size = 16;
+    // fAmpLFOSync->setSize(300,
+    //                      fAmpLFOSync->font_size + fAmpLFOSync->margin * 2.0f);
+    // fAmpLFOSync->setCallback(this);
+    // fAmpLFOSync->label = "LFO Sync :";
+    // fAmpLFOSync->item = "1/4";
+    // fAmpLFOSync->foreground_color = floral_white;
+    // fAmpLFOSync->background_color = black_olive;
+    // fAmpLFOSync->text_color = floral_white;
 
-    fAmpLFOSyncMenu = new Menu(vbox_amp_lfo);
-    fAmpLFOSyncMenu->max_view_items = 4;
-    fAmpLFOSyncMenu->setId(kAmpLFOSyncMenu);
-    fAmpLFOSyncMenu->setCallback(this);
-    fAmpLFOSyncMenu->addItems({
-        "1/16",
-        "1/8",
-        "1/4",
-        "1/2",
-        "1/1",
-        "2/1",
-        "1/16T",
-        "1/8T",
-        "1/4T",
-        "1/2T",
-        "1/1T",
-        "2/1T",
-        "1/16.",
-        "1/8.",
-        "1/4.",
-        "1/2.",
-        "1/1.",
-        "2/1.",
-    });
-    fAmpLFOSyncMenu->font_size = 16;
-    fAmpLFOSyncMenu->hide();
-    fAmpLFOSyncMenu->background_color = black_olive;
-    fAmpLFOSyncMenu->foreground_color = black_olive_2;
-    fAmpLFOSyncMenu->highlight_color = saffron;
-    fAmpLFOSyncMenu->text_color = floral_white;
+    // fAmpLFOSyncMenu = new Menu(vbox_amp_lfo);
+    // fAmpLFOSyncMenu->max_view_items = 4;
+    // fAmpLFOSyncMenu->setId(kAmpLFOSyncMenu);
+    // fAmpLFOSyncMenu->setCallback(this);
+    // fAmpLFOSyncMenu->addItems({
+    //     "1/16",
+    //     "1/8",
+    //     "1/4",
+    //     "1/2",
+    //     "1/1",
+    //     "2/1",
+    //     "1/16T",
+    //     "1/8T",
+    //     "1/4T",
+    //     "1/2T",
+    //     "1/1T",
+    //     "2/1T",
+    //     "1/16.",
+    //     "1/8.",
+    //     "1/4.",
+    //     "1/2.",
+    //     "1/1.",
+    //     "2/1.",
+    // });
+    // fAmpLFOSyncMenu->font_size = 16;
+    // fAmpLFOSyncMenu->hide();
+    // fAmpLFOSyncMenu->background_color = black_olive;
+    // fAmpLFOSyncMenu->foreground_color = black_olive_2;
+    // fAmpLFOSyncMenu->highlight_color = saffron;
+    // fAmpLFOSyncMenu->text_color = floral_white;
 
     hbox_amp_row_2->setWidth(vbox_amp->getWidth());
     hbox_amp_row_2->align_items = HBox::Align_Items::top;
@@ -202,16 +204,20 @@ void DropsUI::initTabAmp()
 
     hbox_amp_row_2->addWidget(fAmpLFOType);
     hbox_amp_row_2->addWidget(box_sync);
-        box_sync->setWidth(std::max(fAmpLFOFreq->getWidth(),fAmpLFOSync->getWidth()));
-        box_sync->setHeight(fAmpLFOFreq->getHeight() + fAmpLFOSync->getHeight());
-        box_sync->justify_content = HBox::Justify_Content::center;
-        box_sync->addWidget(fAmpLFOFreqBeat);
-        box_sync->addWidget(vbox_amp_lfo);
-            vbox_amp_lfo->setWidth(fAmpLFOFreq->getWidth() + fAmpLFOFreqBeat->getWidth());
-            vbox_amp_lfo->setHeight(fAmpLFOFreq->getHeight() + fAmpLFOSync->getHeight());
-            vbox_amp_lfo->justify_content = VBox::Justify_Content::left;
-            vbox_amp_lfo->addWidget(fAmpLFOFreq);
-            vbox_amp_lfo->addWidget(fAmpLFOSync);
+    // box_sync->setWidth(std::max(fAmpLFOFreq->getWidth(),fAmpLFOSync->getWidth()));
+    box_sync->setWidth(fAmpLFOFreq->getWidth());
+    // box_sync->setHeight(fAmpLFOFreq->getHeight() + fAmpLFOSync->getHeight());
+    box_sync->setHeight(fAmpLFOFreq->getHeight());
+    box_sync->justify_content = HBox::Justify_Content::center;
+    // box_sync->addWidget(fAmpLFOFreqBeat);
+    box_sync->addWidget(vbox_amp_lfo);
+    vbox_amp_lfo->setWidth(fAmpLFOFreq->getWidth()); // + fAmpLFOFreqBeat->getWidth());
+    // vbox_amp_lfo->setHeight(fAmpLFOFreq->getHeight() + fAmpLFOSync->getHeight());
+    vbox_amp_lfo->setHeight(fAmpLFOFreq->getHeight());
+
+    vbox_amp_lfo->justify_content = VBox::Justify_Content::left;
+    vbox_amp_lfo->addWidget(fAmpLFOFreq);
+    // vbox_amp_lfo->addWidget(fAmpLFOSync);
 
     hbox_amp_row_2->addWidget(fAmpLFODepth);
 
@@ -223,7 +229,7 @@ void DropsUI::initTabAmp()
     //  fAmpLFOSync->hide();
 
     fAmpLFOType->setMenu(fAmpLFOTypeMenu);
-    fAmpLFOSync->setMenu(fAmpLFOSyncMenu);
+    // fAmpLFOSync->setMenu(fAmpLFOSyncMenu);
     hideTabAmp();
 }
 
@@ -240,8 +246,8 @@ void DropsUI::hideTabAmp()
     fAmpLFOType->hide();
     fAmpLFOFreq->hide();
     fAmpLFODepth->hide();
-    fAmpLFOSync->hide();
-    fAmpLFOFreqBeat->hide();
+    // fAmpLFOSync->hide();
+    // fAmpLFOFreqBeat->hide();
 }
 
 void DropsUI::showTabAmp()
@@ -257,8 +263,8 @@ void DropsUI::showTabAmp()
     fAmpLFOType->show();
     fAmpLFOFreq->show();
     fAmpLFODepth->show();
-    fAmpLFOSync->show();
-    fAmpLFOFreqBeat->show();
+    // fAmpLFOSync->show();
+    // fAmpLFOFreqBeat->show();
 }
 
 END_NAMESPACE_DISTRHO
