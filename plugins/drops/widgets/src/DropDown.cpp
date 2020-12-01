@@ -98,6 +98,14 @@ void DropDown::setCallback(Callback *cb)
     callback_ = cb;
 }
 
+void DropDown::setValue(float val)
+{
+    uint index = static_cast<uint>(val);
+    item = menu_->getItem(index);
+    repaint();
+}
+
+
 float DropDown::getMenuOffset()
 {
     Rectangle<float> bounds;

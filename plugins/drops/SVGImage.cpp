@@ -3,7 +3,8 @@
 SVGImage::SVGImage(NanoWidget *parent, char *svgData, float scale)
     : NanoVG(parent)
 {
-    NSVGimage *svg = nsvgParse(svgData, "px", 96.0f);
+    char* tmpSVG = strdup(svgData);
+    NSVGimage *svg = nsvgParse(tmpSVG, "px", 96.0f);
     if (svg == nullptr)
     {
         printf("Could not open SVG Image.\n");
@@ -26,6 +27,7 @@ SVGImage::SVGImage(NanoWidget *parent, char *svgData, float scale)
     // cleanup
     nsvgDelete(svg);
     nsvgDeleteRasterizer(rast);
+    free(tmpSVG);
 };
 
 SVGImage::~SVGImage()

@@ -24,9 +24,9 @@
 enum Parameters
 {
    /*    common     */
-   kPitchBendDepth, // bend_down, bend_up
-   kPolyphony,      // polyphony
-   kGain,           // volume
+   // kPitchBendDepth, // bend_down, bend_up
+   // kPolyphony,      // polyphony
+   // kGain,           // volume
 
    /*    display     */
    kSampleIn,        // offset
@@ -35,10 +35,10 @@ enum Parameters
    kSampleLoopEnd,   // loop_end
 
    /*    sample tab    */
-   kSampleXFade,          // loop_crossfade (not implemented)
-   kSampleNormalize,      // amplitude or volume
+   // kSampleXFade,          // loop_crossfade (not implemented)
+   // kSampleNormalize,      // amplitude or volume
    kSamplePitchKeyCenter, // pitch_keycenter
-   kSampleTune,           // tune
+   // kSampleTune,           // tune
    kSamplePlayMode,       // loopmode
    kSamplePlayDirection,  // direction
    /*    amp tab */
@@ -49,14 +49,14 @@ enum Parameters
    kAmpLFOType,   // lfoN_wave
    kAmpLFOFreq,   // lfoN_freq
    kAmpLFODepth,  // lfoN_amplitude
-   kAmpLFOSync,   //
+   // kAmpLFOSync,   //
 
    /*  pitch tab */
    kPitchEgAttack,  // pitcheg_attack
    kPitchEgDecay,   // pitcheg_decay
    kPitchEgSustain, // pitcheg_sustain
    kPitchEgRelease, // pitcheg_release
-   kPitchEgDepth,   // pitcheg_depth
+   // kPitchEgDepth,   // pitcheg_depth
    kPitchLFOType,   // lfoN_wave
    kPitchLFOFreq,   // lfoN_freq
    kPitchLFODepth,  // lfoN_pitch
@@ -74,8 +74,9 @@ enum Parameters
    kFilterLFOType,   // lfoN_wave
    kFilterLFOFreq,   // lofN_freq
    kFilterLFODepth,  // lfoN_filter
-   kFilterLFOSync,
+   //kFilterLFOSync,
 
+   kActiveTab,
    kSampleLoaded, // output port to signal UI
 
    kParameterCount
@@ -119,9 +120,11 @@ enum Widgets
    kVBoxFilter,
    kHBoxFilterRow1,
    kHBoxFilterRow2,
+   kHBoxFilterRow3,
    kHBoxFilterSync,
    kVBoxFilterLfo,
    kFilterLFOTypeMenu,
+   kFilterTypeMenu,
 
    kHboxZoomIcons,
    kZoomOut,

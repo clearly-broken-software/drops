@@ -212,7 +212,8 @@ void DropsUI::makeIcons()
 void DropsUI::parameterChanged(uint32_t index, float value)
 {
 #ifdef DEBUG
-    //   printf("parameterChanged(%i,%f)\n", index, value);
+    if (index != kSampleLoaded)
+        printf("parameterChanged(%i,%f)\n", index, value);
 #endif
     switch (index)
     {
@@ -247,7 +248,16 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         sampleLoopEnd = value * static_cast<float>(sampleLength);
         setMarkers();
         break;
-        /*     case kAmpEgAttack:
+    case kSamplePitchKeyCenter:
+        fSamplePitchKeyCenter->setValue(value);
+        break;
+    case kSamplePlayMode:
+        fSamplePlayMode->setValue(value);
+        break;
+    case kSamplePlayDirection:
+        fSamplePlayDirection->setValue(value);
+        break;
+    case kAmpEgAttack:
         fAmpEgAttack->setValue(value);
         repaint();
         break;
@@ -262,9 +272,89 @@ void DropsUI::parameterChanged(uint32_t index, float value)
     case kAmpEgRelease:
         fAmpEgRelease->setValue(value);
         repaint();
-        break; */
+        break;
+    case kAmpLFOType:
+        fAmpLFOType->setValue(value);
+        repaint();
+        break;
+    case kAmpLFOFreq:
+        fAmpLFOFreq->setValue(value);
+        repaint();
+        break;
+    case kAmpLFODepth:
+        fAmpLFODepth->setValue(value);
+        repaint();
+        break;
+        /*  pitch tab */
+    case kPitchEgAttack:
+        fPitchEgAttack->setValue(value);
+        break;
+    case kPitchEgDecay:
+        fPitchEgDecay->setValue(value);
+        break;
+    case kPitchEgSustain:
+        fPitchEgSustain->setValue(value);
+        break;
+    case kPitchEgRelease:
+        fPitchEgRelease->setValue(value);
+        break;
+    // case kPitchEgDepth:
+    //     fPitchEgDepth->setValue(value);
+    //     break;
+    case kPitchLFOType:
+        fPitchLFOType->setValue(value);
+        break;
+    case kPitchLFOFreq:
+        fPitchLFOFreq->setValue(value);
+        break;
+    case kPitchLFODepth:
+        fPitchLFODepth->setValue(value);
+        break;
+
+    case kActiveTab:
+    {
+        const uint index = static_cast<uint>(value);
+        switch (index)
+        {
+        case 0:
+            showTabSample();
+            hideTabAmp();
+            hideTabPitch();
+            hideTabFilter();
+            tab_background = sample_tab_background;
+            break;
+        case 1:
+            hideTabSample();
+            showTabAmp();
+            hideTabPitch();
+            hideTabFilter();
+            tab_background = amp_tab_background;
+            break;
+        case 2:
+            hideTabSample();
+            hideTabAmp();
+            showTabPitch();
+            hideTabFilter();
+            tab_background = pitch_tab_background;
+            break;
+        case 3:
+            hideTabSample();
+            hideTabAmp();
+            hideTabPitch();
+            showTabFilter();
+            tab_background = filter_tab_background;
+            break;
+
+        default:
+            printf("unexpected tab id\n");
+            break;
+        }
+        repaint();
+    }
+    break;
 
     default:
+        printf("parameterChanged(%i,%f)\n", index, value);
         break;
     }
 }
@@ -550,10 +640,10 @@ void DropsUI::uiFileBrowserSelected(const char *filename)
     }
 }
 
-void DropsUI::stateChanged(const char *key, const char *)
+void DropsUI::stateChanged(const char *key, const char *value)
 {
 #ifdef DEBUG
-    printf("state changed... do something?\n");
+    printf("key = %s, value = %s\n", key, value);
 #endif
 }
 
@@ -807,6 +897,7 @@ void DropsUI::onFileOpenButtonClicked(FileOpenButton *)
 
 void DropsUI::onTextButtonClicked(TextButton *tb)
 {
+
     const uint id = tb->getId();
     switch (id)
     {
@@ -816,6 +907,7 @@ void DropsUI::onTextButtonClicked(TextButton *tb)
         hideTabPitch();
         hideTabFilter();
         tab_background = sample_tab_background;
+        setParameterValue(kActiveTab, 0);
         break;
     case kButtonAmp:
         hideTabSample();
@@ -823,6 +915,7 @@ void DropsUI::onTextButtonClicked(TextButton *tb)
         hideTabPitch();
         hideTabFilter();
         tab_background = amp_tab_background;
+        setParameterValue(kActiveTab, 1);
         break;
     case kButtonPitch:
         hideTabSample();
@@ -830,6 +923,7 @@ void DropsUI::onTextButtonClicked(TextButton *tb)
         showTabPitch();
         hideTabFilter();
         tab_background = pitch_tab_background;
+        setParameterValue(kActiveTab, 2);
         break;
     case kButtonFilter:
         hideTabSample();
@@ -837,11 +931,10 @@ void DropsUI::onTextButtonClicked(TextButton *tb)
         hideTabPitch();
         showTabFilter();
         tab_background = filter_tab_background;
-
+        setParameterValue(kActiveTab, 3);
         break;
-
     default:
-        printf("wtf happened");
+        printf("unexpected tab id\n");
         break;
     }
 }
@@ -851,9 +944,9 @@ void DropsUI::onDropDownClicked(DropDown *dropDown)
     uint id = dropDown->getId();
     switch (id)
     {
-    case kSampleNormalize:
-        fNormalizeMenu->show();
-        break;
+    // case kSampleNormalize:
+    //     fNormalizeMenu->show();
+    //     break;
     case kSamplePitchKeyCenter:
         fKeyCenterMenu->show();
         break;
@@ -866,31 +959,43 @@ void DropsUI::onDropDownClicked(DropDown *dropDown)
     case kAmpLFOType:
         fAmpLFOTypeMenu->show();
         break;
-        // case kAmpLFOSync:
-        //     fAmpLFOSyncMenu->show();
-        //     break;
-        case kPitchLFOType:
+    // case kAmpLFOSync:
+    //     fAmpLFOSyncMenu->show();
+    //     break;
+    case kPitchLFOType:
         fPitchLFOTypeMenu->show();
+        break;
+    case kFilterType:
+        fFilterTypeMenu->show();
+        break;
+    case kFilterLFOType:
+        fFilterLFOTypeMenu->show();
+        break;
 
     default:
+#ifdef DEBUG
         printf("dropdown %i clicked\n", id);
+#endif
         break;
     }
 }
 void DropsUI::knobDragStarted(Knob *knob)
 {
     const uint id = knob->getId();
+#ifdef DEBUG
     printf("%i , drag started\n", id);
+#endif
 }
 void DropsUI::knobDragFinished(Knob *knob)
 {
     int id = knob->getId();
+#ifdef DEBUG
     printf("%i , drag finished\n", id);
+#endif
 }
 void DropsUI::knobValueChanged(Knob *knob, float value)
 {
     uint id = knob->getId();
-    printf("knobValueChanged(%i, %f)\n", id, value);
 
     switch (id)
     {
@@ -919,9 +1024,26 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
     case kPitchEgRelease:
         setParameterValue(kPitchEgRelease, value);
         break;
-
+    case kFilterEgAttack:
+        setParameterValue(kFilterEgAttack, value);
+        break;
+    case kFilterEgDecay:
+        setParameterValue(kFilterEgDecay, value);
+        break;
+    case kFilterEgSustain:
+        setParameterValue(kFilterEgSustain, value);
+        break;
+    case kFilterEgRelease:
+        setParameterValue(kFilterEgRelease, value);
+        break;
+    case kFilterCutOff:
+        setParameterValue(kFilterCutOff, value);
+        break;
 
     default:
+#ifdef DEBUG
+        printf("knobValueChanged(%i, %f)\n", id, value);
+#endif
         break;
     }
     repaint();
@@ -930,7 +1052,7 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
 void DropsUI::onSliderValueChanged(Slider *slider, float value)
 {
     uint id = slider->getId();
-    printf("slider %i, value %f\n", id, value);
+
     switch (id)
     {
     case kAmpLFOFreq:
@@ -945,8 +1067,16 @@ void DropsUI::onSliderValueChanged(Slider *slider, float value)
     case kPitchLFODepth:
         setParameterValue(kPitchLFODepth, value);
         break;
+    case kFilterLFODepth:
+        setParameterValue(kFilterLFODepth, value);
+        break;
+    case kFilterLFOFreq:
+        setParameterValue(kFilterLFOFreq, value);
+        break;
     default:
-
+#ifdef DEBUG
+        printf("slider %i, value %f\n", id, value);
+#endif
         break;
     }
 }
@@ -1019,7 +1149,9 @@ void DropsUI::onScrollBarClicked(ScrollBar *scrollBar, bool dragging)
 void DropsUI::onMenuClicked(Menu *menu, uint menu_id, std::string item)
 {
     const uint id = menu->getId();
+#ifdef DEBUG
     printf("menu %i ,menu_id %i, item %s\n", id, menu_id, item.c_str());
+#endif
     switch (id)
     {
     case kPlayModeMenu:
@@ -1056,6 +1188,16 @@ void DropsUI::onMenuClicked(Menu *menu, uint menu_id, std::string item)
         fPitchLFOType->item = item;
         fPitchLFOTypeMenu->hide();
         setParameterValue(kPitchLFOType, menu_id);
+        break;
+    case kFilterTypeMenu:
+        fFilterType->item = item;
+        fFilterTypeMenu->hide();
+        setParameterValue(kFilterType, menu_id);
+        break;
+    case kFilterLFOTypeMenu:
+        fFilterLFOType->item = item;
+        fFilterLFOTypeMenu->hide();
+        setParameterValue(kFilterLFOType, menu_id);
         break;
     default:
 
@@ -1114,7 +1256,9 @@ void DropsUI::onSVGButtonClicked(SVGButton *svgb)
     }
 
     default:
-        printf("some svg button clicked\n");
+#ifdef DEBUG
+        printf("undefined svg button clicked\n");
+#endif
         break;
     }
 }

@@ -42,7 +42,7 @@ class DropsUI : public UI,
                 public Menu::Callback,
                 public Slider::Callback,
                 public FileOpenButton::Callback,
-               // public RadioButton::Callback,
+                // public RadioButton::Callback,
                 public SVGButton::Callback
 {
 public:
@@ -66,7 +66,7 @@ protected:
     void knobValueChanged(Knob *knob, float value) override;
     void onSliderValueChanged(Slider *slider, float value) override;
     void onMenuClicked(Menu *menu, uint id, std::string item);
-   // void onRadioButtonClicked(RadioButton *radio);
+    // void onRadioButtonClicked(RadioButton *radio);
     void onSVGButtonClicked(SVGButton *button);
 
 private:
@@ -86,7 +86,7 @@ private:
     // sample tab
     ScopedPointer<VBox> vbox_sample;
     ScopedPointer<HBox> hbox_sample_row_1, hbox_sample_row_2, hbox_sample_row_3;
-   // ScopedPointer<Slider> fSampleXFade;
+    // ScopedPointer<Slider> fSampleXFade;
     ScopedPointer<Slider> fSampleTune;
     // ScopedPointer<DropDown> fSampleNormalize;
     ScopedPointer<DropDown> fSamplePitchKeyCenter,
@@ -116,15 +116,16 @@ private:
     // ScopedPointer<DropDown> fPitchLFOSync;
     // ScopedPointer<Menu> fPitchLFOSyncMenu;
     // ScopedPointer<RadioButton> fPitchLFOFreqBeat;
-    
+
     // filter tab
     ScopedPointer<VBox> vbox_filter, vbox_filter_lfo;
-    ScopedPointer<HBox> hbox_filter_row_1, hbox_filter_row_2, hbox_filter_sync;
+    ScopedPointer<HBox> hbox_filter_row_1, hbox_filter_row_2, hbox_filter_row_3,hbox_filter_sync;
     ScopedPointer<Knob>
-        fFilterEgAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease;
+        fFilterEgAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease,
+        fFilterCutOff, fFilterResonance;
     ScopedPointer<DropDown> fFilterLFOType, fFilterType;
-    ScopedPointer<Menu> fFilterLFOTypeMenu;
-    ScopedPointer<Slider> fFilterLFOFreq, fFilterLFODepth,fFilterCutOff,fFilterDepth;
+    ScopedPointer<Menu> fFilterLFOTypeMenu, fFilterTypeMenu;
+    ScopedPointer<Slider> fFilterLFOFreq, fFilterLFODepth, fFilterDepth;
     // ScopedPointer<DropDown> fFilterLFOSync;
     // ScopedPointer<Menu> fFilterLFOSyncMenu;
     // ScopedPointer<RadioButton> fFilterLFOFreqBeat;
@@ -186,6 +187,13 @@ private:
     const Paint pitch_tab_background = linearGradient(tabs_x, tabs_y, tabs_x, UI_H, shamrock_green_4, shamrock_green_2);
     const Paint filter_tab_background = linearGradient(tabs_x, tabs_y, tabs_x, UI_H, blue_pigment_4, blue_pigment_2);
     Paint tab_background;
+    // enum tabs {
+    //     kSampleTab,
+    //     kAmpTab,
+    //     kPitchTab,
+    //     kFilterTab
+    // };
+    // tabs activeTab;
 
     DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DropsUI)
 };

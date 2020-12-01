@@ -27,6 +27,7 @@ public:
   void addItems(std::initializer_list<const char *> items);
   void setCallback(Callback *cb);
   void idleCallback();
+  std::string getItem(uint index);
 
   float font_size;
   float margin;
@@ -51,7 +52,7 @@ private:
   void scrollMenu(int dir);
 
   std::vector<const char *> items_;
-  std::string getItem(uint index);
+  
 
   Callback *callback_;
   int highlighted_item_;

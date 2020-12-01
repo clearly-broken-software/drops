@@ -128,6 +128,17 @@ private:
         fFilterEGAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease,
         fFilterEgDepth, fFilterLFOType, fFilterLFOFreq, fFilterLFODepth,
         fFilterLFOSync;
+    double fFilterMaxFreq;
+
+    float fActiveTab;
+
+    enum TABS
+    {
+        kSampleTab,
+        kAmpTab,
+        kPitchTab,
+        kFilterTab
+    };
 
     const char *play_modes_[4]{
         "no_loop", "one_shot",
@@ -136,12 +147,35 @@ private:
     const char *direction_[2]{
         "forward",
         "reverse"};
+    const char *filters_[23]{
+        "lpf_1p",
+        "hpf_1p",
+        "lpf_2p",
+        "hpf_2p",
+        "bpf_2p",
+        "brf_2p",
+        "bpf_1p",
+        "brf_1p",
+        "apf_1p",
+        "lpf_2p_sv",
+        "hpf_2p_sv",
+        "bpf_2p_sv",
+        "brf_2p_sv",
+        "pkf_2p",
+        "lpf_4p",
+        "hpf_4p",
+        "lpf_6p",
+        "hpf_6p",
+        "comb",
+        "pink",
+        "lsh",
+        "hsh",
+        "peq"};
 
-    std::unordered_map<std::string, std::string>
-        opcodes;
+    std::unordered_map<std::string, std::string> opcodes;
 
-        const float amp_lfo_depth = 20.0f;
-        double bpm;
+    const float amp_lfo_depth = 20.0f; // ermm FIXME:
+    double bpm;
 
     friend class DropsUI;
     /*

@@ -256,4 +256,9 @@ void Menu::scrollMenu(int dir)
     repaint();
 }
 
+std::string Menu::getItem(uint index)
+{
+    return items_[index];
+}
+
 END_NAMESPACE_DISTRHO

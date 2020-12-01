@@ -23,6 +23,8 @@ public:
   };
   explicit DropDown(Window &parent) noexcept;
   explicit DropDown(Widget *widget) noexcept;
+  void setValue(float value);
+  
   void addOption(std::string str);
   float getMenuOffset();
   void setCallback(Callback *cb);

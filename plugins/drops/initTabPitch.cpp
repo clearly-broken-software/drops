@@ -148,7 +148,7 @@ void DropsUI::initTabPitch()
     fPitchLFODepth->text_color = floral_white;
     fPitchLFODepth->unit = "Ct";
     fPitchLFODepth->right_padding = slider_right_padding;
-    fPitchLFODepth->format_str = "%.2f";
+    fPitchLFODepth->format_str = "%.f";
     fPitchLFODepth->min_value = 0.0f;
     fPitchLFODepth->max_value = 1200.0f;
 
