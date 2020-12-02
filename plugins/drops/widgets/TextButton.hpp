@@ -26,6 +26,7 @@ public:
   Color background_color;
   Color foreground_color;
   Color highlight_color;
+  bool isActive;
 
   float font_size;
 

@@ -60,7 +60,6 @@ DropsUI::DropsUI()
         std::string filename = plugin->path;
         fileopen_button->setText(filename);
     }
-    tab_background = sample_tab_background;
 }
 
 DropsUI::~DropsUI()
@@ -129,34 +128,34 @@ void DropsUI::initWidgets()
     button_sample->setText("SAMPLE");
     button_sample->background_color = black_olive_4;
     button_sample->foreground_color = floral_white;
-    button_sample->highlight_color = black_olive_1;
+    button_sample->highlight_color = flame;
 
     button_amp = new TextButton(box_tabs);
     button_amp->setId(kButtonAmp);
     button_amp->setCallback(this);
     button_amp->setSize(100, 40); //FIXME: harcoded
     button_amp->setText("AMP");
-    button_amp->background_color = flame_4;
+    button_amp->background_color = black_olive_4;
     button_amp->foreground_color = floral_white;
-    button_amp->highlight_color = flame_1;
+    button_amp->highlight_color = saffron;
 
     button_pitch = new TextButton(box_tabs);
     button_pitch->setId(kButtonPitch);
     button_pitch->setCallback(this);
     button_pitch->setSize(100, 40);
     button_pitch->setText("PITCH");
-    button_pitch->background_color = shamrock_green_4;
+    button_pitch->background_color = black_olive_4;
     button_pitch->foreground_color = floral_white;
-    button_pitch->highlight_color = shamrock_green_1;
+    button_pitch->highlight_color = shamrock_green;
 
     button_filter = new TextButton(box_tabs);
     button_filter->setId(kButtonFilter);
     button_filter->setCallback(this);
     button_filter->setSize(100, 40);
     button_filter->setText("FILTER");
-    button_filter->background_color = blue_pigment_4;
+    button_filter->background_color = black_olive_4;
     button_filter->foreground_color = floral_white;
-    button_filter->highlight_color = blue_pigment_1;
+    button_filter->highlight_color = blue_pigment;
 
     box_tabs->setAbsolutePos(0, display_bottom + minimap_height);
     box_tabs->setWidth(getWidth());
@@ -314,35 +313,53 @@ void DropsUI::parameterChanged(uint32_t index, float value)
     case kActiveTab:
     {
         const uint index = static_cast<uint>(value);
+
         switch (index)
         {
         case 0:
+            button_sample->isActive = true;
+            button_amp->isActive = false;
+            button_pitch->isActive = false;
+            button_filter->isActive = false;
+            tabEdge = button_sample->highlight_color;
             showTabSample();
             hideTabAmp();
             hideTabPitch();
             hideTabFilter();
-            tab_background = sample_tab_background;
+
             break;
         case 1:
+            button_sample->isActive = false;
+            button_amp->isActive = true;
+            button_pitch->isActive = false;
+            button_filter->isActive = false;
+            tabEdge = button_amp->highlight_color;
             hideTabSample();
             showTabAmp();
             hideTabPitch();
             hideTabFilter();
-            tab_background = amp_tab_background;
             break;
         case 2:
+            button_sample->isActive = false;
+            button_amp->isActive = false;
+            button_pitch->isActive = true;
+            button_filter->isActive = false;
+            tabEdge = button_pitch->highlight_color;
             hideTabSample();
             hideTabAmp();
             showTabPitch();
             hideTabFilter();
-            tab_background = pitch_tab_background;
             break;
         case 3:
+            button_sample->isActive = false;
+            button_amp->isActive = false;
+            button_pitch->isActive = false;
+            button_filter->isActive = true;
+            tabEdge = button_filter->highlight_color;
             hideTabSample();
             hideTabAmp();
             hideTabPitch();
             showTabFilter();
-            tab_background = filter_tab_background;
             break;
 
         default:
@@ -354,7 +371,7 @@ void DropsUI::parameterChanged(uint32_t index, float value)
     break;
 
     default:
-        printf("parameterChanged(%i,%f)\n", index, value);
+        printf("DropsUI::parameterChanged(%i,%f)\n", index, value);
         break;
     }
 }
@@ -432,9 +449,18 @@ void DropsUI::onNanoDisplay()
 
     // tab background
     beginPath();
-    fillPaint(tab_background);
+    //fillPaint(tab_background);
+    fillColor(eerie_black_4);
+    strokeColor(saffron);
     rect(tabs_x, tabs_y, tabs_w, tabs_h);
     fill();
+    closePath();
+
+    beginPath();
+    strokeWidth(2.0f);
+    strokeColor(tabEdge);
+    rect(tabs_x + 2, tabs_y + 2, tabs_w - 4, tabs_h - 4);
+    stroke();
     closePath();
 }
 
@@ -897,40 +923,53 @@ void DropsUI::onFileOpenButtonClicked(FileOpenButton *)
 
 void DropsUI::onTextButtonClicked(TextButton *tb)
 {
-
+    tabEdge = tb->highlight_color;
     const uint id = tb->getId();
     switch (id)
     {
     case kButtonSample:
+        button_sample->isActive = true;
+        button_amp->isActive = false;
+        button_pitch->isActive = false;
+        button_filter->isActive = false;
         showTabSample();
         hideTabAmp();
         hideTabPitch();
         hideTabFilter();
-        tab_background = sample_tab_background;
         setParameterValue(kActiveTab, 0);
         break;
     case kButtonAmp:
+        button_sample->isActive = false;
+        button_amp->isActive = true;
+        button_pitch->isActive = false;
+        button_filter->isActive = false;
         hideTabSample();
         showTabAmp();
         hideTabPitch();
         hideTabFilter();
-        tab_background = amp_tab_background;
         setParameterValue(kActiveTab, 1);
         break;
     case kButtonPitch:
+        button_sample->isActive = false;
+        button_amp->isActive = false;
+        button_pitch->isActive = true;
+        button_filter->isActive = false;
         hideTabSample();
         hideTabAmp();
         showTabPitch();
         hideTabFilter();
-        tab_background = pitch_tab_background;
         setParameterValue(kActiveTab, 2);
         break;
     case kButtonFilter:
+        button_sample->isActive = false;
+        button_amp->isActive = false;
+        button_pitch->isActive = false;
+        button_filter->isActive = true;
+
         hideTabSample();
         hideTabAmp();
         hideTabPitch();
         showTabFilter();
-        tab_background = filter_tab_background;
         setParameterValue(kActiveTab, 3);
         break;
     default:

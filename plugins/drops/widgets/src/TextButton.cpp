@@ -24,6 +24,7 @@ TextButton::TextButton(Widget *widget) noexcept
     font_size = 16;
     loadSharedResources();
     has_mouse_ = false;
+    isActive = false;
 }
 
 bool TextButton::onMouse(const MouseEvent &ev)
@@ -58,9 +59,9 @@ void TextButton::onNanoDisplay()
     int width = getWidth();
     int height = getHeight();
     beginPath();
-    fill_color_ = has_mouse_ ? highlight_color : background_color;
-    fillColor(fill_color_);
-    rect(0, 0, width, height);
+   // fill_color_ = has_mouse_ ? highlight_color : background_color;
+    fillColor(background_color);
+    roundedRect(0,0,width,height,5);
     fill();
     closePath();
 
@@ -71,6 +72,18 @@ void TextButton::onNanoDisplay()
     textAlign(ALIGN_CENTER | ALIGN_MIDDLE);
     text(std::round(width / 2), std::round(height / 2.0f), buttonText.c_str(), NULL);
     closePath();
+
+    // indicator
+    if (has_mouse_ || isActive)
+    {
+        beginPath();
+        strokeColor(highlight_color);
+        strokeWidth(5);
+        moveTo(0,5);
+        lineTo(width,5);
+        stroke();
+        closePath();
+    }
 }
 
 void TextButton::setText(std::string str)

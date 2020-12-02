@@ -182,11 +182,13 @@ private:
     int mouseX;
     Rectangle<int> display;
 
-    const Paint sample_tab_background = linearGradient(tabs_x, tabs_y, tabs_x, UI_H, black_olive_4, black_olive_2);
-    const Paint amp_tab_background = linearGradient(tabs_x, tabs_y, tabs_x, UI_H, flame_4, flame_2);
-    const Paint pitch_tab_background = linearGradient(tabs_x, tabs_y, tabs_x, UI_H, shamrock_green_4, shamrock_green_2);
-    const Paint filter_tab_background = linearGradient(tabs_x, tabs_y, tabs_x, UI_H, blue_pigment_4, blue_pigment_2);
-    Paint tab_background;
+    Color tabEdge;
+
+    // const Paint sample_tab_background = linearGradient(tabs_x, tabs_y, tabs_x, UI_H, black_olive_4, black_olive_2);
+    // const Paint amp_tab_background = linearGradient(tabs_x, tabs_y, tabs_x, UI_H, flame_4, flame_2);
+    // const Paint pitch_tab_background = linearGradient(tabs_x, tabs_y, tabs_x, UI_H, shamrock_green_4, shamrock_green_2);
+    // const Paint filter_tab_background = linearGradient(tabs_x, tabs_y, tabs_x, UI_H, blue_pigment_4, blue_pigment_2);
+    // Paint tab_background;
     // enum tabs {
     //     kSampleTab,
     //     kAmpTab,

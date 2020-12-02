@@ -21,7 +21,7 @@ void DropsUI::initTabPitch()
     fPitchEgAttack->label = "ATTACK";
     fPitchEgAttack->foreground_color = floral_white;
     fPitchEgAttack->background_color = black_olive;
-    fPitchEgAttack->highlight_color = flame;
+    fPitchEgAttack->highlight_color = shamrock_green;
     fPitchEgAttack->text_color = floral_white;
 
     fPitchEgDecay = new Knob(hbox_pitch_row_1);
@@ -31,7 +31,7 @@ void DropsUI::initTabPitch()
     fPitchEgDecay->label = "DECAY";
     fPitchEgDecay->foreground_color = floral_white;
     fPitchEgDecay->background_color = black_olive;
-    fPitchEgDecay->highlight_color = flame;
+    fPitchEgDecay->highlight_color = shamrock_green;
     fPitchEgDecay->text_color = floral_white;
 
     fPitchEgSustain = new Knob(hbox_pitch_row_1);
@@ -41,7 +41,7 @@ void DropsUI::initTabPitch()
     fPitchEgSustain->label = "SUSTAIN";
     fPitchEgSustain->foreground_color = floral_white;
     fPitchEgSustain->background_color = black_olive;
-    fPitchEgSustain->highlight_color = flame;
+    fPitchEgSustain->highlight_color = shamrock_green;
     fPitchEgSustain->text_color = floral_white;
 
     fPitchEgRelease = new Knob(hbox_pitch_row_1);
@@ -51,7 +51,7 @@ void DropsUI::initTabPitch()
     fPitchEgRelease->label = "RELEASE";
     fPitchEgRelease->foreground_color = floral_white;
     fPitchEgRelease->background_color = black_olive;
-    fPitchEgRelease->highlight_color = flame;
+    fPitchEgRelease->highlight_color = shamrock_green;
     fPitchEgRelease->text_color = floral_white;
 
     vbox_pitch->setAbsolutePos(tabs_x, tabs_y);
@@ -87,7 +87,7 @@ void DropsUI::initTabPitch()
     // fPitchLFOFreqBeat->background_color = Color(255, 0, 0);
     // fPitchLFOFreqBeat->text_color = floral_white;
     // fPitchLFOFreqBeat->foreground_color = pale_silver;
-    // fPitchLFOFreqBeat->highlight_color = flame;
+    // fPitchLFOFreqBeat->highlight_color = shamrock_green;
 
     fPitchLFOType = new DropDown(hbox_pitch_row_2);
     fPitchLFOType->setId(kPitchLFOType);
@@ -118,7 +118,7 @@ void DropsUI::initTabPitch()
     fPitchLFOTypeMenu->hide();
     fPitchLFOTypeMenu->background_color = black_olive;
     fPitchLFOTypeMenu->foreground_color = black_olive_2;
-    fPitchLFOTypeMenu->highlight_color = flame;
+    fPitchLFOTypeMenu->highlight_color = shamrock_green;
     fPitchLFOTypeMenu->text_color = floral_white;
 
     fPitchLFOFreq = new Slider(vbox_pitch_lfo);
@@ -128,7 +128,7 @@ void DropsUI::initTabPitch()
     fPitchLFOFreq->setLabel("FREQ :");
     fPitchLFOFreq->background_color = black_olive;
     fPitchLFOFreq->foreground_color = floral_white;
-    fPitchLFOFreq->highlight_color = flame;
+    fPitchLFOFreq->highlight_color = shamrock_green;
     fPitchLFOFreq->text_color = floral_white;
     fPitchLFOFreq->unit = "HZ";
     fPitchLFOFreq->right_padding = slider_right_padding + 4;
@@ -144,7 +144,7 @@ void DropsUI::initTabPitch()
     fPitchLFODepth->setLabel("DEPTH :");
     fPitchLFODepth->background_color = black_olive;
     fPitchLFODepth->foreground_color = floral_white;
-    fPitchLFODepth->highlight_color = flame;
+    fPitchLFODepth->highlight_color = shamrock_green;
     fPitchLFODepth->text_color = floral_white;
     fPitchLFODepth->unit = "Ct";
     fPitchLFODepth->right_padding = slider_right_padding;
@@ -192,7 +192,7 @@ void DropsUI::initTabPitch()
     // fPitchLFOSyncMenu->hide();
     // fPitchLFOSyncMenu->background_color = black_olive;
     // fPitchLFOSyncMenu->foreground_color = black_olive_2;
-    // fPitchLFOSyncMenu->highlight_color = flame;
+    // fPitchLFOSyncMenu->highlight_color = shamrock_green;
     // fPitchLFOSyncMenu->text_color = floral_white;
 
     hbox_pitch_row_2->setWidth(vbox_pitch->getWidth());

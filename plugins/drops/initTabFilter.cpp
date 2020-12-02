@@ -61,7 +61,7 @@ void DropsUI::initTabFilter()
     fFilterTypeMenu->hide();
     fFilterTypeMenu->background_color = black_olive;
     fFilterTypeMenu->foreground_color = black_olive_2;
-    fFilterTypeMenu->highlight_color = flame;
+    fFilterTypeMenu->highlight_color = blue_pigment;;
     fFilterTypeMenu->text_color = floral_white;
 
     fFilterCutOff = new Knob(hbox_filter_row_1);
@@ -71,7 +71,7 @@ void DropsUI::initTabFilter()
     fFilterCutOff->label = "FREQ";
     fFilterCutOff->background_color = black_olive;
     fFilterCutOff->foreground_color = floral_white;
-    fFilterCutOff->highlight_color = flame;
+    fFilterCutOff->highlight_color = blue_pigment;;
     fFilterCutOff->text_color = floral_white;
     fFilterCutOff->default_value = 1;
     fFilterCutOff->minimum_value = 0;
@@ -84,7 +84,7 @@ void DropsUI::initTabFilter()
     fFilterResonance->label = "RESONANCE";
     fFilterResonance->background_color = black_olive;
     fFilterResonance->foreground_color = floral_white;
-    fFilterResonance->highlight_color = flame;
+    fFilterResonance->highlight_color = blue_pigment;;
     fFilterResonance->text_color = floral_white;
     fFilterResonance->default_value = 1;
     fFilterResonance->minimum_value = 0;
@@ -99,7 +99,7 @@ void DropsUI::initTabFilter()
     fFilterEgAttack->label = "ATTACK";
     fFilterEgAttack->foreground_color = floral_white;
     fFilterEgAttack->background_color = black_olive;
-    fFilterEgAttack->highlight_color = flame;
+    fFilterEgAttack->highlight_color = blue_pigment;
     fFilterEgAttack->text_color = floral_white;
 
     fFilterEgDecay = new Knob(hbox_filter_row_2);
@@ -109,7 +109,7 @@ void DropsUI::initTabFilter()
     fFilterEgDecay->label = "DECAY";
     fFilterEgDecay->foreground_color = floral_white;
     fFilterEgDecay->background_color = black_olive;
-    fFilterEgDecay->highlight_color = flame;
+    fFilterEgDecay->highlight_color = blue_pigment;;
     fFilterEgDecay->text_color = floral_white;
 
     fFilterEgSustain = new Knob(hbox_filter_row_2);
@@ -119,7 +119,7 @@ void DropsUI::initTabFilter()
     fFilterEgSustain->label = "SUSTAIN";
     fFilterEgSustain->foreground_color = floral_white;
     fFilterEgSustain->background_color = black_olive;
-    fFilterEgSustain->highlight_color = flame;
+    fFilterEgSustain->highlight_color = blue_pigment;;
     fFilterEgSustain->text_color = floral_white;
 
     fFilterEgRelease = new Knob(hbox_filter_row_2);
@@ -129,7 +129,7 @@ void DropsUI::initTabFilter()
     fFilterEgRelease->label = "RELEASE";
     fFilterEgRelease->foreground_color = floral_white;
     fFilterEgRelease->background_color = black_olive;
-    fFilterEgRelease->highlight_color = flame;
+    fFilterEgRelease->highlight_color = blue_pigment;;
     fFilterEgRelease->text_color = floral_white;
 
     vbox_filter->setAbsolutePos(tabs_x, tabs_y);
@@ -173,7 +173,7 @@ void DropsUI::initTabFilter()
     // fFilterLFOFreqBeat->background_color = Color(255, 0, 0);
     // fFilterLFOFreqBeat->text_color = floral_white;
     // fFilterLFOFreqBeat->foreground_color = pale_silver;
-    // fFilterLFOFreqBeat->highlight_color = flame;
+    // fFilterLFOFreqBeat->highlight_color = blue_pigment;;
 
     fFilterLFOType = new DropDown(hbox_filter_row_3);
     fFilterLFOType->setId(kFilterLFOType);
@@ -204,7 +204,7 @@ void DropsUI::initTabFilter()
     fFilterLFOTypeMenu->hide();
     fFilterLFOTypeMenu->background_color = black_olive;
     fFilterLFOTypeMenu->foreground_color = black_olive_2;
-    fFilterLFOTypeMenu->highlight_color = flame;
+    fFilterLFOTypeMenu->highlight_color = blue_pigment;;
     fFilterLFOTypeMenu->text_color = floral_white;
 
     fFilterLFOFreq = new Slider(vbox_filter_lfo);
@@ -214,7 +214,7 @@ void DropsUI::initTabFilter()
     fFilterLFOFreq->setLabel("FREQ :");
     fFilterLFOFreq->background_color = black_olive;
     fFilterLFOFreq->foreground_color = floral_white;
-    fFilterLFOFreq->highlight_color = flame;
+    fFilterLFOFreq->highlight_color = blue_pigment;;
     fFilterLFOFreq->text_color = floral_white;
     fFilterLFOFreq->unit = "HZ";
     fFilterLFOFreq->right_padding = slider_right_padding + 4;
@@ -230,7 +230,7 @@ void DropsUI::initTabFilter()
     fFilterLFODepth->setLabel("DEPTH :");
     fFilterLFODepth->background_color = black_olive;
     fFilterLFODepth->foreground_color = floral_white;
-    fFilterLFODepth->highlight_color = flame;
+    fFilterLFODepth->highlight_color = blue_pigment;;
     fFilterLFODepth->text_color = floral_white;
     fFilterLFODepth->unit = "DB";
     fFilterLFODepth->right_padding = slider_right_padding;
@@ -276,7 +276,7 @@ void DropsUI::initTabFilter()
     // fFilterLFOSyncMenu->hide();
     // fFilterLFOSyncMenu->background_color = black_olive;
     // fFilterLFOSyncMenu->foreground_color = black_olive_2;
-    // fFilterLFOSyncMenu->highlight_color = flame;
+    // fFilterLFOSyncMenu->highlight_color = blue_pigment;;
     // fFilterLFOSyncMenu->text_color = floral_white;
 
     hbox_filter_row_3->setWidth(vbox_filter->getWidth());
