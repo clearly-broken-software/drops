@@ -315,7 +315,36 @@ void DropsUI::parameterChanged(uint32_t index, float value)
     case kPitchLFODepth:
         fPitchLFODepth->setValue(value);
         break;
-
+    case kFilterType:
+        fFilterType->setValue(value);
+        break;
+    case kFilterCutOff:
+        fFilterCutOff->setValue(value);
+        break;
+    case kFilterResonance:
+        fFilterResonance->setValue(value);
+        break;
+    case kFilterEgAttack:
+        fFilterEgAttack->setValue(value);
+        break;
+    case kFilterEgDecay:
+        fFilterEgDecay->setValue(value);
+        break;
+    case kFilterEgSustain:
+        fFilterEgSustain->setValue(value);
+        break;
+    case kFilterEgRelease:
+        fFilterEgRelease->setValue(value);
+        break;
+    case kFilterLFOType:
+        fFilterLFOType->setValue(value);
+        break;
+    case kFilterLFOFreq:
+        fFilterLFOFreq->setValue(value);
+        break;
+    case kFilterLFODepth:
+        fFilterLFODepth->setValue(value);
+        break;
     case kActiveTab:
     {
         const uint index = static_cast<uint>(value);
