@@ -254,8 +254,11 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         setMarkers();
         break;
     case kSamplePitchKeyCenter:
-        fSamplePitchKeyCenter->setValue(value);
+    {
+        float keyValue = 127.f - value;
+        fSamplePitchKeyCenter->setValue(keyValue);
         break;
+    }
     case kSamplePlayMode:
         fSamplePlayMode->setValue(value);
         break;
@@ -1213,10 +1216,13 @@ void DropsUI::onMenuClicked(Menu *menu, uint menu_id, std::string item)
     //     setParameterValue(kSampleNormalize, menu_id);
     //     break;
     case kKeyCenterMenu:
+    {
         fSamplePitchKeyCenter->item = item;
         fKeyCenterMenu->hide();
-        setParameterValue(kSamplePitchKeyCenter, menu_id);
+        float keyValue = 127.f - menu_id;
+        setParameterValue(kSamplePitchKeyCenter, keyValue);
         break;
+    }
     case kDirectionMenu:
         fSamplePlayDirection->item = item;
         fDirectionMenu->hide();

@@ -46,7 +46,7 @@ DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 2)
     fSampleLoopEnd = 1.0f;
     fSampleXFade = 0.0f;
     fSampleNormalize = 0.0f;
-    fSamplePitchKeyCenter = 0.0f;
+    fSamplePitchKeyCenter = 60.0f;
     fSampleTune = 0.0f;
     fSamplePlayMode = 0.0f;
     fSamplePlayDirection = 0.0f;
