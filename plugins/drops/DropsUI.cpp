@@ -216,10 +216,7 @@ void DropsUI::makeIcons()
 }
 void DropsUI::parameterChanged(uint32_t index, float value)
 {
-#ifdef DEBUG
-    if (index != kSampleLoaded)
-        printf("parameterChanged(%i,%f)\n", index, value);
-#endif
+
     switch (index)
     {
     case kSampleLoaded:
@@ -378,7 +375,6 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         repaint();
     }
     break;
-
     default:
         printf("DropsUI::parameterChanged(%i,%f)\n", index, value);
         break;
