@@ -385,14 +385,14 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.ranges.def = 0.0f;
         parameter.hints = kParameterIsAutomable;
         break;
-    case kPitchLFOSync:
-        parameter.name = "Pitch LFO Sync";
-        parameter.symbol = "pitch_lfo_sync";
-        parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 1.0f;
-        parameter.ranges.def = 0.0f;
-        parameter.hints = kParameterIsAutomable;
-        break;
+    // case kPitchLFOSync:
+    //     parameter.name = "Pitch LFO Sync";
+    //     parameter.symbol = "pitch_lfo_sync";
+    //     parameter.ranges.min = 0.0f;
+    //     parameter.ranges.max = 1.0f;
+    //     parameter.ranges.def = 0.0f;
+    //     parameter.hints = kParameterIsAutomable;
+    //     break;
     case kFilterType:
         parameter.name = "Filter Type";
         parameter.symbol = "filter_type";
@@ -479,14 +479,14 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.ranges.def = 0.0f;
         parameter.hints = kParameterIsAutomable;
         break;
-    case kFilterEgDepth:
-        parameter.name = "Filter EG Depth";
-        parameter.symbol = "filter_eg_depth";
-        parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 1.0f;
-        parameter.ranges.def = 0.0f;
-        parameter.hints = kParameterIsAutomable;
-        break;
+    // case kFilterEgDepth:
+    //     parameter.name = "Filter EG Depth";
+    //     parameter.symbol = "filter_eg_depth";
+    //     parameter.ranges.min = 0.0f;
+    //     parameter.ranges.max = 1.0f;
+    //     parameter.ranges.def = 0.0f;
+    //     parameter.hints = kParameterIsAutomable;
+    //     break;
     case kFilterLFOType:
         parameter.name = "Filter LFO Type";
         parameter.symbol = "filter_lfo_type";
@@ -654,9 +654,9 @@ float DropsPlugin::getParameterValue(uint32_t index) const
     case kPitchLFODepth:
         val = fPitchLFODepth;
         break;
-    case kPitchLFOSync:
-        val = fPitchLFOSync;
-        break;
+    // case kPitchLFOSync:
+    //     val = fPitchLFOSync;
+    //     break;
     case kFilterType:
         val = fFilterType;
         break;
@@ -678,9 +678,9 @@ float DropsPlugin::getParameterValue(uint32_t index) const
     case kFilterEgRelease:
         val = fFilterEgRelease;
         break;
-    case kFilterEgDepth:
-        val = fFilterEgDepth;
-        break;
+    // case kFilterEgDepth:
+    //     val = fFilterEgDepth;
+    //     break;
     case kFilterLFOType:
         val = fFilterLFOType;
         break;
@@ -814,9 +814,9 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         fPitchLFODepth = value;
         makeSFZ();
         break;
-    case kPitchLFOSync:
-        fPitchLFOSync = value;
-        makeSFZ();
+    // case kPitchLFOSync:
+    //     fPitchLFOSync = value;
+    //     makeSFZ();
         break;
     case kFilterType:
         fFilterType = value;
@@ -840,9 +840,9 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
     case kFilterEgRelease:
         fFilterEgRelease = value;
         break;
-    case kFilterEgDepth:
-        fFilterEgDepth = value;
-        break;
+    // case kFilterEgDepth:
+    //     fFilterEgDepth = value;
+    //     break;
     case kFilterLFOType:
         fFilterLFOType = value;
         makeSFZ();

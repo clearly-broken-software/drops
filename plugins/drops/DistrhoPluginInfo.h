@@ -60,7 +60,7 @@ enum Parameters
    kPitchLFOType,   // lfoN_wave
    kPitchLFOFreq,   // lfoN_freq
    kPitchLFODepth,  // lfoN_pitch
-   kPitchLFOSync,
+ //  kPitchLFOSync,
 
    /*      filter tab  */
    kFilterType,      // fil_type
@@ -70,7 +70,7 @@ enum Parameters
    kFilterEgDecay,   // fileg_decay
    kFilterEgSustain, // fileg_sustain
    kFilterEgRelease, // fileg_release
-   kFilterEgDepth,   // fileg_depth
+   //kFilterEgDepth,   // fileg_depth
    kFilterLFOType,   // lfoN_wave
    kFilterLFOFreq,   // lofN_freq
    kFilterLFODepth,  // lfoN_filter
