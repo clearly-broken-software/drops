@@ -12,7 +12,6 @@ TextButton::TextButton(Window &parent) noexcept
     font_size = 16;
     loadSharedResources();
     has_mouse_ = false;
-
 }
 
 TextButton::TextButton(Widget *widget) noexcept
@@ -59,9 +58,13 @@ void TextButton::onNanoDisplay()
     int width = getWidth();
     int height = getHeight();
     beginPath();
-   // fill_color_ = has_mouse_ ? highlight_color : background_color;
     fillColor(background_color);
-    roundedRect(0,0,width,height,5);
+    roundedRect(0, 0, width, height, 5);
+    fill();
+    closePath();
+    beginPath();
+    fillColor(background_color);
+    rect(0, 5, width, height - 10);
     fill();
     closePath();
 
@@ -77,10 +80,11 @@ void TextButton::onNanoDisplay()
     if (has_mouse_ || isActive)
     {
         beginPath();
+        lineCap(DGL::NanoVG::LineCap::ROUND);
         strokeColor(highlight_color);
-        strokeWidth(5);
-        moveTo(0,5);
-        lineTo(width,5);
+        strokeWidth(4);
+        moveTo(4, 4);
+        lineTo(width - 4, 4);
         stroke();
         closePath();
     }

@@ -73,7 +73,7 @@ void DropsUI::initWidgets()
     fileopen_button->setCallback(this);
     fileopen_button->setAbsolutePos(238, 0);
     fileopen_button->setSize(530, 55);
-    fileopen_button->background_color = black_olive;
+    fileopen_button->background_color = eerie_black_3;
     fileopen_button->text_color = floral_white;
     fileopen_button->font_size = 24.f;
 
@@ -121,12 +121,18 @@ void DropsUI::initWidgets()
 
     box_tabs = new HBox(window);
 
+    const float clrScale = 0.5f;
+    const Color buttonBackClr(eerie_black_3.red * clrScale,
+                              eerie_black_3.green * clrScale,
+                              eerie_black_3.blue * clrScale,
+                              1.0f);
+
     button_sample = new TextButton(box_tabs);
     button_sample->setId(kButtonSample);
     button_sample->setCallback(this);
     button_sample->setSize(100, 40);
     button_sample->setText("SAMPLE");
-    button_sample->background_color = black_olive_4;
+    button_sample->background_color = buttonBackClr;
     button_sample->foreground_color = floral_white;
     button_sample->highlight_color = flame;
 
@@ -135,7 +141,7 @@ void DropsUI::initWidgets()
     button_amp->setCallback(this);
     button_amp->setSize(100, 40); //FIXME: harcoded
     button_amp->setText("AMP");
-    button_amp->background_color = black_olive_4;
+    button_amp->background_color = buttonBackClr;
     button_amp->foreground_color = floral_white;
     button_amp->highlight_color = saffron;
 
@@ -144,7 +150,7 @@ void DropsUI::initWidgets()
     button_pitch->setCallback(this);
     button_pitch->setSize(100, 40);
     button_pitch->setText("PITCH");
-    button_pitch->background_color = black_olive_4;
+    button_pitch->background_color = buttonBackClr;
     button_pitch->foreground_color = floral_white;
     button_pitch->highlight_color = shamrock_green;
 
@@ -153,7 +159,7 @@ void DropsUI::initWidgets()
     button_filter->setCallback(this);
     button_filter->setSize(100, 40);
     button_filter->setText("FILTER");
-    button_filter->background_color = black_olive_4;
+    button_filter->background_color = buttonBackClr;
     button_filter->foreground_color = floral_white;
     button_filter->highlight_color = blue_pigment;
 
@@ -449,9 +455,12 @@ void DropsUI::onNanoDisplay()
 
     // tab background
     beginPath();
-    //fillPaint(tab_background);
-    fillColor(eerie_black_4);
-    strokeColor(saffron);
+    const Color tabColor = eerie_black_3;
+    const float clrScale = 0.5f;
+    fillColor(tabColor.red * clrScale,
+              tabColor.green * clrScale,
+              tabColor.blue * clrScale,
+              1.0f);
     rect(tabs_x, tabs_y, tabs_w, tabs_h);
     fill();
     closePath();
