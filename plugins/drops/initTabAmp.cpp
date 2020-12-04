@@ -19,9 +19,9 @@ void DropsUI::initTabAmp()
     fAmpEgAttack->setSize(knobSize);
     fAmpEgAttack->setCallback(this);
     fAmpEgAttack->label = "ATTACK";
-    fAmpEgAttack->foreground_color = floral_white;
+    fAmpEgAttack->foreground_color = saffron;
     fAmpEgAttack->background_color = black_olive;
-    fAmpEgAttack->highlight_color = saffron;
+    fAmpEgAttack->highlight_color = saffron_1;
     fAmpEgAttack->text_color = floral_white;
 
     fAmpEgDecay = new Knob(hbox_amp_row_1);
@@ -29,9 +29,9 @@ void DropsUI::initTabAmp()
     fAmpEgDecay->setSize(knobSize);
     fAmpEgDecay->setCallback(this);
     fAmpEgDecay->label = "DECAY";
-    fAmpEgDecay->foreground_color = floral_white;
+    fAmpEgDecay->foreground_color = saffron;
     fAmpEgDecay->background_color = black_olive;
-    fAmpEgDecay->highlight_color = saffron;
+    fAmpEgDecay->highlight_color = saffron_1;
     fAmpEgDecay->text_color = floral_white;
 
     fAmpEgSustain = new Knob(hbox_amp_row_1);
@@ -39,19 +39,18 @@ void DropsUI::initTabAmp()
     fAmpEgSustain->setSize(knobSize);
     fAmpEgSustain->setCallback(this);
     fAmpEgSustain->label = "SUSTAIN";
-    fAmpEgSustain->foreground_color = floral_white;
+    fAmpEgSustain->foreground_color = saffron;
     fAmpEgSustain->background_color = black_olive;
-    fAmpEgSustain->highlight_color = saffron;
+    fAmpEgSustain->highlight_color = saffron_1;
     fAmpEgSustain->text_color = floral_white;
-
     fAmpEgRelease = new Knob(hbox_amp_row_1);
     fAmpEgRelease->setId(kAmpEgRelease);
     fAmpEgRelease->setSize(knobSize);
     fAmpEgRelease->setCallback(this);
     fAmpEgRelease->label = "RELEASE";
-    fAmpEgRelease->foreground_color = floral_white;
+    fAmpEgRelease->foreground_color = saffron;
     fAmpEgRelease->background_color = black_olive;
-    fAmpEgRelease->highlight_color = saffron;
+    fAmpEgRelease->highlight_color = saffron_1;
     fAmpEgRelease->text_color = floral_white;
 
     // fAmpLFOFreqBeat = new RadioButton(hbox_amp_row_1);
@@ -64,8 +63,8 @@ void DropsUI::initTabAmp()
     // fAmpLFOFreqBeat->setSize(20 + 2, 40); // font_size + 2 * margin
     // fAmpLFOFreqBeat->background_color = black_olive;
     // fAmpLFOFreqBeat->text_color = floral_white;
-    // fAmpLFOFreqBeat->foreground_color = pale_silver;
-    // fAmpLFOFreqBeat->highlight_color = saffron;
+    // fAmpLFOFreqBeat->foreground_color = floral_white;
+    // fAmpLFOFreqBeat->highlight_color = saffron_1;
 
     vbox_amp->setAbsolutePos(tabs_x, tabs_y);
     vbox_amp->setWidth(tabs_w);
@@ -97,7 +96,7 @@ void DropsUI::initTabAmp()
     fAmpLFOType->setCallback(this);
     fAmpLFOType->label = "LFO TYPE :";
     fAmpLFOType->item = "SINE";
-    fAmpLFOType->foreground_color = floral_white;
+    fAmpLFOType->foreground_color = saffron;
     fAmpLFOType->background_color = black_olive;
     fAmpLFOType->text_color = floral_white;
 
@@ -118,7 +117,7 @@ void DropsUI::initTabAmp()
     fAmpLFOTypeMenu->hide();
     fAmpLFOTypeMenu->background_color = black_olive;
     fAmpLFOTypeMenu->foreground_color = black_olive_2;
-    fAmpLFOTypeMenu->highlight_color = saffron;
+    fAmpLFOTypeMenu->highlight_color = saffron_1;
     fAmpLFOTypeMenu->text_color = floral_white;
 
     fAmpLFOFreq = new Slider(vbox_amp_lfo);
@@ -127,8 +126,8 @@ void DropsUI::initTabAmp()
     fAmpLFOFreq->setSize(300, 20);
     fAmpLFOFreq->setLabel("FREQ :");
     fAmpLFOFreq->background_color = black_olive;
-    fAmpLFOFreq->foreground_color = floral_white;
-    fAmpLFOFreq->highlight_color = saffron;
+    fAmpLFOFreq->foreground_color = saffron;
+    fAmpLFOFreq->highlight_color = saffron_1;
     fAmpLFOFreq->text_color = floral_white;
     fAmpLFOFreq->unit = "HZ";
     fAmpLFOFreq->right_padding = slider_right_padding + 4;
@@ -143,8 +142,8 @@ void DropsUI::initTabAmp()
     fAmpLFODepth->setSize(300, 20);
     fAmpLFODepth->setLabel("DEPTH :");
     fAmpLFODepth->background_color = black_olive;
-    fAmpLFODepth->foreground_color = floral_white;
-    fAmpLFODepth->highlight_color = saffron;
+    fAmpLFODepth->foreground_color = saffron;
+    fAmpLFODepth->highlight_color = saffron_1;
     fAmpLFODepth->text_color = floral_white;
     fAmpLFODepth->unit = "DB";
     fAmpLFODepth->right_padding = slider_right_padding;
@@ -160,7 +159,7 @@ void DropsUI::initTabAmp()
     // fAmpLFOSync->setCallback(this);
     // fAmpLFOSync->label = "LFO Sync :";
     // fAmpLFOSync->item = "1/4";
-    // fAmpLFOSync->foreground_color = floral_white;
+    // fAmpLFOSync->foreground_color = saffron;
     // fAmpLFOSync->background_color = black_olive;
     // fAmpLFOSync->text_color = floral_white;
 
@@ -192,7 +191,7 @@ void DropsUI::initTabAmp()
     // fAmpLFOSyncMenu->hide();
     // fAmpLFOSyncMenu->background_color = black_olive;
     // fAmpLFOSyncMenu->foreground_color = black_olive_2;
-    // fAmpLFOSyncMenu->highlight_color = saffron;
+    // fAmpLFOSyncMenu->highlight_color = saffron_1;
     // fAmpLFOSyncMenu->text_color = floral_white;
 
     hbox_amp_row_2->setWidth(vbox_amp->getWidth());

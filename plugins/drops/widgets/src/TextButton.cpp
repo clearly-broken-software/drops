@@ -59,12 +59,13 @@ void TextButton::onNanoDisplay()
     int height = getHeight();
     beginPath();
     fillColor(background_color);
-    roundedRect(0, 0, width, height, 5);
+    roundedRect(1, 1, width-2, height-2, 2);
     fill();
     closePath();
+    
     beginPath();
     fillColor(background_color);
-    rect(0, 5, width, height - 10);
+    rect(1, 5, width-2, height - 5);
     fill();
     closePath();
 

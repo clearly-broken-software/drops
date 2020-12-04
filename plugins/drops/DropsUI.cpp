@@ -121,11 +121,12 @@ void DropsUI::initWidgets()
 
     box_tabs = new HBox(window);
 
-    const float clrScale = 0.5f;
-    const Color buttonBackClr(eerie_black_3.red * clrScale,
-                              eerie_black_3.green * clrScale,
-                              eerie_black_3.blue * clrScale,
+    const float clrScale = 1.5f;
+    const Color buttonBackClr(eerie_black.red * clrScale,
+                              eerie_black.green * clrScale,
+                              eerie_black.blue * clrScale,
                               1.0f);
+
 
     button_sample = new TextButton(box_tabs);
     button_sample->setId(kButtonSample);
@@ -161,7 +162,7 @@ void DropsUI::initWidgets()
     button_filter->setText("FILTER");
     button_filter->background_color = buttonBackClr;
     button_filter->foreground_color = floral_white;
-    button_filter->highlight_color = blue_pigment;
+    button_filter->highlight_color = blue_pigment_1;
 
     box_tabs->setAbsolutePos(0, display_bottom + minimap_height);
     box_tabs->setWidth(getWidth());
@@ -483,12 +484,13 @@ void DropsUI::onNanoDisplay()
 
     // tab background
     beginPath();
-    const Color tabColor = eerie_black_3;
-    const float clrScale = 0.5f;
-    fillColor(tabColor.red * clrScale,
-              tabColor.green * clrScale,
-              tabColor.blue * clrScale,
-              1.0f);
+    // const Color tabColor = eerie_black_3;
+    // const float clrScale = 0.5f;
+    // fillColor(tabColor.red * clrScale,
+    //           tabColor.green * clrScale,
+    //           tabColor.blue * clrScale,
+    //           1.0f);
+    fillColor(eerie_black);
     rect(tabs_x, tabs_y, tabs_w, tabs_h);
     fill();
     closePath();

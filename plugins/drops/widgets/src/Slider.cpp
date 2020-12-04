@@ -161,11 +161,11 @@ void Slider::onNanoDisplay()
     const float stroke_width = 2.f; // FIXME: hard coded
 
     // background
-    beginPath();
-    fillColor(background_color);
-    rect(0, 0, width, height);
-    fill();
-    closePath();
+    // beginPath();
+    // fillColor(background_color);
+    // rect(0, 0, width, height);
+    // fill();
+    // closePath();
 
     // label
     const float label_x = 0.0f;
@@ -182,7 +182,7 @@ void Slider::onNanoDisplay()
     const float line_y = label_y + label_height_ + stroke_width / 2.f;
     const float line_end_x = width - margin_ - right_padding;
     beginPath();
-    strokeColor(foreground_color);
+    strokeColor(text_color);
     strokeWidth(stroke_width);
     moveTo(line_x, line_y);
     lineTo(line_end_x, line_y);
