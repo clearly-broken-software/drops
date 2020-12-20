@@ -20,7 +20,7 @@ jobs:
       - name: create-zip
         run: |
           cd /home/runner/work/drops/drops/bin/
-          zip /home/runner/work/drops_binaries.zip /home/runner/work/drops/drops/bin/* 
+          zip /home/runner/work/drops_binaries.zip ./* 
 
 #      - uses: actions/upload-artifact@v2
 #        with:
