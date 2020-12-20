@@ -18,7 +18,7 @@ jobs:
         run: sudo apt-get install libgl1-mesa-dev libx11-dev libsamplerate0-dev libsndfile1-dev libjack-jackd2-dev
       - name: make
         run: make -j2
-      - name: create_zip_debug
+      - name: create-zip
         run: |
           cd /home/runner/work/drops/drops/bin/
           zip /home/runner/work/drops_binaries.zip /home/runner/work/drops/drops/bin/* 
@@ -51,7 +51,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /home/runner/work/
+          asset_path: /home/runner/work/drops_binaries.zip
           asset_name: drops_binaries.zip
           asset_content_type: application/zip
 
