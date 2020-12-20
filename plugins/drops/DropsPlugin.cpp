@@ -747,6 +747,7 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
     //     break;
     case kSamplePitchKeyCenter:
         fSamplePitchKeyCenter = value;
+        makeSFZ();
         break;
     // case kSampleTune:
     //     fSampleTune = value;
@@ -1072,6 +1073,7 @@ void DropsPlugin::makeSFZ()
     opcodes["lfo03_cutoff"] = std::to_string(fFilterLFODepth * fFilterMaxFreq);
     
     opcodes["cutoff"] = std::to_string(fFilterCutOff * fFilterMaxFreq);
+    opcodes["pitch_keycenter"] = std::to_string(static_cast<int>(fSamplePitchKeyCenter));
 
     std::stringstream buffer;
     // amp ADSR
