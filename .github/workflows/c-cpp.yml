@@ -22,28 +22,34 @@ jobs:
         run: |
           cd /home/runner/work/drops/drops/bin/
           zip /home/runner/work/drops_binaries.zip /home/runner/work/drops/drops/bin/* 
-      - uses: actions/upload-artifact@v2
-        with:
-          name: drops-binaries
-          path: /home/runner/work/drops/drops/bin/
-      - name: clean
-        run: make dist-clean
-      - name: make-debug
-        run: make -j2 DEBUG=true
-      - uses: actions/upload-artifact@v2
-        with:
-          name: drops-binaries-debug
-          path: /home/runner/work/drops/drops/bin
+
+#      - uses: actions/upload-artifact@v2
+#        with:
+#          name: drops-binaries
+#          path: /home/runner/work/drops/drops/bin/
+
+#      - name: clean
+#        run: make dist-clean
+
+#      - name: make-debug
+#        run: make -j2 DEBUG=true
+
+#      - uses: actions/upload-artifact@v2
+#        with:
+#         name: drops-binaries-debug
+#          path: /home/runner/work/drops/drops/bin
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: testing
-          release_name: Release testing
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
           draft: false
           prerelease: true
+
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
