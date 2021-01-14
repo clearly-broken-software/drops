@@ -11,12 +11,13 @@ Knob::Knob(Window &parent) noexcept
     has_mouse_ = false;
     value_ = 0.f;
     value_tmp_ = 0.f;
-    maximum_value = 1.0f;
-    minimum_value = 0.0f;
+    max = 1.0f;
+    min = 0.0f;
     using_log_ = false;
     labelSize = 14.0f;
     label = "label";
     margin = 4.0f;
+    gauge_width = 8.0f;
     fontFace(NANOVG_DEJAVU_SANS_TTF);
     font_ = findFont(NANOVG_DEJAVU_SANS_TTF);
     if (font_ == -1)
@@ -37,12 +38,13 @@ Knob::Knob(Widget *parent) noexcept
     has_mouse_ = false;
     value_ = 0.f;
     value_tmp_ = 0.f;
-    maximum_value = 1.0f;
-    minimum_value = 0.0f;
+    max = 1.0f;
+    min = 0.0f;
     using_log_ = false;
     labelSize = 14.0f;
     label = "label";
     margin = 4.0f;
+    gauge_width = 8.0f;
     fontFace(NANOVG_DEJAVU_SANS_TTF);
     font_ = findFont(NANOVG_DEJAVU_SANS_TTF);
     if (font_ == -1)
@@ -76,7 +78,7 @@ bool Knob::onMouse(const MouseEvent &ev)
         {
             setValue(default_value);
             tmp_value_ = value_;
-            return true;
+            return false;
         }
         has_mouse_ = true;
         dragging_ = true;
@@ -86,7 +88,7 @@ bool Knob::onMouse(const MouseEvent &ev)
         if (callback != nullptr)
             callback->knobDragStarted(this);
 
-        return true;
+        return false;
     }
     else if (dragging_)
     {
@@ -95,7 +97,7 @@ bool Knob::onMouse(const MouseEvent &ev)
 
         dragging_ = false;
         repaint();
-        return true;
+        return false;
     }
 
     has_mouse_ = false;
@@ -110,21 +112,21 @@ bool Knob::onScroll(const ScrollEvent &ev)
         return false;
 
     const float d = (ev.mod & kModifierControl) ? 2000.0f : 200.0f;
-    float value = (using_log_ ? _invlogscale(tmp_value_) : tmp_value_) + (float(maximum_value - minimum_value) / d * 10.f * ev.delta.getY());
+    float value = (using_log_ ? _invlogscale(tmp_value_) : tmp_value_) + (float(max - min) / d * 10.f * ev.delta.getY());
 
     if (using_log_)
         value = _logscale(value);
 
-    if (value < minimum_value)
+    if (value < min)
     {
-        tmp_value_ = value = minimum_value;
+        tmp_value_ = value = min;
     }
-    else if (value > maximum_value)
+    else if (value > max)
     {
-        tmp_value_ = value = maximum_value;
+        tmp_value_ = value = max;
     }
     setValue(value);
-    return true;
+    return false;
 }
 
 bool Knob::onMotion(const MotionEvent &ev)
@@ -148,19 +150,19 @@ bool Knob::onMotion(const MotionEvent &ev)
     const int movY = last_mouse_y_ - ev.pos.getY();
     d = (ev.mod & kModifierControl) ? 2000.0f : 200.0f;
     //    printf("d = %f\n",d);
-    value = (using_log_ ? _invlogscale(tmp_value_) : tmp_value_) + (float(maximum_value - minimum_value) / d * float(movY));
+    value = (using_log_ ? _invlogscale(tmp_value_) : tmp_value_) + (float(max - min) / d * float(movY));
     //  printf("value %f\n", value);
 
     if (using_log_)
         value = _logscale(value);
 
-    if (value < minimum_value)
+    if (value < min)
     {
-        tmp_value_ = value = minimum_value;
+        tmp_value_ = value = min;
     }
-    else if (value > maximum_value)
+    else if (value > max)
     {
-        tmp_value_ = value = maximum_value;
+        tmp_value_ = value = max;
     }
 
     setValue(value);
@@ -168,15 +170,13 @@ bool Knob::onMotion(const MotionEvent &ev)
     last_mouse_x_ = ev.pos.getX();
     last_mouse_y_ = ev.pos.getY();
 
-    return true;
+    return false;
 }
 
 void Knob::onNanoDisplay()
 {
     const float height = getHeight();
     const float width = getWidth();
-
-    const float stroke_width = 8.0f;
 
     // measure string
     fontFaceId(font_);
@@ -186,10 +186,10 @@ void Knob::onNanoDisplay()
     const float label_width = bounds.getWidth();
     const float label_height = bounds.getHeight();
     // label
-    const float label_x = width / 2.0f; //- label_width / 2.0f;
+    const float label_x = width *.5f; //- label_width / 2.0f;
     const float label_y = height - label_height;
     const float radius = (height - label_height - margin) / 2.0f;
-    const float center_x = (width / 2.f);
+    const float center_x = (width * .5f);
     const float center_y = radius;
     beginPath();
     fillColor(text_color);
@@ -199,15 +199,15 @@ void Knob::onNanoDisplay()
 
     //Gauge (empty)
     beginPath();
-    strokeWidth(stroke_width);
+    strokeWidth(gauge_width);
     strokeColor(background_color);
-    arc(center_x, center_y, radius - stroke_width, 0.75f * M_PI, 0.25f * M_PI, NanoVG::Winding::CW);
+    arc(center_x, center_y, radius - gauge_width, 0.75f * M_PI, 0.25f * M_PI, NanoVG::Winding::CW);
     stroke();
     closePath();
 
     //Gauge (value)
     beginPath();
-    strokeWidth(stroke_width);
+    strokeWidth(gauge_width);
     if (has_mouse_)
     {
         fill_color_ = highlight_color;
@@ -218,29 +218,29 @@ void Knob::onNanoDisplay()
     }
 
     strokeColor(fill_color_);
-    arc(center_x, center_y, radius - stroke_width, 0.75f * M_PI, (0.75f + 1.5f * value_) * M_PI, NanoVG::Winding::CW);
+    arc(center_x, center_y, radius - gauge_width, 0.75f * M_PI, (0.75f + 1.5f * value_) * M_PI, NanoVG::Winding::CW);
     stroke();
     closePath();
 }
 
 void Knob::setValue(float val) noexcept
 {
-    value_ = std::max(minimum_value, std::min(val, maximum_value));
+    value_ = std::max(min, std::min(val, max));
     tmp_value_ = value_;
     callback->knobValueChanged(this, value_);
 }
 
 float Knob::_logscale(float value) const
 {
-    const float b = std::log(maximum_value / minimum_value) / (maximum_value - minimum_value);
-    const float a = maximum_value / std::exp(maximum_value * b);
+    const float b = std::log(max / min) / (max - min);
+    const float a = max / std::exp(max * b);
     return a * std::exp(b * value);
 }
 
 float Knob::_invlogscale(float value) const
 {
-    const float b = std::log(maximum_value / minimum_value) / (maximum_value - minimum_value);
-    const float a = maximum_value / std::exp(maximum_value * b);
+    const float b = std::log(max / min) / (max - min);
+    const float a = max / std::exp(max * b);
     return std::log(value / a) / b;
 }
 

@@ -17,6 +17,9 @@ namespace artwork
     extern char *zoom_in_hl;
     extern char *zoom_all_hl;
     extern char *zoom_in_out_hl;
+    extern char *filter_bandpass;
+    extern char *filter_highpass;
+    extern char *filter_lowpass;
 
 } // namespace artwork
 

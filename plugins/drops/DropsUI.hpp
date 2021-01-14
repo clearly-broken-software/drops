@@ -94,65 +94,51 @@ private:
     ScopedPointer<Menu> fNormalizeMenu, fKeyCenterMenu, fPlayModeMenu,
         fDirectionMenu;
     // amp tab
-    ScopedPointer<VBox> vbox_amp, vbox_amp_lfo;
-    ScopedPointer<HBox> hbox_amp_row_1, hbox_amp_row_2, box_sync;
+    ScopedPointer<VBox> vbox_amp;
+    ScopedPointer<HBox> hbox_amp_row_1, hbox_amp_row_2, hbox_amp_row_3;
     ScopedPointer<Knob>
         fAmpEgAttack, fAmpEgDecay, fAmpEgSustain, fAmpEgRelease;
     ScopedPointer<DropDown> fAmpLFOType;
     ScopedPointer<Menu> fAmpLFOTypeMenu;
-    ScopedPointer<Slider> fAmpLFOFreq, fAmpLFODepth;
+    ScopedPointer<Knob> fAmpLFOFreq, fAmpLFODepth;
     // ScopedPointer<DropDown> fAmpLFOSync;
     // ScopedPointer<Menu> fAmpLFOSyncMenu;
     //ScopedPointer<RadioButton> fAmpLFOFreqBeat;
 
-    // pitch tab
-    ScopedPointer<VBox> vbox_pitch, vbox_pitch_lfo;
-    ScopedPointer<HBox> hbox_pitch_row_1, hbox_pitch_row_2, hbox_pitch_sync;
-    ScopedPointer<Knob>
-        fPitchEgAttack, fPitchEgDecay, fPitchEgSustain, fPitchEgRelease;
-    ScopedPointer<DropDown> fPitchLFOType;
-    ScopedPointer<Menu> fPitchLFOTypeMenu;
-    ScopedPointer<Slider> fPitchLFOFreq, fPitchLFODepth;
-    // ScopedPointer<DropDown> fPitchLFOSync;
-    // ScopedPointer<Menu> fPitchLFOSyncMenu;
-    // ScopedPointer<RadioButton> fPitchLFOFreqBeat;
-
     // filter tab
     ScopedPointer<VBox> vbox_filter, vbox_filter_lfo;
-    ScopedPointer<HBox> hbox_filter_row_1, hbox_filter_row_2, hbox_filter_row_3,hbox_filter_sync;
-    ScopedPointer<Knob>
-        fFilterEgAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease,
+    ScopedPointer<HBox> hbox_filter_row_1, hbox_filter_row_2, hbox_filter_row_3;
+    ScopedPointer<Knob> fFilterEgAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease,
         fFilterCutOff, fFilterResonance;
-    ScopedPointer<DropDown> fFilterLFOType, fFilterType;
-    ScopedPointer<Menu> fFilterLFOTypeMenu, fFilterTypeMenu;
-    ScopedPointer<Slider> fFilterLFOFreq, fFilterLFODepth, fFilterDepth;
+    ScopedPointer<DropDown> fFilterLFOType;
+    ScopedPointer<Menu> fFilterLFOTypeMenu;
+    ScopedPointer<Knob> fFilterLFOFreq, fFilterLFODepth;
     // ScopedPointer<DropDown> fFilterLFOSync;
     // ScopedPointer<Menu> fFilterLFOSyncMenu;
     // ScopedPointer<RadioButton> fFilterLFOFreqBeat;
 
+    // pitch tab
+    // ScopedPointer<VBox> vbox_pitch, vbox_pitch_lfo;
+    // ScopedPointer<HBox> hbox_pitch_row_1, hbox_pitch_row_2, hbox_pitch_sync;
+    // ScopedPointer<Knob>
+    //     fPitchEgAttack, fPitchEgDecay, fPitchEgSustain, fPitchEgRelease;
+    // ScopedPointer<DropDown> fPitchLFOType;
+    // ScopedPointer<Menu> fPitchLFOTypeMenu;
+    // ScopedPointer<Slider> fPitchLFOFreq, fPitchLFODepth;
+    // // ScopedPointer<DropDown> fPitchLFOSync;
+    // ScopedPointer<Menu> fPitchLFOSyncMenu;
+    // ScopedPointer<RadioButton> fPitchLFOFreqBeat;
+
     ScopedPointer<SVGImage> dropsLogo, clearlyBrokenLogo, loopLeft, loopRight,
         zoomIn, zoomOut, zoomAll, zoomLoop;
     ScopedPointer<HBox> hbox_zoom_icons;
-    ScopedPointer<SVGButton> fZoomOut, fZoomIn, fZoomAll, fZoomInOut;
+    ScopedPointer<SVGButton> fZoomOut, fZoomIn, fZoomAll, fZoomInOut,
+     fFilterBandpass,fFilterLowpass,fFilterHighpass;
 
     void initWidgets();
-
-    void initTabSample();
-    void showTabSample();
-    void hideTabSample();
-
     void initTabAmp();
-    void showTabAmp();
-    void hideTabAmp();
-
-    void initTabPitch();
-    void showTabPitch();
-    void hideTabPitch();
-
+    //void initTabPitch();
     void initTabFilter();
-    void showTabFilter();
-    void hideTabFilter();
-
     void makeIcons();
     int loadSample();
     void drawWaveform();

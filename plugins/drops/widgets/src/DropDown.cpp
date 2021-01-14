@@ -105,10 +105,10 @@ void DropDown::setValue(float val)
     repaint();
 }
 
-
 float DropDown::getMenuOffset()
 {
     Rectangle<float> bounds;
+    fontSize(font_size);
     textBounds(0, 0, label.c_str(), nullptr, bounds);
     return bounds.getX() + bounds.getWidth();
 }
@@ -120,6 +120,22 @@ void DropDown::setMenu(Menu *menu)
     int x = getAbsoluteX() + getMenuOffset();
     int y = getAbsoluteY() + getHeight();
     menu_->setAbsolutePos(x, y);
+}
+
+void DropDown::resize()
+{
+    float itemWidth = 0.f;
+    if (menu_) // if menu is set, add width;
+    {
+        itemWidth = menu_->getWidth();
+    }
+    else // add width of item
+    {
+        Rectangle<float> bounds;
+        textBounds(0, 0, item.c_str(), nullptr, bounds);
+        itemWidth = bounds.getWidth();
+    }
+    setWidth(getMenuOffset() + itemWidth);
 }
 
 END_NAMESPACE_DISTRHO

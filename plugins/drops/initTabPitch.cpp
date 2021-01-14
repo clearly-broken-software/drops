@@ -224,42 +224,10 @@ void DropsUI::initTabPitch()
     vbox_pitch_lfo->positionWidgets();
     fPitchLFOType->setMenu(fPitchLFOTypeMenu);
     // fPitchLFOSync->setMenu(fPitchLFOSyncMenu);
-    hideTabPitch();
 }
 
-void DropsUI::hideTabPitch()
-{
-    vbox_pitch->hide();
-    hbox_pitch_row_1->hide();
-    fPitchEgAttack->hide();
-    fPitchEgDecay->hide();
-    fPitchEgSustain->hide();
-    fPitchEgRelease->hide();
 
-    hbox_pitch_row_2->hide();
-    fPitchLFOType->hide();
-    fPitchLFOFreq->hide();
-    fPitchLFODepth->hide();
-    // fPitchLFOSync->hide();
-    // fPitchLFOFreqBeat->hide();
-}
 
-void DropsUI::showTabPitch()
-{
-    vbox_pitch->show();
-    hbox_pitch_row_1->show();
-    fPitchEgAttack->show();
-    fPitchEgDecay->show();
-    fPitchEgSustain->show();
-    fPitchEgRelease->show();
 
-    hbox_pitch_row_2->show();
-    vbox_pitch_lfo->show();
-    fPitchLFOType->show();
-    fPitchLFOFreq->show();
-    fPitchLFODepth->show();
-    // fPitchLFOSync->show();
-    // fPitchLFOFreqBeat->show();
-}
 
 END_NAMESPACE_DISTRHO

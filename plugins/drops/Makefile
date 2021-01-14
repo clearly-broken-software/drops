@@ -30,11 +30,11 @@ FILES_UI  = \
 			widgets/src/SVGButton.cpp \
 			SVGImage.cpp \
 			Artwork.cpp \
+			SVG_Icons.cpp \
 			initTabAmp.cpp \
-			initTabSample.cpp \
-			initTabPitch.cpp \
-			initTabFilter.cpp \
-			SVG_Icons.cpp 
+			initTabFilter.cpp
+#			initTabSample.cpp \
+#			initTabPitch.cpp \
 
 # --------------------------------------------------------------
 # Do some magic

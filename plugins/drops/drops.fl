@@ -1,0 +1,212 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0304
+header_name {.h}
+code_name {.cxx}
+widget_class mainView {open
+  xywh {851 451 1000 515} type Double labelsize 12 hide
+} {
+  Fl_Group {} {
+    label HBOX_ROW1 open
+    xywh {5 5 995 50} labeltype NO_LABEL align 5
+  } {
+    Fl_Box {} {
+      image {artwork/drops_logo.png} xywh {5 5 222 50}
+    }
+    Fl_File_Input {} {
+      xywh {358 12 283 35} labeltype NO_LABEL
+    }
+    Fl_Box {} {selected
+      image {artwork/clearly_broken.png} xywh {712 10 286 40}
+    }
+  }
+  Fl_Group {} {open
+    xywh {175 70 602 35}
+  } {
+    Fl_Input_Choice {} {
+      label {PITCH-KEY-CENTER} open
+      xywh {175 77 96 20} labelsize 12 textsize 12
+    } {}
+    Fl_Value_Slider {} {
+      label TUNE
+      xywh {316 77 120 20} type Horizontal labelsize 12 align 4 minimum -1200 maximum 1200 step 1 textsize 12
+    }
+    Fl_Input_Choice {} {
+      label DIRECTION open
+      xywh {536 77 65 20} labelsize 12 textsize 12
+    } {}
+    Fl_Input_Choice {} {
+      label {PLAY MODE} open
+      xywh {709 77 65 20} labelsize 12 textsize 12
+    } {}
+  }
+  Fl_Group {} {open
+    xywh {10 107 985 212}
+  } {
+    Fl_Box {} {
+      label WAVEFORM
+      xywh {5 107 990 183} box DOWN_BOX align 16
+    }
+    Fl_Scrollbar {} {
+      xywh {5 289 990 30} type Horizontal
+    }
+  }
+  Fl_Group {} {open
+    xywh {12 329 978 176}
+  } {
+    Fl_Group {} {
+      label VBOX_AMP open
+      xywh {12 329 323 176} box BORDER_BOX labelsize 12 align 21
+    } {
+      Fl_Group {} {
+        label ROW1 open
+        xywh {90 344 245 26} labeltype NO_LABEL
+      } {
+        Fl_Choice {} {
+          label {LFO Type} open
+          xywh {90 345 65 25} down_box BORDER_BOX labelsize 12 textsize 12
+        } {}
+        Fl_Choice {} {
+          label {LFO Sync} open
+          xywh {252 345 65 25} down_box BORDER_BOX labelsize 12 textsize 12
+        } {}
+      }
+      Fl_Group {} {
+        label ROW2 open
+        xywh {48 381 219 40} labeltype NO_LABEL
+      } {
+        Fl_Dial {} {
+          label Freq
+          xywh {50 381 40 40} labelsize 12 align 4
+        }
+        Fl_Dial {} {
+          label Depth
+          xywh {153 381 40 40} labelsize 12 align 4
+        }
+      }
+      Fl_Group {} {
+        label ROW3 open
+        xywh {40 433 280 70} labeltype NO_LABEL labelsize 12 align 17
+      } {
+        Fl_Dial {} {
+          label Attack
+          xywh {50 441 40 40} labelsize 12
+        }
+        Fl_Dial {} {
+          label Decay
+          xywh {123 441 40 40} labelsize 12
+        }
+        Fl_Dial {} {
+          label Sustain
+          xywh {196 441 40 40} labelsize 12
+        }
+        Fl_Dial {} {
+          label Release
+          xywh {270 441 40 40} labelsize 12
+        }
+      }
+    }
+    Fl_Group {} {
+      label VBOX_FILTER open
+      xywh {339 329 320 176} box BORDER_BOX labelsize 12 align 21
+    } {
+      Fl_Choice {} {
+        label {LFO Type} open
+        xywh {408 361 65 25} down_box BORDER_BOX labelsize 12 textsize 12
+      } {}
+      Fl_Choice {} {
+        label {LFO Sync} open
+        xywh {408 402 65 25} down_box BORDER_BOX labelsize 12 textsize 12
+      } {}
+      Fl_Dial {} {
+        label Freq
+        xywh {520 379 40 40} labelsize 12 align 4
+      }
+      Fl_Dial {} {
+        label Depth
+        xywh {605 379 40 40} labelsize 12 align 4
+      }
+      Fl_Group {} {
+        label ROW3 open
+        xywh {367 433 280 70} labeltype NO_LABEL labelsize 12 align 17
+      } {
+        Fl_Dial {} {
+          label Attack
+          xywh {377 442 40 40} labelsize 12
+        }
+        Fl_Dial {} {
+          label Decay
+          xywh {450 442 40 40} labelsize 12
+        }
+        Fl_Dial {} {
+          label Sustain
+          xywh {523 442 40 40} labelsize 12
+        }
+        Fl_Dial {} {
+          label Release
+          xywh {597 442 40 40} labelsize 12
+        }
+      }
+      Fl_Box {} {
+        image {artwork/lp.png} xywh {510 337 34 22} box DOWN_BOX
+      }
+      Fl_Box {} {
+        image {artwork/bp.png} xywh {560 337 34 22} box UP_BOX
+      }
+      Fl_Box {} {
+        image {artwork/hp.png} xywh {610 337 34 22} box UP_BOX
+      }
+    }
+    Fl_Group {} {
+      label VBOX_PITCH open
+      xywh {667 329 323 176} box BORDER_BOX labelsize 12 align 21
+    } {
+      Fl_Group {} {
+        label ROW1 open
+        xywh {745 342 245 28} labeltype NO_LABEL
+      } {
+        Fl_Choice {} {
+          label {LFO Type} open
+          xywh {745 345 65 25} down_box BORDER_BOX labelsize 12 textsize 12
+        } {}
+        Fl_Choice {} {
+          label {LFO Sync} open
+          xywh {907 345 65 25} down_box BORDER_BOX labelsize 12 textsize 12
+        } {}
+      }
+      Fl_Group {} {
+        label ROW2 open
+        xywh {703 379 219 41} labeltype NO_LABEL
+      } {
+        Fl_Dial {} {
+          label Freq
+          xywh {705 379 40 40} labelsize 12 align 4
+        }
+        Fl_Dial {} {
+          label Depth
+          xywh {808 379 40 40} labelsize 12 align 4
+        }
+      }
+      Fl_Group {} {
+        label ROW3 open
+        xywh {695 432 280 70} labeltype NO_LABEL labelsize 12 align 17
+      } {
+        Fl_Dial {} {
+          label Attack
+          xywh {705 439 40 40} labelsize 12
+        }
+        Fl_Dial {} {
+          label Decay
+          xywh {778 439 40 40} labelsize 12
+        }
+        Fl_Dial {} {
+          label Sustain
+          xywh {851 439 40 40} labelsize 12
+        }
+        Fl_Dial {} {
+          label Release
+          xywh {925 439 40 40} labelsize 12
+        }
+      }
+    }
+  }
+}

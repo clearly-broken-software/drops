@@ -1,0 +1,56 @@
+UI wh {1000 515}
+  // HBOX_ROW1 xywh {5 5 995 50} 
+    image {artwork/drops_logo.png} xywh {5 5 222 50}
+    file open xywh {358 12 283 35}
+    image {artwork/clearly_broken.png} xywh {712 10 286 40}
+  HBOX_ROW2 {175 70 602 35}
+    DropDown PITCH-KEY-CENTER xywh {175 77 96 20} 
+    Slider TUNE xywh {316 77 120 20}
+    DropDown DIRECTION xywh {536 77 65 20} 
+    DropDown PLAY MODE xywh {709 77 65 20}
+  // DISPLAY xywh {10 107 985 212}
+    WAVEFORM xywh {5 107 990 183}
+    MINIMAP  xywh {5 289 990 30}
+  HBOX TABS xywh {12 329 978 176}
+    VBOX_AMP xywh {12 329 323 176}
+      HBOX ROW1 xywh {90 344 245 26}
+        DropDown LFO Type xywh {90 345 65 25}
+        DropDown LFO Sync xywh {252 345 65 25}
+      HBOX ROW2  xywh {48 381 219 40}
+        Knob Freq xywh {50 381 40 40}
+        Knob Depth xywh {153 381 40 40}
+      HBOX ROW3 xywh {40 433 280 70}
+        Knob Attack xywh {50 441 40 40} Knob
+        Knob Decay xywh {123 441 40 40} 
+        Knob Sustain xywh {196 441 40 40} 
+        Knob Release xywh {270 441 40 40} 
+    
+    VBOX_FILTER xywh {339 329 320 176}
+      HBOX ROW1
+        image button {artwork/lp.png} xywh {510 337 34 22} 
+        image button {artwork/bp.png} xywh {560 337 34 22}
+        image button {artwork/hp.png} xywh {610 337 34 22} 
+      HBOX ROW2 (FILTER LFO)
+        VBOX
+          DropDown LFO Type xywh {408 361 65 25}
+          DropDown LFO Sync xywh {408 402 65 25} 
+        Knob Freq xywh {520 379 40 40}  
+        Knob Depth xywh {605 379 40 40}  
+      HBOX ROW3 (ADSR) xywh {367 433 280 70}   
+        Knob Attack xywh {377 442 40 40}
+        Knob Decay xywh {450 442 40 40}
+        Knob Sustain xywh {523 442 40 40}
+        Knob Release xywh {597 442 40 40}
+    
+    VBOX_PITCH xywh {667 329 323 176} 
+      HBOX ROW1 xywh {745 342 245 28}
+        DropDown LFO Type xywh {745 345 65 25} 
+        DropDown LFO Sync xywh {907 345 65 25} 
+      HBOX ROW2 xywh {703 379 219 41} 
+        Knob Freq xywh {705 379 40 40}
+        Knob  Depth xywh {808 379 40 40}
+      HBOX ROW3 xywh {695 432 280 70}   
+        Knob Attack xywh {705 439 40 40} 
+        Knob Decay xywh {778 439 40 40} 
+        Knob Sustain xywh {851 439 40 40} 
+        Knob Release xywh {925 439 40 40} 

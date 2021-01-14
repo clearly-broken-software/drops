@@ -30,6 +30,7 @@ public:
 
     std::string label; // public, no getter or setter
     float labelSize;
+    float gauge_width;
     Color background_color;
     Color foreground_color;
     Color highlight_color;
@@ -37,8 +38,8 @@ public:
     float margin;
     float default_value;
     float step_value;
-    float minimum_value;
-    float maximum_value;
+    float min;
+    float max;
 
 protected:
     void onNanoDisplay() override;

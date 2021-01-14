@@ -19,9 +19,13 @@ public:
     virtual ~Callback() {}
     virtual void onSVGButtonClicked(SVGButton *svgButton) = 0;
   };
-  explicit SVGButton(Window &parent, char *svg, char *svgHL) noexcept;
-  explicit SVGButton(Widget *widget, char *svg, char *svgHL) noexcept;
+  explicit SVGButton(Window &parent, char *svg, char *svgHL = nullptr, float scale = 1.0f) noexcept;
+  explicit SVGButton(Widget *widget, char *svg, char *svgHL = nullptr, float scale = 1.0f) noexcept;
   void setCallback(Callback *cb);
+  Color background_color;
+  Color highlight_color;
+  Color active_color;
+  bool is_active;
 
 protected:
   void onNanoDisplay() override;
@@ -29,9 +33,12 @@ protected:
   bool onMotion(const MotionEvent &) override;
 
 private:
+  
   bool has_mouse_;
+  bool has_highlight;
   Callback *callback;
   ScopedPointer<SVGImage> svgImage,svgImageHL;
+  Color fill_color_;
 
   DISTRHO_LEAK_DETECTOR(SVGButton)
 };

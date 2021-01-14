@@ -59,7 +59,7 @@ bool Menu::onMouse(const MouseEvent &ev)
             {
                 const uint index = highlighted_item_ + item_view_first;
                 callback_->onMenuClicked(this, index, items_[index]);
-                return false;
+                return true;
             }
             if (ev.pos.getY() < font_size)
             {
@@ -99,6 +99,7 @@ bool Menu::onMotion(const MotionEvent &ev)
             highlighted_item_ = -1;
         }
         repaint();
+        return true;
     }
     else
     {
@@ -114,9 +115,10 @@ bool Menu::onMotion(const MotionEvent &ev)
             hide();
             repaint();
         }
+        return false;
     }
 
-    return false;
+    return true;
 }
 
 bool Menu::onScroll(const ScrollEvent &ev)
@@ -130,7 +132,7 @@ bool Menu::onScroll(const ScrollEvent &ev)
         const int delta = -static_cast<int>(ev.delta.getY());
         scrollMenu(delta);
     }
-    return false;
+    return true;
 }
 
 void Menu::onNanoDisplay()
@@ -235,14 +237,17 @@ void Menu::resize()
     {
         buffer << i << "\n";
     }
+    beginPath();
+    fontSize(font_size);
     textAlign(ALIGN_LEFT | ALIGN_TOP);
     textBoxBounds(0.f, 0.f, 200.f, buffer.str().c_str(), nullptr, bounds);
+    closePath();
 
     const float width = bounds[2] - bounds[0];
     float height = bounds[3] - bounds[1];
 
     if (max_size_reached_) // add up and down 'arrow'
-        height = max_view_items * (font_size + margin) + 2 * (font_size + margin);
+        height = max_view_items * (font_size) + (2 * font_size);
 
     setSize(width, height);
 }

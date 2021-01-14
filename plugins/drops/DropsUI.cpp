@@ -22,6 +22,8 @@ DropsUI::DropsUI()
     loadSharedResources();
     plugin = static_cast<DropsPlugin *>(getPluginInstancePointer());
 
+    fontFace(NANOVG_DEJAVU_SANS_TTF);
+
     viewStart = 0;
     viewEnd = 0;
     viewZoom = 0;
@@ -119,59 +121,13 @@ void DropsUI::initWidgets()
     fSampleOut->setCallback(this);
     fSampleOut->hide();
 
-    box_tabs = new HBox(window);
+    /*  box_tabs = new HBox(window);
 
     const float clrScale = 1.5f;
     const Color buttonBackClr(eerie_black.red * clrScale,
                               eerie_black.green * clrScale,
                               eerie_black.blue * clrScale,
                               1.0f);
-
-
-    button_sample = new TextButton(box_tabs);
-    button_sample->setId(kButtonSample);
-    button_sample->setCallback(this);
-    button_sample->setSize(100, 40);
-    button_sample->setText("SAMPLE");
-    button_sample->background_color = buttonBackClr;
-    button_sample->foreground_color = floral_white;
-    button_sample->highlight_color = flame;
-
-    button_amp = new TextButton(box_tabs);
-    button_amp->setId(kButtonAmp);
-    button_amp->setCallback(this);
-    button_amp->setSize(100, 40); //FIXME: harcoded
-    button_amp->setText("AMP");
-    button_amp->background_color = buttonBackClr;
-    button_amp->foreground_color = floral_white;
-    button_amp->highlight_color = saffron;
-
-    button_pitch = new TextButton(box_tabs);
-    button_pitch->setId(kButtonPitch);
-    button_pitch->setCallback(this);
-    button_pitch->setSize(100, 40);
-    button_pitch->setText("PITCH");
-    button_pitch->background_color = buttonBackClr;
-    button_pitch->foreground_color = floral_white;
-    button_pitch->highlight_color = shamrock_green;
-
-    button_filter = new TextButton(box_tabs);
-    button_filter->setId(kButtonFilter);
-    button_filter->setCallback(this);
-    button_filter->setSize(100, 40);
-    button_filter->setText("FILTER");
-    button_filter->background_color = buttonBackClr;
-    button_filter->foreground_color = floral_white;
-    button_filter->highlight_color = blue_pigment_1;
-
-    box_tabs->setAbsolutePos(0, display_bottom + minimap_height);
-    box_tabs->setWidth(getWidth());
-    box_tabs->justify_content = HBox::Justify_Content::left;
-    box_tabs->addWidget(button_sample);
-    box_tabs->addWidget(button_amp);
-    box_tabs->addWidget(button_pitch);
-    box_tabs->addWidget(button_filter);
-    box_tabs->positionWidgets();
 
     hbox_zoom_icons = new HBox(this);
     hbox_zoom_icons->setId(kHboxZoomIcons);
@@ -199,13 +155,232 @@ void DropsUI::initWidgets()
     hbox_zoom_icons->addWidget(fZoomAll);
     hbox_zoom_icons->addWidget(fZoomInOut);
 
-    hbox_zoom_icons->positionWidgets();
+    hbox_zoom_icons->positionWidgets(); */
 
-    initTabSample();
+    //    initTabSample();
+    fSamplePitchKeyCenter = new DropDown(window);
+    fSamplePitchKeyCenter->setId(kSamplePitchKeyCenter);
+    fSamplePitchKeyCenter->font_size = 14;
+    fSamplePitchKeyCenter->setSize(175,
+                                   fSamplePitchKeyCenter->font_size +
+                                       fSamplePitchKeyCenter->margin * 2.0f);
+    fSamplePitchKeyCenter->setAbsolutePos(175, 77);
+    fSamplePitchKeyCenter->setCallback(this);
+    fSamplePitchKeyCenter->label = "PITCH KEY-CENTER :";
+    fSamplePitchKeyCenter->item = "C4";
+    fSamplePitchKeyCenter->foreground_color = black_olive_2;
+    fSamplePitchKeyCenter->background_color = black_olive;
+    fSamplePitchKeyCenter->text_color = floral_white;
+
+    fKeyCenterMenu = new Menu(window);
+    fKeyCenterMenu->setId(kKeyCenterMenu);
+
+    fKeyCenterMenu->setCallback(this);
+    fKeyCenterMenu->font_size = 14;
+    fKeyCenterMenu->addItems({
+        "127 G9",
+        "126 F#9/Gb9",
+        "125 F9",
+        "124 E9",
+        "123 D#9/Eb9",
+        "122 D9",
+        "121 C#9/Db9",
+        "120 C9",
+        "119 B8",
+        "118 A#8/Bb8",
+        "117 A8",
+        "116 G#8/Ab8",
+        "115 G8",
+        "114 F#8/Gb8",
+        "113 F8",
+        "112 E8",
+        "111 D#8/Eb8",
+        "110 D8",
+        "109 C#8/Db8",
+        "108 C8",
+        "107 B7",
+        "106 A#7/Bb7",
+        "105 A7",
+        "104 G#7/Ab7",
+        "103 G7",
+        "102 F#7/Gb7",
+        "101 F7",
+        "100 E7",
+        "99 D#7/Eb7",
+        "98 D7",
+        "97 C#7/Db7",
+        "96 C7",
+        "95 B6",
+        "94 A#6/Bb6",
+        "93 A6",
+        "92 G#6/Ab6",
+        "91 G6",
+        "90 F#6/Gb6",
+        "89 F6",
+        "88 E6",
+        "87 D#6/Eb6",
+        "86 D6",
+        "85 C#6/Db6",
+        "84 C6",
+        "83 B5",
+        "82 A#5/Bb5",
+        "81 A5",
+        "80 G#5/Ab5",
+        "79 G5",
+        "78 F#5/Gb5",
+        "77 F5",
+        "76 E5",
+        "75 D#5/Eb5",
+        "74 D5",
+        "73 C#5/Db5",
+        "72 C5",
+        "71 B4",
+        "70 A#4/Bb4",
+        "69 A4",
+        "68 G#4/Ab4",
+        "67 G4",
+        "66 F#4/Gb4",
+        "65 F4",
+        "64 E4",
+        "63 D#4/Eb4",
+        "62 D4",
+        "61 C#4/Db4",
+        "60 C4",
+        "59 B3",
+        "58 A#3/Bb3",
+        "57 A3",
+        "56 G#3/Ab3",
+        "55 G3",
+        "54 F#3/Gb3",
+        "53 F3",
+        "52 E3",
+        "51 D#3/Eb3",
+        "50 D3",
+        "49 C#3/Db3",
+        "48 C3",
+        "47 B2",
+        "46 A#2/Bb2",
+        "45 A2",
+        "44 G#2/Ab2",
+        "43 G2",
+        "42 F#2/Gb2",
+        "41 F2",
+        "40 E2",
+        "39 D#2/Eb2",
+        "38 D2",
+        "37 C#2/Db2",
+        "36 C2",
+        "35 B1",
+        "34 A#1/Bb1",
+        "33 A1",
+        "32 G#1/Ab1",
+        "31 G1",
+        "30 F#1/Gb1",
+        "29 F1",
+        "28 E1",
+        "27 D#1/Eb1",
+        "26 D1",
+        "25 C#1/Db1",
+        "24 C1",
+        "23 B0",
+        "22 A#0/Bb0",
+        "21 A0",
+        "20  ",
+        "19  ",
+        "18  ",
+        "17  ",
+        "16  ",
+        "15  ",
+        "14  ",
+        "13  ",
+        "12  ",
+        "11  ",
+        "10  ",
+        "9  ",
+        "8  ",
+        "7  ",
+        "6  ",
+        "5  ",
+        "4  ",
+        "3  ",
+        "2  ",
+        "1  ",
+        "0 ",
+    });
+
+    fKeyCenterMenu->hide();
+    fKeyCenterMenu->background_color = black_olive;
+    fKeyCenterMenu->foreground_color = black_olive_2;
+    fKeyCenterMenu->highlight_color = flame;
+    fKeyCenterMenu->text_color = floral_white;
+    fKeyCenterMenu->item_view_first = 60;
+    fKeyCenterMenu->item_view_last = 63;
+    fKeyCenterMenu->max_view_items = 4;
+
+    fSamplePitchKeyCenter->setMenu(fKeyCenterMenu);
+    fSamplePitchKeyCenter->resize();
+
+    fSamplePlayDirection = new DropDown(window);
+    fSamplePlayDirection->setId(kSamplePlayDirection);
+    fSamplePlayDirection->font_size = 14;
+    fSamplePlayDirection->setSize(216,
+                                  fSamplePlayDirection->font_size +
+                                      fSamplePlayDirection->margin * 2.0f);
+    fSamplePlayDirection->setAbsolutePos(536, 77);
+    fSamplePlayDirection->setCallback(this);
+    fSamplePlayDirection->label = "DIRECTION: ";
+    fSamplePlayDirection->item = "FORWARD";
+    fSamplePlayDirection->foreground_color = floral_white;
+    fSamplePlayDirection->background_color = black_olive;
+    fSamplePlayDirection->text_color = floral_white;
+
+    fDirectionMenu = new Menu(window);
+    fDirectionMenu->setId(kDirectionMenu);
+    fDirectionMenu->setCallback(this);
+    fDirectionMenu->font_size = 14;
+    fDirectionMenu->addItems({"FORWARD", "REVERSE"});
+
+    fDirectionMenu->hide();
+    fDirectionMenu->background_color = black_olive;
+    fDirectionMenu->foreground_color = black_olive_2;
+    fDirectionMenu->highlight_color = flame;
+    fDirectionMenu->text_color = floral_white;
+
+    fSamplePlayDirection->setMenu(fDirectionMenu);
+    fSamplePlayDirection->resize();
+
+    fSamplePlayMode = new DropDown(window);
+    fSamplePlayMode->setId(kSamplePlayMode);
+    fSamplePlayMode->font_size = 14;
+    fSamplePlayMode->setSize(216,
+                             fSamplePlayMode->font_size +
+                                 fSamplePlayMode->margin * 2.0f);
+    fSamplePlayMode->setAbsolutePos(709, 77);
+    fSamplePlayMode->setCallback(this);
+    fSamplePlayMode->label = "LOOP MODE:";
+    fSamplePlayMode->item = "NO LOOP";
+    fSamplePlayMode->foreground_color = floral_white;
+    fSamplePlayMode->background_color = black_olive;
+    fSamplePlayMode->text_color = floral_white;
+
+    fPlayModeMenu = new Menu(window);
+    fPlayModeMenu->setId(kPlayModeMenu);
+    fPlayModeMenu->setCallback(this);
+    fPlayModeMenu->font_size = 14;
+    fPlayModeMenu->addItems({"NO LOOP", "ONE SHOT", "CONTINUOUS", "SUSTAIN"});
+
+    fPlayModeMenu->hide();
+    fPlayModeMenu->background_color = black_olive;
+    fPlayModeMenu->foreground_color = black_olive_2;
+    fPlayModeMenu->highlight_color = flame;
+    fPlayModeMenu->text_color = floral_white;
+
+    fSamplePlayMode->setMenu(fPlayModeMenu);
+    fSamplePlayMode->resize();
+
     initTabAmp();
-    initTabPitch();
     initTabFilter();
-    showTabSample();
+    // initTabPitch();
 }
 
 void DropsUI::makeIcons()
@@ -264,35 +439,35 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         fSamplePlayDirection->setValue(value);
         break;
     case kAmpEgAttack:
-        fAmpEgAttack->setValue(value);
-        repaint();
+        // fAmpEgAttack->setValue(value);
+        // repaint();
         break;
     case kAmpEgDecay:
-        fAmpEgDecay->setValue(value);
-        repaint();
+        // fAmpEgDecay->setValue(value);
+        // repaint();
         break;
     case kAmpEgSustain:
-        fAmpEgSustain->setValue(value);
-        repaint();
+        //  fAmpEgSustain->setValue(value);
+        //  repaint();
         break;
     case kAmpEgRelease:
-        fAmpEgRelease->setValue(value);
-        repaint();
+        // fAmpEgRelease->setValue(value);
+        // repaint();
         break;
     case kAmpLFOType:
-        fAmpLFOType->setValue(value);
-        repaint();
+        // fAmpLFOType->setValue(value);
+        // repaint();
         break;
     case kAmpLFOFreq:
-        fAmpLFOFreq->setValue(value);
-        repaint();
+        // fAmpLFOFreq->setValue(value);
+        // repaint();
         break;
     case kAmpLFODepth:
-        fAmpLFODepth->setValue(value);
-        repaint();
+        // fAmpLFODepth->setValue(value);
+        // repaint();
         break;
         /*  pitch tab */
-    case kPitchEgAttack:
+        /*    case kPitchEgAttack:
         fPitchEgAttack->setValue(value);
         break;
     case kPitchEgDecay:
@@ -345,66 +520,7 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         break;
     case kFilterLFODepth:
         fFilterLFODepth->setValue(value);
-        break;
-    case kActiveTab:
-    {
-        const uint index = static_cast<uint>(value);
-
-        switch (index)
-        {
-        case 0:
-            button_sample->isActive = true;
-            button_amp->isActive = false;
-            button_pitch->isActive = false;
-            button_filter->isActive = false;
-            tabEdge = button_sample->highlight_color;
-            showTabSample();
-            hideTabAmp();
-            hideTabPitch();
-            hideTabFilter();
-
-            break;
-        case 1:
-            button_sample->isActive = false;
-            button_amp->isActive = true;
-            button_pitch->isActive = false;
-            button_filter->isActive = false;
-            tabEdge = button_amp->highlight_color;
-            hideTabSample();
-            showTabAmp();
-            hideTabPitch();
-            hideTabFilter();
-            break;
-        case 2:
-            button_sample->isActive = false;
-            button_amp->isActive = false;
-            button_pitch->isActive = true;
-            button_filter->isActive = false;
-            tabEdge = button_pitch->highlight_color;
-            hideTabSample();
-            hideTabAmp();
-            showTabPitch();
-            hideTabFilter();
-            break;
-        case 3:
-            button_sample->isActive = false;
-            button_amp->isActive = false;
-            button_pitch->isActive = false;
-            button_filter->isActive = true;
-            tabEdge = button_filter->highlight_color;
-            hideTabSample();
-            hideTabAmp();
-            hideTabPitch();
-            showTabFilter();
-            break;
-
-        default:
-            printf("unexpected tab id\n");
-            break;
-        }
-        repaint();
-    }
-    break;
+        break; */
     default:
         printf("DropsUI::parameterChanged(%i,%f)\n", index, value);
         break;
@@ -449,11 +565,14 @@ void DropsUI::onNanoDisplay()
 {
     float width = getWidth();
     float height = getHeight();
+    // background
     beginPath();
     fillColor(eerie_black);
     rect(0.0f, 0.0f, width, height);
     fill();
     closePath();
+
+    // display
 
     beginPath();
     fillColor(black_olive);
@@ -491,15 +610,54 @@ void DropsUI::onNanoDisplay()
     //           tabColor.blue * clrScale,
     //           1.0f);
     fillColor(eerie_black);
-    rect(tabs_x, tabs_y, tabs_w, tabs_h);
+    // VBOX_AMP xywh {12 329 323 176}
+    rect(12, 329, 323, 176);
     fill();
     closePath();
 
     beginPath();
     strokeWidth(2.0f);
-    strokeColor(tabEdge);
-    rect(tabs_x + 2, tabs_y + 2, tabs_w - 4, tabs_h - 4);
+    strokeColor(saffron);
+    rect(12 + 2, 329 + 2, 323 - 4, 176 - 4);
     stroke();
+    closePath();
+
+    beginPath();
+    fillColor(saffron);
+    roundedRect(12 + 2, 329 + 2, 40, 18, 2);
+    fill();
+    closePath();
+    beginPath();
+    fontSize(16);
+    textAlign(ALIGN_TOP | ALIGN_LEFT);
+    fillColor(eerie_black);
+    text(12 + 4, 329 + 4, "AMP", nullptr);
+    closePath();
+
+    // VBOX_FILTER xywh {339 329 320 176}
+    beginPath();
+    fillColor(eerie_black);
+    rect(339, 329, 323, 176);
+    fill();
+    closePath();
+
+    beginPath();
+    strokeWidth(2.0f);
+    strokeColor(blue_pigment_1);
+    rect(339 + 2, 329 + 2, 323 - 4, 176 - 4);
+    stroke();
+    closePath();
+
+    beginPath();
+    fillColor(blue_pigment_1);
+    roundedRect(339 + 2, 329 + 2, 56, 18, 2);
+    fill();
+    closePath();
+    beginPath();
+    fontSize(16);
+    textAlign(ALIGN_TOP | ALIGN_LEFT);
+    fillColor(eerie_black);
+    text(339 + 4, 329 + 4, "FILTER", nullptr);
     closePath();
 }
 
@@ -962,59 +1120,6 @@ void DropsUI::onFileOpenButtonClicked(FileOpenButton *)
 
 void DropsUI::onTextButtonClicked(TextButton *tb)
 {
-    tabEdge = tb->highlight_color;
-    const uint id = tb->getId();
-    switch (id)
-    {
-    case kButtonSample:
-        button_sample->isActive = true;
-        button_amp->isActive = false;
-        button_pitch->isActive = false;
-        button_filter->isActive = false;
-        showTabSample();
-        hideTabAmp();
-        hideTabPitch();
-        hideTabFilter();
-        setParameterValue(kActiveTab, 0);
-        break;
-    case kButtonAmp:
-        button_sample->isActive = false;
-        button_amp->isActive = true;
-        button_pitch->isActive = false;
-        button_filter->isActive = false;
-        hideTabSample();
-        showTabAmp();
-        hideTabPitch();
-        hideTabFilter();
-        setParameterValue(kActiveTab, 1);
-        break;
-    case kButtonPitch:
-        button_sample->isActive = false;
-        button_amp->isActive = false;
-        button_pitch->isActive = true;
-        button_filter->isActive = false;
-        hideTabSample();
-        hideTabAmp();
-        showTabPitch();
-        hideTabFilter();
-        setParameterValue(kActiveTab, 2);
-        break;
-    case kButtonFilter:
-        button_sample->isActive = false;
-        button_amp->isActive = false;
-        button_pitch->isActive = false;
-        button_filter->isActive = true;
-
-        hideTabSample();
-        hideTabAmp();
-        hideTabPitch();
-        showTabFilter();
-        setParameterValue(kActiveTab, 3);
-        break;
-    default:
-        printf("unexpected tab id\n");
-        break;
-    }
 }
 
 void DropsUI::onDropDownClicked(DropDown *dropDown)
@@ -1041,10 +1146,7 @@ void DropsUI::onDropDownClicked(DropDown *dropDown)
     //     fAmpLFOSyncMenu->show();
     //     break;
     case kPitchLFOType:
-        fPitchLFOTypeMenu->show();
-        break;
-    case kFilterType:
-        fFilterTypeMenu->show();
+        //   fPitchLFOTypeMenu->show();
         break;
     case kFilterLFOType:
         fFilterLFOTypeMenu->show();
@@ -1266,14 +1368,9 @@ void DropsUI::onMenuClicked(Menu *menu, uint menu_id, std::string item)
     //     setParameterValue(kAmpLFOSync, menu_id);
     //     break;
     case kPitchLFOTypeMenu:
-        fPitchLFOType->item = item;
-        fPitchLFOTypeMenu->hide();
+        //   fPitchLFOType->item = item;
+        //   fPitchLFOTypeMenu->hide();
         setParameterValue(kPitchLFOType, menu_id);
-        break;
-    case kFilterTypeMenu:
-        fFilterType->item = item;
-        fFilterTypeMenu->hide();
-        setParameterValue(kFilterType, menu_id);
         break;
     case kFilterLFOTypeMenu:
         fFilterLFOType->item = item;
@@ -1305,37 +1402,51 @@ void DropsUI::onSVGButtonClicked(SVGButton *svgb)
     const uint id = svgb->getId();
     switch (id)
     {
-    case kZoomOut:
-        zoomButtons(0.05f);
-        break;
-    case kZoomIn:
-        zoomButtons(-0.05f);
-        break;
-    case kZoomAll:
-        viewStart = 0;
-        viewEnd = sampleLength;
-        viewZoom = 1.0f;
-        setScrollbarWidgets();
-        setMarkers();
+    // case kZoomOut:
+    //     zoomButtons(0.05f);
+    //     break;
+    // case kZoomIn:
+    //     zoomButtons(-0.05f);
+    //     break;
+    // case kZoomAll:
+    //     viewStart = 0;
+    //     viewEnd = sampleLength;
+    //     viewZoom = 1.0f;
+    //     setScrollbarWidgets();
+    //     setMarkers();
+    //     repaint();
+    //     break;
+    // case kZoomInOut:
+    // {
+    //     viewStart = sampleIn;
+    //     viewEnd = sampleOut;
+    //     viewEnd = clamp<sf_count_t>(viewEnd, sampleLength, sampleIn + display_width);
+    //     const float inOutLength = static_cast<float>(sampleOut - sampleIn);
+    //     const float samples_pp = inOutLength / static_cast<float>(display_width);
+    //     const float l2_spp = log2(samples_pp);
+    //     const float l2_vmz = log2(viewMaxZoom);
+    //     viewZoom = l2_spp / l2_vmz;
+    //     viewZoom = clamp<float>(viewZoom, 1.0f, 0.0f);
+    //     setScrollbarWidgets();
+    //     setMarkers();
+    //     repaint();
+    //     break;
+    // }
+    case kFilterLowpass:
+        fFilterBandpass->is_active = false;
+        fFilterHighpass->is_active = false;
         repaint();
         break;
-    case kZoomInOut:
-    {
-        viewStart = sampleIn;
-        viewEnd = sampleOut;
-        viewEnd = clamp<sf_count_t>(viewEnd, sampleLength, sampleIn + display_width);
-        const float inOutLength = static_cast<float>(sampleOut - sampleIn);
-        const float samples_pp = inOutLength / static_cast<float>(display_width);
-        const float l2_spp = log2(samples_pp);
-        const float l2_vmz = log2(viewMaxZoom);
-        viewZoom = l2_spp / l2_vmz;
-        viewZoom = clamp<float>(viewZoom, 1.0f, 0.0f);
-        setScrollbarWidgets();
-        setMarkers();
+    case kFilterBandpass:
+        fFilterLowpass->is_active = false;
+        fFilterHighpass->is_active = false;
         repaint();
         break;
-    }
-
+    case kFilterHighpass:
+        fFilterLowpass->is_active = false;
+        fFilterBandpass->is_active = false;
+        repaint();
+        break;
     default:
 #ifdef DEBUG
         printf("undefined svg button clicked\n");

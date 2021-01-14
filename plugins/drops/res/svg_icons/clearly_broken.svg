@@ -5,11 +5,35 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="214.55186"
    height="30"
    viewBox="0 0 56.766846 7.9375001"
    version="1.1"
-   id="svg1812">
+   id="svg1812"
+   sodipodi:docname="clearly_broken.svg"
+   inkscape:version="1.0.1 (0767f8302a, 2020-10-17)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="973"
+     id="namedview16"
+     showgrid="false"
+     inkscape:zoom="6.5625158"
+     inkscape:cx="107.27593"
+     inkscape:cy="15"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1812" />
   <defs
      id="defs1806" />
   <metadata
@@ -20,13 +44,16 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
      id="layer1"
-     transform="matrix(0.93749952,0,0,0.93749952,-11.157444,-55.389321)">
+     transform="matrix(0.93749952,0,0,0.93749952,-11.157444,-55.389321)"
+     inkscape:export-filename="/home/rob/git/drops/plugins/drops/artwork/clearly_broken.png"
+     inkscape:export-xdpi="128"
+     inkscape:export-ydpi="128">
     <g
        id="text4509"
        style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#d7172f;fill-opacity:1;stroke:none;stroke-width:0.264583"
