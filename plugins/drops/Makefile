@@ -32,9 +32,8 @@ FILES_UI  = \
 			Artwork.cpp \
 			SVG_Icons.cpp \
 			initTabAmp.cpp \
-			initTabFilter.cpp
-#			initTabSample.cpp \
-#			initTabPitch.cpp \
+			initTabFilter.cpp \
+			initTabPitch.cpp
 
 # --------------------------------------------------------------
 # Do some magic

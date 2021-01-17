@@ -37,27 +37,33 @@ DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 2)
     synth.setSampleRate(sampleRate);
     //synth.loadSfzFile("/home/rob/git/drops/plugins/drops/res/basic.sfz");
     synth.setNumVoices(16);
-    fPitchBendDepth = 0.0f;
-    fPolyphony = 0.0f;
-    fGain = 0.0f;
     fSampleIn = 0.0f;
     fSampleOut = 1.0f;
     fSampleLoopStart = 0.0f;
     fSampleLoopEnd = 1.0f;
-    fSampleXFade = 0.0f;
-    fSampleNormalize = 0.0f;
     fSamplePitchKeyCenter = 60.0f;
-    fSampleTune = 0.0f;
     fSamplePlayMode = 0.0f;
     fSamplePlayDirection = 0.0f;
+    // amp
+    fAmpLFOType = 0.0f;
+    fAmpLFOFreq = 0.0f;
+    fAmpLFODepth = 0.0f;
     fAmpEGAttack = 0.0f;
     fAmpEgDecay = 0.0f;
     fAmpEgSustain = 1.0f;
     fAmpEgRelease = 0.0f;
-    fAmpLFOType = 0.0f;
-    fAmpLFOFreq = 0.0f;
-    fAmpLFODepth = 0.0f;
-    fAmpLFOSync = 0.0f;
+    // filter
+    fFilterType = 0.0f;
+    fFilterLFOType = 0.0f;
+    fFilterLFOFreq = 0.0f;
+    fFilterLFODepth = 0.0f;
+    fFilterCutOff = 1.0f;
+    fFilterResonance = 0.0f;
+    fFilterEGAttack = 0.0f;
+    fFilterEgDecay = 0.0f;
+    fFilterEgSustain = 0.0f;
+    fFilterEgRelease = 0.0f;
+    // pitch
     fPitchEGAttack = 0.0f;
     fPitchEgDecay = 0.0f;
     fPitchEgSustain = 0.0f;
@@ -67,20 +73,7 @@ DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 2)
     fPitchLFOFreq = 0.0f;
     fPitchLFODepth = 0.0f;
     fPitchLFOSync = 0.0f;
-    fFilterType = 0.0f;
-    fFilterCutOff = 1.0f;
-    fFilterResonance = 0.0f;
-    fFilterEGAttack = 0.0f;
-    fFilterEgDecay = 0.0f;
-    fFilterEgSustain = 0.0f;
-    fFilterEgRelease = 0.0f;
-    fFilterEgDepth = 0.0f;
-    fFilterLFOType = 0.0f;
-    fFilterLFOFreq = 0.0f;
-    fFilterLFODepth = 0.0f;
-    fFilterLFOSync = 0.0f;
-    bpm = 120;
-    fActiveTab = static_cast<float>(kSampleTab);
+
     fFilterMaxFreq = sampleRate * .5;
     initSFZ();
 }
@@ -92,30 +85,6 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
 {
     switch (index)
     {
-    // case kPitchBendDepth:
-    //     parameter.name = "Pitchbend Depth";
-    //     parameter.symbol = "pitchbend_depth";
-    //     parameter.ranges.min = 0.0f;
-    //     parameter.ranges.max = 1.0f;
-    //     parameter.ranges.def = 0.0f;
-    //     parameter.hints = kParameterIsAutomable;
-    //     break;
-    // case kPolyphony:
-    //     parameter.name = "Polyphony";
-    //     parameter.symbol = "polyphony";
-    //     parameter.ranges.min = 0.0f;
-    //     parameter.ranges.max = 1.0f;
-    //     parameter.ranges.def = 0.0f;
-    //     parameter.hints = kParameterIsAutomable;
-    //     break;
-    // case kGain:
-    //     parameter.name = "Gain";
-    //     parameter.symbol = "gain";
-    //     parameter.ranges.min = 0.0f;
-    //     parameter.ranges.max = 1.0f;
-    //     parameter.ranges.def = 0.0f;
-    //     parameter.hints = kParameterIsAutomable;
-    //     break;
     case kSampleIn:
         parameter.name = "Sample In";
         parameter.symbol = "sample_in";
@@ -148,22 +117,6 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.ranges.def = 1.0f;
         parameter.hints = kParameterIsAutomable;
         break;
-    // case kSampleXFade:
-    //     parameter.name = "Crossfade";
-    //     parameter.symbol = "crossfade";
-    //     parameter.ranges.min = 0.0f;
-    //     parameter.ranges.max = 1.0f;
-    //     parameter.ranges.def = 0.0f;
-    //     parameter.hints = kParameterIsAutomable;
-    //     break;
-    // case kSampleNormalize:
-    //     parameter.name = "Normalize";
-    //     parameter.symbol = "normalize";
-    //     parameter.ranges.min = 0.0f;
-    //     parameter.ranges.max = 1.0f;
-    //     parameter.ranges.def = 0.0f;
-    //     parameter.hints = kParameterIsAutomable;
-    //     break;
     case kSamplePitchKeyCenter:
         parameter.name = "Key Center";
         parameter.symbol = "pitch_center";
@@ -172,14 +125,6 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.ranges.def = 60.0f;
         parameter.hints = kParameterIsAutomable | kParameterIsInteger;
         break;
-    // case kSampleTune:
-    //     parameter.name = "Tune";
-    //     parameter.symbol = "tune";
-    //     parameter.ranges.min = -100.0f;
-    //     parameter.ranges.max = 100.0f;
-    //     parameter.ranges.def = 0.0f;
-    //     parameter.hints = kParameterIsAutomable | kParameterIsInteger;
-    //     break;
     case kSamplePlayMode:
         parameter.name = "Playmode";
         parameter.symbol = "playmode";
@@ -209,6 +154,42 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
             ParameterEnumerationValue(1.0f, "reverse"),
         };
         parameter.hints = kParameterIsAutomable;
+        break;
+    case kAmpLFOType:
+        parameter.name = "Amp LFO Type";
+        parameter.symbol = "amp_lfo_type";
+        parameter.ranges.min = 0.0f;
+        parameter.ranges.max = 7.0f;
+        parameter.ranges.def = 0.0f;
+        parameter.enumValues.count = 8;
+        parameter.enumValues.restrictedMode = true;
+        parameter.enumValues.values = new ParameterEnumerationValue[8]{
+            ParameterEnumerationValue(0.0f, "triangle"),
+            ParameterEnumerationValue(1.0f, "sine"),
+            ParameterEnumerationValue(2.0f, "75% pulse"),
+            ParameterEnumerationValue(3.0f, "square (50% pulse)"),
+            ParameterEnumerationValue(4.0f, "25% pulse"),
+            ParameterEnumerationValue(5.0f, "12:5% pulse"),
+            ParameterEnumerationValue(6.0f, "saw going up"),
+            ParameterEnumerationValue(7.0f, "saw going down"),
+        };
+        parameter.hints = kParameterIsAutomable;
+        break;
+    case kAmpLFOFreq:
+        parameter.name = "Amp LFO Freq";
+        parameter.symbol = "amp_lfo_freq";
+        parameter.ranges.min = 0.0f;
+        parameter.ranges.max = 20.0f;
+        parameter.ranges.def = 0.0f;
+        parameter.hints = kParameterIsAutomable;
+        break;
+    case kAmpLFODepth:
+        parameter.name = "Amp LFO Depth";
+        parameter.symbol = "amp_lfo_depth";
+        parameter.ranges.min = 0.0f;
+        parameter.ranges.max = 1.0f;
+        parameter.ranges.def = 0.0f;
+        parameter.hints = kParameterIsAutomable | kParameterIsInteger;
         break;
     case kAmpEgAttack:
         parameter.name = "Amp Attack";
@@ -242,116 +223,27 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.ranges.def = 0.0f;
         parameter.hints = kParameterIsAutomable;
         break;
-    case kAmpLFOType:
-        parameter.name = "Amp LFO Type";
-        parameter.symbol = "amp_lfo_type";
+    case kFilterType:
+        parameter.name = "Filter Type";
+        parameter.symbol = "filter_type";
         parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 7.0f;
+        parameter.ranges.max = 2.0f;
         parameter.ranges.def = 0.0f;
-        parameter.enumValues.count = 8;
+        parameter.enumValues.count = 3;
         parameter.enumValues.restrictedMode = true;
-        parameter.enumValues.values = new ParameterEnumerationValue[8]{
-            ParameterEnumerationValue(0.0f, "sine"),
-            ParameterEnumerationValue(1.0f, "triangle"),
-            ParameterEnumerationValue(2.0f, "75% pulse"),
-            ParameterEnumerationValue(3.0f, "square (50% pulse)"),
-            ParameterEnumerationValue(4.0f, "25% pulse"),
-            ParameterEnumerationValue(5.0f, "12:5% pulse"),
-            ParameterEnumerationValue(6.0f, "saw going up"),
-            ParameterEnumerationValue(7.0f, "saw going down"),
-        };
+        parameter.enumValues.values = new ParameterEnumerationValue[3]{
+            ParameterEnumerationValue(0.0f, "lpf_2p"),
+            ParameterEnumerationValue(0.0f, "bpf_2p"),
+            ParameterEnumerationValue(0.0f, "hpf_2p")};
         parameter.hints = kParameterIsAutomable;
-        break;
-
-    case kAmpLFOFreq:
-        parameter.name = "Amp LFO Freq";
-        parameter.symbol = "amp_lfo_freq";
         parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 20.0f;
-        parameter.ranges.def = 0.0f;
-        parameter.hints = kParameterIsAutomable;
-        break;
-    case kAmpLFODepth:
-        parameter.name = "Amp LFO Depth";
-        parameter.symbol = "amp_lfo_depth";
-        parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 12.0f;
+        parameter.ranges.max = 2.0f;
         parameter.ranges.def = 0.0f;
         parameter.hints = kParameterIsAutomable | kParameterIsInteger;
         break;
-    // case kAmpLFOSync:
-    //     parameter.name = "Amp LFO Sync";
-    //     parameter.symbol = "amp_lfo_sync";
-    //     parameter.ranges.min = 0.0f;
-    //     parameter.ranges.max = 17.0f;
-    //     parameter.ranges.def = 0.0f;
-    //     parameter.hints = kParameterIsAutomable;
-    //     parameter.enumValues.count = 18;
-    //     parameter.enumValues.restrictedMode = true;
-    //     parameter.enumValues.values = new ParameterEnumerationValue[18]{
-    //         ParameterEnumerationValue(0.0f, "1/16"),
-    //         ParameterEnumerationValue(1.0f, "1/8"),
-    //         ParameterEnumerationValue(2.0f, "1/4"),
-    //         ParameterEnumerationValue(3.0f, "1/2"),
-    //         ParameterEnumerationValue(4.0f, "1/1"),
-    //         ParameterEnumerationValue(5.0f, "2/1"),
-    //         ParameterEnumerationValue(6.0f, "1/16T"),
-    //         ParameterEnumerationValue(7.0f, "1/8T"),
-    //         ParameterEnumerationValue(8.0f, "1/4T"),
-    //         ParameterEnumerationValue(9.0f, "1/2T"),
-    //         ParameterEnumerationValue(10.0f, "1/1T"),
-    //         ParameterEnumerationValue(11.0f, "2/1T"),
-    //         ParameterEnumerationValue(12.0f, "1/16."),
-    //         ParameterEnumerationValue(13.0f, "1/8."),
-    //         ParameterEnumerationValue(14.0f, "1/4."),
-    //         ParameterEnumerationValue(15.0f, "1/2."),
-    //         ParameterEnumerationValue(16.0f, "1/1."),
-    //         ParameterEnumerationValue(17.0f, "2/1."),
-    //     };
-    //     break;
-    case kPitchEgAttack:
-        parameter.name = "Pitch Attack";
-        parameter.symbol = "pitch_attack";
-        parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 1.0f;
-        parameter.ranges.def = 0.0f;
-        parameter.hints = kParameterIsAutomable;
-        break;
-    case kPitchEgDecay:
-        parameter.name = "Pitch Decay";
-        parameter.symbol = "pitch_decay";
-        parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 1.0f;
-        parameter.ranges.def = 0.0f;
-        parameter.hints = kParameterIsAutomable;
-        break;
-    case kPitchEgSustain:
-        parameter.name = "Pitch Sustain";
-        parameter.symbol = "pitch_sustain";
-        parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 1.0f;
-        parameter.ranges.def = 0.0f;
-        parameter.hints = kParameterIsAutomable;
-        break;
-    case kPitchEgRelease:
-        parameter.name = "Pitch Release";
-        parameter.symbol = "pitch_release";
-        parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 1.0f;
-        parameter.ranges.def = 0.0f;
-        parameter.hints = kParameterIsAutomable;
-        break;
-    // case kPitchEgDepth:
-    //     parameter.name = "Pitch EG Depth";
-    //     parameter.symbol = "pitch_eg_depth";
-    //     parameter.ranges.min = 0.0f;
-    //     parameter.ranges.max = 1.0f;
-    //     parameter.ranges.def = 0.0f;
-    //     parameter.hints = kParameterIsAutomable;
-    //     break;
-    case kPitchLFOType:
-        parameter.name = "Pitch LFO Type";
-        parameter.symbol = "pitch_lfo_type";
+    case kFilterLFOType:
+        parameter.name = "Filter LFO Type";
+        parameter.symbol = "filter_lfo_type";
         parameter.ranges.min = 0.0f;
         parameter.ranges.max = 7.0f;
         parameter.ranges.def = 0.0f;
@@ -369,68 +261,23 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         };
         parameter.hints = kParameterIsAutomable;
         break;
-    case kPitchLFOFreq:
-        parameter.name = "Pitch LFO Freq";
-        parameter.symbol = "pitch_lfo_freq";
+    case kFilterLFOFreq:
+        parameter.name = "Filter LFO Freq";
+        parameter.symbol = "filter_lfo_freq";
         parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 20.0f;
+        parameter.ranges.max = 1.0f;
         parameter.ranges.def = 0.0f;
         parameter.hints = kParameterIsAutomable;
         break;
-    case kPitchLFODepth:
-        parameter.name = "Pitch LFO Depth";
-        parameter.symbol = "pitch_lfo_depth";
+    case kFilterLFODepth:
+        parameter.name = "Filter LFO Depth";
+        parameter.symbol = "filter_lfo_depth";
         parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 1200.0f;
+        parameter.ranges.max = 1.0f;
         parameter.ranges.def = 0.0f;
         parameter.hints = kParameterIsAutomable;
         break;
-    // case kPitchLFOSync:
-    //     parameter.name = "Pitch LFO Sync";
-    //     parameter.symbol = "pitch_lfo_sync";
-    //     parameter.ranges.min = 0.0f;
-    //     parameter.ranges.max = 1.0f;
-    //     parameter.ranges.def = 0.0f;
-    //     parameter.hints = kParameterIsAutomable;
-    //     break;
-    case kFilterType:
-        parameter.name = "Filter Type";
-        parameter.symbol = "filter_type";
-        parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 22.0f;
-        parameter.ranges.def = 0.0f;
-        parameter.enumValues.count = 23;
-        parameter.enumValues.restrictedMode = true;
-        parameter.enumValues.values = new ParameterEnumerationValue[23]{
-            ParameterEnumerationValue(0.0f, "lpf_1p"),
-            ParameterEnumerationValue(0.0f, "hpf_1p"),
-            ParameterEnumerationValue(0.0f, "lpf_2p"),
-            ParameterEnumerationValue(0.0f, "hpf_2p"),
-            ParameterEnumerationValue(0.0f, "bpf_2p"),
-            ParameterEnumerationValue(0.0f, "brf_2p"),
-            ParameterEnumerationValue(0.0f, "bpf_1p"),
-            ParameterEnumerationValue(0.0f, "brf_1p"),
-            ParameterEnumerationValue(0.0f, "apf_1p"),
-            ParameterEnumerationValue(0.0f, "lpf_2p_sv"),
-            ParameterEnumerationValue(0.0f, "hpf_2p_sv"),
-            ParameterEnumerationValue(0.0f, "bpf_2p_sv"),
-            ParameterEnumerationValue(0.0f, "brf_2p_sv"),
-            ParameterEnumerationValue(0.0f, "pkf_2p"),
-            ParameterEnumerationValue(0.0f, "lpf_4p"),
-            ParameterEnumerationValue(0.0f, "hpf_4p"),
-            ParameterEnumerationValue(0.0f, "lpf_6p"),
-            ParameterEnumerationValue(0.0f, "hpf_6p"),
-            ParameterEnumerationValue(0.0f, "comb"),
-            ParameterEnumerationValue(0.0f, "pink"),
-            ParameterEnumerationValue(0.0f, "lsh"),
-            ParameterEnumerationValue(0.0f, "hsh"),
-            ParameterEnumerationValue(0.0f, "peq")};
-        parameter.hints = kParameterIsAutomable;
-        parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 22.0f;
-        parameter.ranges.def = 0.0f;
-        parameter.hints = kParameterIsAutomable;
-        break;
+
     case kFilterCutOff:
         parameter.name = "Cutoff";
         parameter.symbol = "cutoff";
@@ -479,17 +326,9 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.ranges.def = 0.0f;
         parameter.hints = kParameterIsAutomable;
         break;
-    // case kFilterEgDepth:
-    //     parameter.name = "Filter EG Depth";
-    //     parameter.symbol = "filter_eg_depth";
-    //     parameter.ranges.min = 0.0f;
-    //     parameter.ranges.max = 1.0f;
-    //     parameter.ranges.def = 0.0f;
-    //     parameter.hints = kParameterIsAutomable;
-    //     break;
-    case kFilterLFOType:
-        parameter.name = "Filter LFO Type";
-        parameter.symbol = "filter_lfo_type";
+    case kPitchLFOType:
+        parameter.name = "Pitch LFO Type";
+        parameter.symbol = "pitch_lfo_type";
         parameter.ranges.min = 0.0f;
         parameter.ranges.max = 7.0f;
         parameter.ranges.def = 0.0f;
@@ -507,43 +346,52 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         };
         parameter.hints = kParameterIsAutomable;
         break;
-    case kFilterLFOFreq:
-        parameter.name = "Filter LFO Freq";
-        parameter.symbol = "filter_lfo_freq";
-        parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 20.0f;
-        parameter.ranges.def = 0.0f;
-        parameter.hints = kParameterIsAutomable;
-        break;
-    case kFilterLFODepth:
-        parameter.name = "Filter LFO Depth";
-        parameter.symbol = "filter_lfo_depth";
+    case kPitchLFOFreq:
+        parameter.name = "Pitch LFO Freq";
+        parameter.symbol = "pitch_lfo_freq";
         parameter.ranges.min = 0.0f;
         parameter.ranges.max = 1.0f;
         parameter.ranges.def = 0.0f;
         parameter.hints = kParameterIsAutomable;
         break;
-    // case kFilterLFOSync:
-    //     parameter.name = "Filter LFO Sync";
-    //     parameter.symbol = "filter_lfo_sync";
-    //     parameter.ranges.min = 0.0f;
-    //     parameter.ranges.max = 1.0f;
-    //     parameter.ranges.def = 0.0f;
-    //     parameter.hints = kParameterIsAutomable;
-    //     break;
-    case kActiveTab:
-        parameter.name = "Active Tab";
-        parameter.symbol = "active_tab";
+    case kPitchLFODepth:
+        parameter.name = "Pitch LFO Depth";
+        parameter.symbol = "pitch_lfo_depth";
         parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 3.0f;
-        parameter.enumValues.count = 4;
-        parameter.enumValues.restrictedMode = true;
-        parameter.enumValues.values = new ParameterEnumerationValue[4]{
-            ParameterEnumerationValue(0.0f, "Sample Tab"),
-            ParameterEnumerationValue(1.0f, "Amp Tab"),
-            ParameterEnumerationValue(2.0f, "Pitch Tab"),
-            ParameterEnumerationValue(3.0f, "Filter Tab"),
-        };
+        parameter.ranges.max = 1.0f;
+        parameter.ranges.def = 0.0f;
+        parameter.hints = kParameterIsAutomable;
+        break;
+    case kPitchEgAttack:
+        parameter.name = "Pitch Attack";
+        parameter.symbol = "pitch_attack";
+        parameter.ranges.min = 0.0f;
+        parameter.ranges.max = 1.0f;
+        parameter.ranges.def = 0.0f;
+        parameter.hints = kParameterIsAutomable;
+        break;
+    case kPitchEgDecay:
+        parameter.name = "Pitch Decay";
+        parameter.symbol = "pitch_decay";
+        parameter.ranges.min = 0.0f;
+        parameter.ranges.max = 1.0f;
+        parameter.ranges.def = 0.0f;
+        parameter.hints = kParameterIsAutomable;
+        break;
+    case kPitchEgSustain:
+        parameter.name = "Pitch Sustain";
+        parameter.symbol = "pitch_sustain";
+        parameter.ranges.min = 0.0f;
+        parameter.ranges.max = 1.0f;
+        parameter.ranges.def = 0.0f;
+        parameter.hints = kParameterIsAutomable;
+        break;
+    case kPitchEgRelease:
+        parameter.name = "Pitch Release";
+        parameter.symbol = "pitch_release";
+        parameter.ranges.min = 0.0f;
+        parameter.ranges.max = 1.0f;
+        parameter.ranges.def = 0.0f;
         parameter.hints = kParameterIsAutomable;
         break;
     case kSampleLoaded:
@@ -553,7 +401,6 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.ranges.max = 1.0f;
         parameter.ranges.def = 0.0f;
         parameter.hints = kParameterIsBoolean | kParameterIsOutput;
-
     default:
         break;
     }
@@ -564,21 +411,9 @@ float DropsPlugin::getParameterValue(uint32_t index) const
     float val = 0.0f;
     switch (index)
     {
-
-    // case kPitchBendDepth:
-    //     val = fPitchBendDepth;
-    //     break;
-    // case kPolyphony:
-    //     val = fPolyphony;
-    //     break;
-    // case kGain:
-    //     val = fGain;
-    //     break;
     case kSampleIn:
-    {
         val = fSampleIn;
-    }
-    break;
+        break;
     case kSampleOut:
         val = fSampleOut;
         break;
@@ -588,23 +423,23 @@ float DropsPlugin::getParameterValue(uint32_t index) const
     case kSampleLoopEnd:
         val = fSampleLoopEnd;
         break;
-    // case kSampleXFade:
-    //     val = fSampleXFade;
-    //     break;
-    // case kSampleNormalize:
-    //     val = fSampleNormalize;
-    //     break;
     case kSamplePitchKeyCenter:
         val = fSamplePitchKeyCenter;
         break;
-    // case kSampleTune:
-    //     val = fSampleTune;
-    //     break;
     case kSamplePlayMode:
         val = fSamplePlayMode;
         break;
     case kSamplePlayDirection:
         val = fSamplePlayDirection;
+        break;
+    case kAmpLFOType:
+        val = fAmpLFOType;
+        break;
+    case kAmpLFOFreq:
+        val = fAmpLFOFreq;
+        break;
+    case kAmpLFODepth:
+        val = fAmpLFODepth;
         break;
     case kAmpEgAttack:
         val = fAmpEGAttack;
@@ -618,47 +453,18 @@ float DropsPlugin::getParameterValue(uint32_t index) const
     case kAmpEgRelease:
         val = fAmpEgRelease;
         break;
-    case kAmpLFOType:
-        val = fAmpLFOType;
-        break;
-    case kAmpLFOFreq:
-        val = fAmpLFOFreq;
-        break;
-    case kAmpLFODepth:
-        val = fAmpLFODepth;
-        break;
-    // case kAmpLFOSync:
-    //     val = fAmpLFOSync;
-    //     break;
-    case kPitchEgAttack:
-        val = fPitchEGAttack;
-        break;
-    case kPitchEgDecay:
-        val = fPitchEgDecay;
-        break;
-    case kPitchEgSustain:
-        val = fPitchEgSustain;
-        break;
-    case kPitchEgRelease:
-        val = fPitchEgRelease;
-        break;
-    // case kPitchEgDepth:
-    //     val = fPitchEgDepth;
-    //     break;
-    case kPitchLFOType:
-        val = fPitchLFOType;
-        break;
-    case kPitchLFOFreq:
-        val = fPitchLFOFreq;
-        break;
-    case kPitchLFODepth:
-        val = fPitchLFODepth;
-        break;
-    // case kPitchLFOSync:
-    //     val = fPitchLFOSync;
-    //     break;
+        // filter
     case kFilterType:
         val = fFilterType;
+        break;
+    case kFilterLFOType:
+        val = fFilterLFOType;
+        break;
+    case kFilterLFOFreq:
+        val = fFilterLFOFreq;
+        break;
+    case kFilterLFODepth:
+        val = fFilterLFODepth;
         break;
     case kFilterCutOff:
         val = fFilterCutOff;
@@ -678,28 +484,31 @@ float DropsPlugin::getParameterValue(uint32_t index) const
     case kFilterEgRelease:
         val = fFilterEgRelease;
         break;
-    // case kFilterEgDepth:
-    //     val = fFilterEgDepth;
-    //     break;
-    case kFilterLFOType:
-        val = fFilterLFOType;
+    case kPitchLFOType:
+        val = fPitchLFOType;
         break;
-    case kFilterLFOFreq:
-        val = fFilterLFOFreq;
+    case kPitchLFOFreq:
+        val = fPitchLFOFreq;
         break;
-    case kFilterLFODepth:
-        val = fFilterLFODepth;
+    case kPitchLFODepth:
+        val = fPitchLFODepth;
         break;
-    // case kFilterLFOSync:
-    //     val = fFilterLFOSync;
-    //     break;
-    case kActiveTab:
-        val = fActiveTab;
+    case kPitchEgAttack:
+        val = fPitchEGAttack;
         break;
+    case kPitchEgDecay:
+        val = fPitchEgDecay;
+        break;
+    case kPitchEgSustain:
+        val = fPitchEgSustain;
+        break;
+    case kPitchEgRelease:
+        val = fPitchEgRelease;
+        break;
+
     case kSampleLoaded:
         val = sig_sampleLoaded;
         break;
-
     default:
 #ifdef DEBUG
         printf("Unknown parameter: %i\n", index);
@@ -713,16 +522,6 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
 {
     switch (index)
     {
-
-    // case kPitchBendDepth:
-    //     fPitchBendDepth = value;
-    //     break;
-    // case kPolyphony:
-    //     fPolyphony = value;
-    //     break;
-    // case kGain:
-    //     fGain = value;
-    //     break;
     case kSampleIn:
         fSampleIn = value;
         makeSFZ();
@@ -739,25 +538,29 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         fSampleLoopEnd = value;
         makeSFZ();
         break;
-    // case kSampleXFade:
-    //     fSampleXFade = value;
-    //     break;
-    // case kSampleNormalize:
-    //     fSampleNormalize = value;
-    //     break;
     case kSamplePitchKeyCenter:
         fSamplePitchKeyCenter = value;
         makeSFZ();
         break;
-    // case kSampleTune:
-    //     fSampleTune = value;
-    //     break;
     case kSamplePlayMode:
         fSamplePlayMode = value;
         makeSFZ();
         break;
     case kSamplePlayDirection:
         fSamplePlayDirection = value;
+        makeSFZ();
+        break;
+        // amp
+    case kAmpLFOType:
+        fAmpLFOType = value;
+        makeSFZ();
+        break;
+    case kAmpLFOFreq:
+        fAmpLFOFreq = value * lfo_max_freq;
+        makeSFZ();
+        break;
+    case kAmpLFODepth:
+        fAmpLFODepth = (value - 0.5f) * lfo_max_depth;
         makeSFZ();
         break;
     case kAmpEgAttack:
@@ -772,55 +575,21 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
     case kAmpEgRelease:
         fAmpEgRelease = value;
         break;
-    case kAmpLFOType:
-        fAmpLFOType = value;
-        makeSFZ();
-        break;
-    case kAmpLFOFreq:
-        fAmpLFOFreq = value;
-        makeSFZ();
-        break;
-    case kAmpLFODepth:
-        fAmpLFODepth = value;
-        makeSFZ();
-        break;
-    // case kAmpLFOSync:
-    //     fAmpLFOSync = value;
-    //     makeSFZ();
-    //     break;
-    case kPitchEgAttack:
-        fPitchEGAttack = value;
-        break;
-    case kPitchEgDecay:
-        fPitchEgDecay = value;
-        break;
-    case kPitchEgSustain:
-        fPitchEgSustain = value;
-        break;
-    case kPitchEgRelease:
-        fPitchEgRelease = value;
-        break;
-    // case kPitchEgDepth:
-    //     fPitchEgDepth = value;
-    //     break;
-    case kPitchLFOType:
-        fPitchLFOType = value;
-        makeSFZ();
-        break;
-    case kPitchLFOFreq:
-        fPitchLFOFreq = value;
-        makeSFZ();
-        break;
-    case kPitchLFODepth:
-        fPitchLFODepth = value;
-        makeSFZ();
-        break;
-    // case kPitchLFOSync:
-    //     fPitchLFOSync = value;
-    //     makeSFZ();
-        break;
+        // filter
     case kFilterType:
         fFilterType = value;
+        makeSFZ();
+        break;
+    case kFilterLFOType:
+        fFilterLFOType = value;
+        makeSFZ();
+        break;
+    case kFilterLFOFreq:
+        fFilterLFOFreq = value * lfo_max_freq;
+        makeSFZ();
+        break;
+    case kFilterLFODepth:
+        fFilterLFODepth = (value - 0.5f) * lfo_max_depth;
         makeSFZ();
         break;
     case kFilterCutOff:
@@ -841,25 +610,33 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
     case kFilterEgRelease:
         fFilterEgRelease = value;
         break;
-    // case kFilterEgDepth:
-    //     fFilterEgDepth = value;
-    //     break;
-    case kFilterLFOType:
-        fFilterLFOType = value;
+        // pitch
+    case kPitchLFOType:
+        fPitchLFOType = value;
         makeSFZ();
         break;
-    case kFilterLFOFreq:
-        fFilterLFOFreq = value;
+    case kPitchLFOFreq:
+        fPitchLFOFreq = value * lfo_max_freq;
         makeSFZ();
         break;
-    case kFilterLFODepth:
-        fFilterLFODepth = value;
+    case kPitchLFODepth:
+        fPitchLFODepth = (value - 0.5f) * lfo_max_depth;
         makeSFZ();
         break;
-    // case kFilterLFOSync:
-    //     fFilterLFOSync = value;
-    //     break;
-
+    case kPitchEgAttack:
+        fPitchEGAttack = value;
+        break;
+    case kPitchEgDecay:
+        fPitchEgDecay = value;
+        break;
+    case kPitchEgSustain:
+        fPitchEgSustain = value;
+        break;
+    case kPitchEgRelease:
+        fPitchEgRelease = value;
+        break;
+    case kSampleLoaded:
+        break;
     default:
         break;
     }
@@ -1059,11 +836,11 @@ void DropsPlugin::makeSFZ()
     opcodes["offset"] = std::to_string(sampleInInFrames);
     opcodes["end"] = std::to_string(sampleOutInFrames);
     opcodes["direction"] = direction_[static_cast<uint>(fSamplePlayDirection)];
-    
+
     opcodes["lfo01_wave"] = std::to_string(static_cast<int>(fAmpLFOType));
     opcodes["lfo01_freq"] = std::to_string(fAmpLFOFreq);
     opcodes["lfo01_volume"] = std::to_string(fAmpLFODepth);
-    
+
     opcodes["lfo02_wave"] = std::to_string(static_cast<int>(fPitchLFOType));
     opcodes["lfo02_freq"] = std::to_string(fPitchLFOFreq);
     opcodes["lfo02_pitch"] = std::to_string(fPitchLFODepth);
@@ -1071,7 +848,7 @@ void DropsPlugin::makeSFZ()
     opcodes["lfo03_wave"] = std::to_string(static_cast<int>(fFilterLFOType));
     opcodes["lfo03_freq"] = std::to_string(fFilterLFOFreq);
     opcodes["lfo03_cutoff"] = std::to_string(fFilterLFODepth * fFilterMaxFreq);
-    
+
     opcodes["cutoff"] = std::to_string(fFilterCutOff * fFilterMaxFreq);
     opcodes["pitch_keycenter"] = std::to_string(static_cast<int>(fSamplePitchKeyCenter));
 
@@ -1110,9 +887,6 @@ void DropsPlugin::makeSFZ()
     buffer << "lfo03_wave=" << opcodes["lfo03_wave"] << "\n";
     buffer << "lfo03_freq=" << opcodes["lfo03_freq"] << "\n";
     buffer << "lfo03_cutoff=" << opcodes["lfo03_cutoff"] << "\n";
-
-
-
 
     buffer << "pitcheg_depth=9600\n";
     buffer << "pitcheg_attack=0 \n";
@@ -1161,9 +935,9 @@ void DropsPlugin::run(
     // output ports, stereo
     //float *const outL = outputs[0];
     //float *const outR = outputs[1];
-    const TimePosition &timePos(getTimePosition());
-    if (timePos.bbt.valid)
-        bpm = timePos.bbt.beatsPerMinute;
+    // const TimePosition &timePos(getTimePosition());
+    // if (timePos.bbt.valid)
+    //     bpm = timePos.bbt.beatsPerMinute;
 
     uint32_t framesDone = 0;
     uint32_t curEventIndex = 0; // index for midi event to process

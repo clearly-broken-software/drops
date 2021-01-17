@@ -39,31 +39,23 @@ enum Parameters
    // kSampleNormalize,      // amplitude or volume
    kSamplePitchKeyCenter, // pitch_keycenter
    // kSampleTune,           // tune
-   kSamplePlayMode,       // loopmode
-   kSamplePlayDirection,  // direction
+   kSamplePlayMode,      // loopmode
+   kSamplePlayDirection, // direction
    /*    amp tab */
+   kAmpLFOType,   // lfoN_wave
+   kAmpLFOFreq,   // lfoN_freq
+   kAmpLFODepth,  // lfoN_amplitude
    kAmpEgAttack,  // ampeg_attack
    kAmpEgDecay,   // ampeg_decay
    kAmpEgSustain, // ampeg_sustain
    kAmpEgRelease, // ampeg_release
-   kAmpLFOType,   // lfoN_wave
-   kAmpLFOFreq,   // lfoN_freq
-   kAmpLFODepth,  // lfoN_amplitude
+
    // kAmpLFOSync,   //
-
-   /*  pitch tab */
-   kPitchEgAttack,  // pitcheg_attack
-   kPitchEgDecay,   // pitcheg_decay
-   kPitchEgSustain, // pitcheg_sustain
-   kPitchEgRelease, // pitcheg_release
-   // kPitchEgDepth,   // pitcheg_depth
-   kPitchLFOType,   // lfoN_wave
-   kPitchLFOFreq,   // lfoN_freq
-   kPitchLFODepth,  // lfoN_pitch
- //  kPitchLFOSync,
-
-   /*      filter tab  */
+   /* filter tab */
    kFilterType,      // fil_type
+   kFilterLFOType,   // lfoN_wave
+   kFilterLFOFreq,   // lofN_freq
+   kFilterLFODepth,  // lfoN_filter
    kFilterCutOff,    // cutoff , cutoff_oncc200
    kFilterResonance, // resonance
    kFilterEgAttack,  // fileg_attack
@@ -71,12 +63,19 @@ enum Parameters
    kFilterEgSustain, // fileg_sustain
    kFilterEgRelease, // fileg_release
    //kFilterEgDepth,   // fileg_depth
-   kFilterLFOType,   // lfoN_wave
-   kFilterLFOFreq,   // lofN_freq
-   kFilterLFODepth,  // lfoN_filter
    //kFilterLFOSync,
 
-   kActiveTab,
+   /*  pitch tab */
+   kPitchLFOType,   // lfoN_wave
+   kPitchLFOFreq,   // lfoN_freq
+   kPitchLFODepth,  // lfoN_pitch
+   kPitchEgAttack,  // pitcheg_attack
+   kPitchEgDecay,   // pitcheg_decay
+   kPitchEgSustain, // pitcheg_sustain
+   kPitchEgRelease, // pitcheg_release
+   // kPitchEgDepth,   // pitcheg_depth
+   // kPitchLFOSync,
+
    kSampleLoaded, // output port to signal UI
 
    kParameterCount
@@ -87,15 +86,13 @@ enum Widgets
    kScrollbarHandle = 1000,
    kScrollbarLeft,
    kScrollbarRight,
-   kBoxTabs,
-   kButtonSample,
-   kButtonAmp,
-   kButtonPitch,
-   kButtonFilter,
    kNormalizeMenu,
    kKeyCenterMenu,
    kPlayModeMenu,
    kDirectionMenu,
+   kAmpLFOFreqBeat,
+   kAmpLFOTypeMenu,
+   kAmpLFOSyncMenu,
    kVBoxSample,
    kHBoxSampleRow1,
    kHBoxSampleRow2,
@@ -104,10 +101,6 @@ enum Widgets
    kHBoxAmpRow2,
    kHBoxAmpSync,
    kVBoxAmpLfo,
-   kAmpLFOFreqBeat,
-   kAmpLFOTypeMenu,
-   kAmpLFOSyncMenu,
-
    kVBoxPitch,
    kHBoxPitchRow1,
    kHBoxPitchRow2,

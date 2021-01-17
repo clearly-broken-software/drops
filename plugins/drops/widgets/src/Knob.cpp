@@ -10,7 +10,7 @@ Knob::Knob(Window &parent) noexcept
     dragging_ = false;
     has_mouse_ = false;
     value_ = 0.f;
-    value_tmp_ = 0.f;
+    tmp_value_ = 0.f;
     max = 1.0f;
     min = 0.0f;
     using_log_ = false;
@@ -37,7 +37,7 @@ Knob::Knob(Widget *parent) noexcept
     dragging_ = false;
     has_mouse_ = false;
     value_ = 0.f;
-    value_tmp_ = 0.f;
+    tmp_value_ = 0.f;
     max = 1.0f;
     min = 0.0f;
     using_log_ = false;

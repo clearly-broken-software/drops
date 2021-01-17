@@ -9,89 +9,33 @@ void DropsUI::initTabPitch()
     Window &window = getParentWindow();
     vbox_pitch = new VBox(window);
     vbox_pitch->setId(kVBoxPitch);
-    hbox_pitch_row_1 = new HBox(vbox_pitch);
-    hbox_pitch_row_1->setId(kHBoxPitchRow1);
+    vbox_pitch->setAbsolutePos(667, 329);
+    vbox_pitch->setSize(323, 176);
 
-    const Size<uint> knobSize = Size<uint>(76, 76);
+    hbox_pitch_row_3 = new HBox(vbox_pitch);
+    hbox_pitch_row_3->setSize(280, 70);
+    //hbox_pitch_row_3->setAbsolutePos(40, 433);
 
-    fPitchEgAttack = new Knob(hbox_pitch_row_1);
-    fPitchEgAttack->setId(kPitchEgAttack);
-    fPitchEgAttack->setSize(knobSize);
-    fPitchEgAttack->setCallback(this);
-    fPitchEgAttack->label = "ATTACK";
-    fPitchEgAttack->foreground_color = shamrock_green;
-    fPitchEgAttack->background_color = black_olive;
-    fPitchEgAttack->highlight_color = shamrock_green_1;
-    fPitchEgAttack->text_color = floral_white;
-
-    fPitchEgDecay = new Knob(hbox_pitch_row_1);
-    fPitchEgDecay->setId(kPitchEgDecay);
-    fPitchEgDecay->setSize(knobSize);
-    fPitchEgDecay->setCallback(this);
-    fPitchEgDecay->label = "DECAY";
-    fPitchEgDecay->foreground_color = shamrock_green;
-    fPitchEgDecay->background_color = black_olive;
-    fPitchEgDecay->highlight_color = shamrock_green_1;
-    fPitchEgDecay->text_color = floral_white;
-
-    fPitchEgSustain = new Knob(hbox_pitch_row_1);
-    fPitchEgSustain->setId(kPitchEgSustain);
-    fPitchEgSustain->setSize(knobSize);
-    fPitchEgSustain->setCallback(this);
-    fPitchEgSustain->label = "SUSTAIN";
-    fPitchEgSustain->foreground_color = shamrock_green;
-    fPitchEgSustain->background_color = black_olive;
-    fPitchEgSustain->highlight_color = shamrock_green_1;
-    fPitchEgSustain->text_color = floral_white;
-
-    fPitchEgRelease = new Knob(hbox_pitch_row_1);
-    fPitchEgRelease->setId(kPitchEgRelease);
-    fPitchEgRelease->setSize(knobSize);
-    fPitchEgRelease->setCallback(this);
-    fPitchEgRelease->label = "RELEASE";
-    fPitchEgRelease->foreground_color = shamrock_green;
-    fPitchEgRelease->background_color = black_olive;
-    fPitchEgRelease->highlight_color = shamrock_green_1;
-    fPitchEgRelease->text_color = floral_white;
-
-    vbox_pitch->setAbsolutePos(tabs_x, tabs_y);
-    vbox_pitch->setWidth(tabs_w);
-    vbox_pitch->setHeight(tabs_h);
-
-    hbox_pitch_row_1->setWidth(vbox_pitch->getWidth());
-    vbox_pitch->addWidget(hbox_pitch_row_1);
-    vbox_pitch->setWidgetResize(kHBoxPitchRow1, true);
-
-    hbox_pitch_row_1->addWidget(fPitchEgAttack);
-    hbox_pitch_row_1->addWidget(fPitchEgDecay);
-    hbox_pitch_row_1->addWidget(fPitchEgSustain);
-    hbox_pitch_row_1->addWidget(fPitchEgRelease);
-
-    // row 2
     hbox_pitch_row_2 = new HBox(vbox_pitch);
     hbox_pitch_row_2->setId(kHBoxPitchRow2);
-    hbox_pitch_sync = new HBox(hbox_pitch_row_2);
-    hbox_pitch_sync->setId(kHBoxPitchSync);
-    vbox_pitch_lfo = new VBox(hbox_pitch_sync);
-    vbox_pitch_lfo->setId(kVBoxPitchLfo);
-    // hbox_pitch_row_2->setWidgetJustify_Content(kPitchLFOSync,HBox::Justify_Content::right);
+    hbox_pitch_row_2->setSize(219, 40);
+    //hbox_pitch_row_2->setAbsolutePos(48, 381);
 
-    // fPitchLFOFreqBeat = new RadioButton(hbox_pitch_row_2);
-    // fPitchLFOFreqBeat->setId(kPitchLFOFreqBeat);
-    // fPitchLFOFreqBeat->setCallback(this);
-    // fPitchLFOFreqBeat->font_size = 16.f;
-    // fPitchLFOFreqBeat->margin = 2.0f;
-    // fPitchLFOFreqBeat->addOption(" ");
-    // fPitchLFOFreqBeat->addOption(" ");
-    // fPitchLFOFreqBeat->setSize(20 + 2, 40); // font_size + 2 * margin
-    // fPitchLFOFreqBeat->background_color = Color(255, 0, 0);
-    // fPitchLFOFreqBeat->text_color = floral_white;
-    // fPitchLFOFreqBeat->foreground_color = pale_silver;
-    // fPitchLFOFreqBeat->highlight_color = shamrock_green_1;
+    hbox_pitch_row_1 = new HBox(vbox_pitch);
+    hbox_pitch_row_1->setId(kHBoxPitchRow1);
+    hbox_pitch_row_1->setWidth(vbox_pitch->getWidth());
+    hbox_pitch_row_1->setHeight(26);
 
-    fPitchLFOType = new DropDown(hbox_pitch_row_2);
+    const float margin = 6.f;
+    const float gauge = 6.f;
+    const float font_size = 14.f;
+    const uint sz = 40 + margin + gauge + font_size;
+
+    const Size<uint> knobSize = Size<uint>(sz, sz);
+
+    fPitchLFOType = new DropDown(hbox_pitch_row_1);
     fPitchLFOType->setId(kPitchLFOType);
-    fPitchLFOType->font_size = 16;
+    fPitchLFOType->font_size = font_size;
     fPitchLFOType->setSize(200,
                            fPitchLFOType->font_size + fPitchLFOType->margin * 2.0f);
     fPitchLFOType->setCallback(this);
@@ -100,11 +44,115 @@ void DropsUI::initTabPitch()
     fPitchLFOType->foreground_color = shamrock_green;
     fPitchLFOType->background_color = black_olive;
     fPitchLFOType->text_color = floral_white;
+    hbox_pitch_row_1->addWidget(fPitchLFOType);
 
-    fPitchLFOTypeMenu = new Menu(hbox_pitch_row_2);
+    // row 2
+    fPitchLFOFreq = new Knob(hbox_pitch_row_2);
+    fPitchLFOFreq->setId(kPitchLFOFreq);
+    fPitchLFOFreq->setCallback(this);
+    fPitchLFOFreq->setSize(knobSize);
+    fPitchLFOFreq->labelSize = font_size;
+    fPitchLFOFreq->gauge_width = gauge;
+    fPitchLFOFreq->margin = margin;
+    fPitchLFOFreq->label = "FREQ";
+    fPitchLFOFreq->background_color = black_olive;
+    fPitchLFOFreq->foreground_color = shamrock_green;
+    fPitchLFOFreq->highlight_color = shamrock_green_1;
+    fPitchLFOFreq->text_color = floral_white;
+    fPitchLFOFreq->default_value = 0;
+
+    fPitchLFODepth = new Knob(hbox_pitch_row_2);
+    fPitchLFODepth->setId(kPitchLFODepth);
+    fPitchLFODepth->setCallback(this);
+    fPitchLFODepth->setSize(knobSize);
+    fPitchLFODepth->labelSize = font_size;
+    fPitchLFODepth->gauge_width = gauge;
+    fPitchLFODepth->margin = margin;
+    fPitchLFODepth->label = "DEPTH";
+    fPitchLFODepth->background_color = black_olive;
+    fPitchLFODepth->foreground_color = shamrock_green;
+    fPitchLFODepth->highlight_color = shamrock_green_1;
+    fPitchLFODepth->text_color = floral_white;
+
+    hbox_pitch_row_2->addWidget(fPitchLFOFreq);
+    hbox_pitch_row_2->addWidget(fPitchLFODepth);
+
+    // row 3
+
+    fPitchEgAttack = new Knob(hbox_pitch_row_3);
+    fPitchEgAttack->setId(kPitchEgAttack);
+    fPitchEgAttack->setSize(knobSize);
+    fPitchEgAttack->setCallback(this);
+    fPitchEgAttack->labelSize = font_size;
+    fPitchEgAttack->gauge_width = gauge;
+    fPitchEgAttack->margin = margin;
+    fPitchEgAttack->label = "ATTACK";
+    fPitchEgAttack->foreground_color = shamrock_green;
+    fPitchEgAttack->background_color = black_olive;
+    fPitchEgAttack->highlight_color = shamrock_green_1;
+    fPitchEgAttack->text_color = floral_white;
+
+    fPitchEgDecay = new Knob(hbox_pitch_row_3);
+    fPitchEgDecay->setId(kPitchEgDecay);
+    fPitchEgDecay->setSize(knobSize);
+    fPitchEgDecay->setCallback(this);
+    fPitchEgDecay->labelSize = font_size;
+    fPitchEgDecay->gauge_width = gauge;
+    fPitchEgDecay->margin = margin;
+    fPitchEgDecay->label = "DECAY";
+    fPitchEgDecay->foreground_color = shamrock_green;
+    fPitchEgDecay->background_color = black_olive;
+    fPitchEgDecay->highlight_color = shamrock_green_1;
+    fPitchEgDecay->text_color = floral_white;
+
+    fPitchEgSustain = new Knob(hbox_pitch_row_3);
+    fPitchEgSustain->setId(kPitchEgSustain);
+    fPitchEgSustain->setSize(knobSize);
+    fPitchEgSustain->setCallback(this);
+    fPitchEgSustain->labelSize = font_size;
+    fPitchEgSustain->gauge_width = gauge;
+    fPitchEgSustain->margin = margin;
+    fPitchEgSustain->label = "SUSTAIN";
+    fPitchEgSustain->foreground_color = shamrock_green;
+    fPitchEgSustain->background_color = black_olive;
+    fPitchEgSustain->highlight_color = shamrock_green_1;
+    fPitchEgSustain->text_color = floral_white;
+
+    fPitchEgRelease = new Knob(hbox_pitch_row_3);
+    fPitchEgRelease->setId(kPitchEgRelease);
+    fPitchEgRelease->setSize(knobSize);
+    fPitchEgRelease->setCallback(this);
+    fPitchEgRelease->labelSize = font_size;
+    fPitchEgRelease->gauge_width = gauge;
+    fPitchEgRelease->margin = margin;
+    fPitchEgRelease->label = "RELEASE";
+    fPitchEgRelease->foreground_color = shamrock_green;
+    fPitchEgRelease->background_color = black_olive;
+    fPitchEgRelease->highlight_color = shamrock_green_1;
+    fPitchEgRelease->text_color = floral_white;
+
+    hbox_pitch_row_3->addWidget(fPitchEgAttack);
+    hbox_pitch_row_3->addWidget(fPitchEgDecay);
+    hbox_pitch_row_3->addWidget(fPitchEgSustain);
+    hbox_pitch_row_3->addWidget(fPitchEgRelease);
+
+    vbox_pitch->addWidget(hbox_pitch_row_1);
+    vbox_pitch->addWidget(hbox_pitch_row_2);
+    vbox_pitch->addWidget(hbox_pitch_row_3);
+
+    vbox_pitch->setWidgetResize(kHBoxPitchRow1, true);
+    vbox_pitch->setWidgetResize(kHBoxPitchRow2, true);
+
+    vbox_pitch->positionWidgets();
+    hbox_pitch_row_1->positionWidgets();
+    hbox_pitch_row_2->positionWidgets();
+    hbox_pitch_row_3->positionWidgets();
+
+    fPitchLFOTypeMenu = new Menu(hbox_pitch_row_1);
     fPitchLFOTypeMenu->max_view_items = 4;
     fPitchLFOTypeMenu->setId(kPitchLFOTypeMenu);
     fPitchLFOTypeMenu->setCallback(this);
+    fPitchLFOTypeMenu->font_size = font_size;
     fPitchLFOTypeMenu->addItems({"TRIANGLE",
                                  "SINE",
                                  "75% PULSE",
@@ -113,121 +161,14 @@ void DropsUI::initTabPitch()
                                  "12.5% PULSE",
                                  "SAW UP",
                                  "SAW DOWN"});
-
-    fPitchLFOTypeMenu->font_size = 16;
     fPitchLFOTypeMenu->hide();
     fPitchLFOTypeMenu->background_color = black_olive;
     fPitchLFOTypeMenu->foreground_color = black_olive_2;
     fPitchLFOTypeMenu->highlight_color = shamrock_green_1;
     fPitchLFOTypeMenu->text_color = floral_white;
 
-    fPitchLFOFreq = new Slider(vbox_pitch_lfo);
-    fPitchLFOFreq->setId(kPitchLFOFreq);
-    fPitchLFOFreq->setCallback(this);
-    fPitchLFOFreq->setSize(300, 20);
-    fPitchLFOFreq->setLabel("FREQ :");
-    fPitchLFOFreq->background_color = black_olive;
-    fPitchLFOFreq->foreground_color = shamrock_green;
-    fPitchLFOFreq->highlight_color = shamrock_green_1;
-    fPitchLFOFreq->text_color = floral_white;
-    fPitchLFOFreq->unit = "HZ";
-    fPitchLFOFreq->right_padding = slider_right_padding + 4;
-    fPitchLFOFreq->format_str = "%.2f";
-    fPitchLFOFreq->min_value = 0;
-    fPitchLFOFreq->max_value = 20;
-    fPitchLFOFreq->default_value = 0;
-
-    fPitchLFODepth = new Slider(hbox_pitch_row_2);
-    fPitchLFODepth->setId(kPitchLFODepth);
-    fPitchLFODepth->setCallback(this);
-    fPitchLFODepth->setSize(300, 20);
-    fPitchLFODepth->setLabel("DEPTH :");
-    fPitchLFODepth->background_color = black_olive;
-    fPitchLFODepth->foreground_color = shamrock_green;
-    fPitchLFODepth->highlight_color = shamrock_green_1;
-    fPitchLFODepth->text_color = floral_white;
-    fPitchLFODepth->unit = "Ct";
-    fPitchLFODepth->right_padding = slider_right_padding;
-    fPitchLFODepth->format_str = "%.f";
-    fPitchLFODepth->min_value = 0.0f;
-    fPitchLFODepth->max_value = 1200.0f;
-
-    // fPitchLFOSync = new DropDown(vbox_pitch_lfo);
-    // fPitchLFOSync->setId(kPitchLFOSync);
-    // fPitchLFOSync->font_size = 16;
-    // fPitchLFOSync->setSize(300,
-    //                        fPitchLFOSync->font_size + fPitchLFOSync->margin * 2.0f);
-    // fPitchLFOSync->setCallback(this);
-    // fPitchLFOSync->label = "LFO Sync :";
-    // fPitchLFOSync->item = "1/4";
-    // fPitchLFOSync->foreground_color = shamrock_green;
-    // fPitchLFOSync->background_color = black_olive;
-    // fPitchLFOSync->text_color = floral_white;
-
-    // fPitchLFOSyncMenu = new Menu(vbox_pitch_lfo);
-    // fPitchLFOSyncMenu->max_view_items = 4;
-    // fPitchLFOSyncMenu->setId(kPitchLFOSyncMenu);
-    // fPitchLFOSyncMenu->setCallback(this);
-    // fPitchLFOSyncMenu->addItems({
-    //     "1/16",
-    //     "1/8",
-    //     "1/4",
-    //     "1/2",
-    //     "1/1",
-    //     "2/1",
-    //     "1/16T",
-    //     "1/8T",
-    //     "1/4T",
-    //     "1/2T",
-    //     "1/1T",
-    //     "2/1T",
-    //     "1/16.",
-    //     "1/8.",
-    //     "1/4.",
-    //     "1/2.",
-    //     "1/1.",
-    //     "2/1.",
-    // });
-    // fPitchLFOSyncMenu->font_size = 16;
-    // fPitchLFOSyncMenu->hide();
-    // fPitchLFOSyncMenu->background_color = black_olive;
-    // fPitchLFOSyncMenu->foreground_color = black_olive_2;
-    // fPitchLFOSyncMenu->highlight_color = shamrock_green_1;
-    // fPitchLFOSyncMenu->text_color = floral_white;
-
-    hbox_pitch_row_2->setWidth(vbox_pitch->getWidth());
-    hbox_pitch_row_2->align_items = HBox::Align_Items::top;
-
-    vbox_pitch->addWidget(hbox_pitch_row_2);
-    vbox_pitch->setWidgetResize(kHBoxPitchRow2, true);
-
-    hbox_pitch_row_2->addWidget(fPitchLFOType);
-    hbox_pitch_row_2->addWidget(hbox_pitch_sync);
-    hbox_pitch_sync->setWidth(fPitchLFOFreq->getWidth());
-    // hbox_pitch_sync->setWidth(std::max(fPitchLFOFreq->getWidth(), fPitchLFOSync->getWidth()));
-    hbox_pitch_sync->setHeight(fPitchLFOFreq->getHeight()); //  + fPitchLFOSync->getHeight());
-    hbox_pitch_sync->justify_content = HBox::Justify_Content::center;
-    // hbox_pitch_sync->addWidget(fPitchLFOFreqBeat);
-    hbox_pitch_sync->addWidget(vbox_pitch_lfo);
-    vbox_pitch_lfo->setWidth(fPitchLFOFreq->getWidth()); //+ fPitchLFOFreqBeat->getWidth());
-    vbox_pitch_lfo->setHeight(fPitchLFOFreq->getHeight()); // + fPitchLFOSync->getHeight());
-    vbox_pitch_lfo->justify_content = VBox::Justify_Content::left;
-    vbox_pitch_lfo->addWidget(fPitchLFOFreq);
-    // vbox_pitch_lfo->addWidget(fPitchLFOSync);
-
-    hbox_pitch_row_2->addWidget(fPitchLFODepth);
-
-    vbox_pitch->positionWidgets();
-    hbox_pitch_row_1->positionWidgets();
-    hbox_pitch_row_2->positionWidgets();
-    hbox_pitch_sync->positionWidgets();
-    vbox_pitch_lfo->positionWidgets();
     fPitchLFOType->setMenu(fPitchLFOTypeMenu);
-    // fPitchLFOSync->setMenu(fPitchLFOSyncMenu);
+    fPitchLFOType->resize();
 }
-
-
-
-
 
 END_NAMESPACE_DISTRHO

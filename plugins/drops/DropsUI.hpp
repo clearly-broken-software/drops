@@ -108,7 +108,7 @@ private:
     // filter tab
     ScopedPointer<VBox> vbox_filter, vbox_filter_lfo;
     ScopedPointer<HBox> hbox_filter_row_1, hbox_filter_row_2, hbox_filter_row_3;
-    ScopedPointer<Knob> fFilterEgAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease,
+    ScopedPointer<Knob>   fFilterEgAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease,
         fFilterCutOff, fFilterResonance;
     ScopedPointer<DropDown> fFilterLFOType;
     ScopedPointer<Menu> fFilterLFOTypeMenu;
@@ -118,13 +118,13 @@ private:
     // ScopedPointer<RadioButton> fFilterLFOFreqBeat;
 
     // pitch tab
-    // ScopedPointer<VBox> vbox_pitch, vbox_pitch_lfo;
-    // ScopedPointer<HBox> hbox_pitch_row_1, hbox_pitch_row_2, hbox_pitch_sync;
-    // ScopedPointer<Knob>
-    //     fPitchEgAttack, fPitchEgDecay, fPitchEgSustain, fPitchEgRelease;
-    // ScopedPointer<DropDown> fPitchLFOType;
-    // ScopedPointer<Menu> fPitchLFOTypeMenu;
-    // ScopedPointer<Slider> fPitchLFOFreq, fPitchLFODepth;
+    ScopedPointer<VBox> vbox_pitch, vbox_pitch_lfo;
+    ScopedPointer<HBox> hbox_pitch_row_1, hbox_pitch_row_2, hbox_pitch_row_3;
+    ScopedPointer<Knob>
+         fPitchEgAttack, fPitchEgDecay, fPitchEgSustain, fPitchEgRelease;
+    ScopedPointer<DropDown> fPitchLFOType;
+    ScopedPointer<Menu> fPitchLFOTypeMenu;
+    ScopedPointer<Knob> fPitchLFOFreq, fPitchLFODepth;
     // // ScopedPointer<DropDown> fPitchLFOSync;
     // ScopedPointer<Menu> fPitchLFOSyncMenu;
     // ScopedPointer<RadioButton> fPitchLFOFreqBeat;
@@ -137,7 +137,7 @@ private:
 
     void initWidgets();
     void initTabAmp();
-    //void initTabPitch();
+    void initTabPitch();
     void initTabFilter();
     void makeIcons();
     int loadSample();

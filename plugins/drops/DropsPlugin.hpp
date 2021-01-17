@@ -109,36 +109,24 @@ private:
     std::vector<char> miniMap;
 
     // Parameters
-    //  common     */
-    float fPitchBendDepth, fPolyphony, fGain;
-    //  display     */
+
+    //  display
     float fSampleIn, fSampleOut, fSampleLoopStart, fSampleLoopEnd;
-    //  sample tab    */
-    float fSampleXFade, fSampleNormalize, fSamplePitchKeyCenter, fSampleTune,
-        fSamplePlayMode, fSamplePlayDirection;
-    //  amp tab */
-    float fAmpEGAttack, fAmpEgDecay, fAmpEgSustain, fAmpEgRelease,
-        fAmpLFOType, fAmpLFOFreq, fAmpLFODepth, fAmpLFOSync;
-    //  pitch tab */
+    //  sample tab
+    float fSamplePitchKeyCenter, fSamplePlayMode, fSamplePlayDirection;
+    //  amp
+    float fAmpLFOType, fAmpLFOFreq, fAmpLFODepth,
+        fAmpEGAttack, fAmpEgDecay, fAmpEgSustain, fAmpEgRelease;
+    //  pitch
     float fPitchEGAttack, fPitchEgDecay, fPitchEgSustain, fPitchEgRelease,
         fPitchEgDepth, fPitchLFOType, fPitchLFOFreq, fPitchLFODepth,
         fPitchLFOSync;
-    //  filter tab  */
-    float fFilterType, fFilterCutOff, fFilterResonance,
-        fFilterEGAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease,
-        fFilterEgDepth, fFilterLFOType, fFilterLFOFreq, fFilterLFODepth,
-        fFilterLFOSync;
+    //  filter
+    float fFilterType, fFilterLFOType, fFilterLFOFreq, fFilterLFODepth,
+        fFilterCutOff, fFilterResonance,
+        fFilterEGAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease;
+
     double fFilterMaxFreq;
-
-    float fActiveTab;
-
-    enum TABS
-    {
-        kSampleTab,
-        kAmpTab,
-        kPitchTab,
-        kFilterTab
-    };
 
     const char *play_modes_[4]{
         "no_loop", "one_shot",
@@ -147,35 +135,16 @@ private:
     const char *direction_[2]{
         "forward",
         "reverse"};
-    const char *filters_[23]{
-        "lpf_1p",
-        "hpf_1p",
+    const char *filters_[3]{
         "lpf_2p",
-        "hpf_2p",
         "bpf_2p",
-        "brf_2p",
-        "bpf_1p",
-        "brf_1p",
-        "apf_1p",
-        "lpf_2p_sv",
-        "hpf_2p_sv",
-        "bpf_2p_sv",
-        "brf_2p_sv",
-        "pkf_2p",
-        "lpf_4p",
-        "hpf_4p",
-        "lpf_6p",
-        "hpf_6p",
-        "comb",
-        "pink",
-        "lsh",
-        "hsh",
-        "peq"};
+        "hpf_2p"};
 
     std::unordered_map<std::string, std::string> opcodes;
 
-    const float amp_lfo_depth = 20.0f; // ermm FIXME:
-    double bpm;
+    const float lfo_max_depth = 20.0f; // -10 .. 10
+    const float lfo_max_freq = 20.0f;
+    // double bpm;
 
     friend class DropsUI;
     /*

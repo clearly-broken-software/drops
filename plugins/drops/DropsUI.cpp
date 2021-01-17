@@ -380,7 +380,7 @@ void DropsUI::initWidgets()
 
     initTabAmp();
     initTabFilter();
-    // initTabPitch();
+    initTabPitch();
 }
 
 void DropsUI::makeIcons()
@@ -407,7 +407,6 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         {
             loadSample();
         }
-
         break;
     }
     case kSampleIn:
@@ -438,61 +437,69 @@ void DropsUI::parameterChanged(uint32_t index, float value)
     case kSamplePlayDirection:
         fSamplePlayDirection->setValue(value);
         break;
-    case kAmpEgAttack:
-        // fAmpEgAttack->setValue(value);
-        // repaint();
-        break;
-    case kAmpEgDecay:
-        // fAmpEgDecay->setValue(value);
-        // repaint();
-        break;
-    case kAmpEgSustain:
-        //  fAmpEgSustain->setValue(value);
-        //  repaint();
-        break;
-    case kAmpEgRelease:
-        // fAmpEgRelease->setValue(value);
-        // repaint();
-        break;
+        // amp
     case kAmpLFOType:
-        // fAmpLFOType->setValue(value);
-        // repaint();
+        fAmpLFOType->setValue(value);
+        repaint();
         break;
     case kAmpLFOFreq:
-        // fAmpLFOFreq->setValue(value);
-        // repaint();
+        fAmpLFOFreq->setValue(value);
+        repaint();
         break;
     case kAmpLFODepth:
-        // fAmpLFODepth->setValue(value);
-        // repaint();
+        fAmpLFODepth->setValue(value);
+        repaint();
         break;
-        /*  pitch tab */
-        /*    case kPitchEgAttack:
-        fPitchEgAttack->setValue(value);
+    case kAmpEgAttack:
+        fAmpEgAttack->setValue(value);
+        repaint();
         break;
-    case kPitchEgDecay:
-        fPitchEgDecay->setValue(value);
+    case kAmpEgDecay:
+        fAmpEgDecay->setValue(value);
+        repaint();
         break;
-    case kPitchEgSustain:
-        fPitchEgSustain->setValue(value);
+    case kAmpEgSustain:
+        fAmpEgSustain->setValue(value);
+        repaint();
         break;
-    case kPitchEgRelease:
-        fPitchEgRelease->setValue(value);
+    case kAmpEgRelease:
+        fAmpEgRelease->setValue(value);
+        repaint();
         break;
-    // case kPitchEgDepth:
-    //     fPitchEgDepth->setValue(value);
-    //     break;
-    case kPitchLFOType:
-        fPitchLFOType->setValue(value);
-        break;
-    case kPitchLFOFreq:
-        fPitchLFOFreq->setValue(value);
-        break;
-    case kPitchLFODepth:
-        fPitchLFODepth->setValue(value);
-        break;
+    // filter
     case kFilterType:
-        fFilterType->setValue(value);
+    {
+        static uint val = static_cast<uint>(value);
+        switch (val)
+        {
+        case 0:
+            fFilterLowpass->is_active = true;
+            fFilterBandpass->is_active = false;
+            fFilterHighpass->is_active = false;
+            break;
+        case 1:
+            fFilterLowpass->is_active = false;
+            fFilterBandpass->is_active = true;
+            fFilterHighpass->is_active = false;
+            break;
+        case 2:
+            fFilterLowpass->is_active = false;
+            fFilterBandpass->is_active = false;
+            fFilterHighpass->is_active = true;
+            break;
+        default:
+            break;
+        }
+        break;
+    }
+    case kFilterLFOType:
+        fFilterLFOType->setValue(value);
+        break;
+    case kFilterLFOFreq:
+        fFilterLFOFreq->setValue(value);
+        break;
+    case kFilterLFODepth:
+        fFilterLFODepth->setValue(value);
         break;
     case kFilterCutOff:
         fFilterCutOff->setValue(value);
@@ -512,15 +519,28 @@ void DropsUI::parameterChanged(uint32_t index, float value)
     case kFilterEgRelease:
         fFilterEgRelease->setValue(value);
         break;
-    case kFilterLFOType:
-        fFilterLFOType->setValue(value);
+    //  pitch
+    case kPitchLFOType:
+        fPitchLFOType->setValue(value);
         break;
-    case kFilterLFOFreq:
-        fFilterLFOFreq->setValue(value);
+    case kPitchLFOFreq:
+        fPitchLFOFreq->setValue(value);
         break;
-    case kFilterLFODepth:
-        fFilterLFODepth->setValue(value);
-        break; */
+    case kPitchLFODepth:
+        fPitchLFODepth->setValue(value);
+        break;
+    case kPitchEgAttack:
+        fPitchEgAttack->setValue(value);
+        break;
+    case kPitchEgDecay:
+        fPitchEgDecay->setValue(value);
+        break;
+    case kPitchEgSustain:
+        fPitchEgSustain->setValue(value);
+        break;
+    case kPitchEgRelease:
+        fPitchEgRelease->setValue(value);
+        break;
     default:
         printf("DropsUI::parameterChanged(%i,%f)\n", index, value);
         break;
@@ -601,16 +621,9 @@ void DropsUI::onNanoDisplay()
     y = fileopen_button->getHeight() / 2 - clearlyBrokenLogo->getHeight() / 2;
     clearlyBrokenLogo->drawAt(x, y);
 
-    // tab background
-    beginPath();
-    // const Color tabColor = eerie_black_3;
-    // const float clrScale = 0.5f;
-    // fillColor(tabColor.red * clrScale,
-    //           tabColor.green * clrScale,
-    //           tabColor.blue * clrScale,
-    //           1.0f);
-    fillColor(eerie_black);
     // VBOX_AMP xywh {12 329 323 176}
+    beginPath();
+    fillColor(eerie_black);
     rect(12, 329, 323, 176);
     fill();
     closePath();
@@ -658,6 +671,32 @@ void DropsUI::onNanoDisplay()
     textAlign(ALIGN_TOP | ALIGN_LEFT);
     fillColor(eerie_black);
     text(339 + 4, 329 + 4, "FILTER", nullptr);
+    closePath();
+
+    // VBOX_PITCH xywh {667 329 323 176}
+    beginPath();
+    fillColor(eerie_black);
+    rect(667, 329, 323, 176);
+    fill();
+    closePath();
+
+    beginPath();
+    strokeWidth(2.0f);
+    strokeColor(shamrock_green);
+    rect(667 + 2, 329 + 2, 323 - 4, 176 - 4);
+    stroke();
+    closePath();
+
+    beginPath();
+    fillColor(shamrock_green);
+    roundedRect(667 + 2, 329 + 2, 56, 18, 2);
+    fill();
+    closePath();
+    beginPath();
+    fontSize(16);
+    textAlign(ALIGN_TOP | ALIGN_LEFT);
+    fillColor(eerie_black);
+    text(667 + 4, 329 + 4, "PITCH", nullptr);
     closePath();
 }
 
@@ -856,7 +895,6 @@ void DropsUI::uiFileBrowserSelected(const char *filename)
     // if a file was selected, tell DSP
     if (filename != nullptr)
     {
-
         fileopen_button->setText(filename);
         setState("filepath", filename);
         repaint();
@@ -872,13 +910,11 @@ void DropsUI::stateChanged(const char *key, const char *value)
 
 bool DropsUI::onMouse(const MouseEvent &ev)
 {
-
     if (ev.press)
         if (scrollbarDragging || loopstartDragging || loopendDragging || sampleInDragging || sampleOutDragging)
         {
             mouseX = ev.pos.getX();
         }
-
     return false;
 }
 
@@ -1146,7 +1182,7 @@ void DropsUI::onDropDownClicked(DropDown *dropDown)
     //     fAmpLFOSyncMenu->show();
     //     break;
     case kPitchLFOType:
-        //   fPitchLFOTypeMenu->show();
+        fPitchLFOTypeMenu->show();
         break;
     case kFilterLFOType:
         fFilterLFOTypeMenu->show();
@@ -1179,6 +1215,12 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
 
     switch (id)
     {
+    case kAmpLFOFreq:
+        setParameterValue(kAmpLFOFreq, value);
+        break;
+    case kAmpLFODepth:
+        setParameterValue(kAmpLFODepth, value);
+        break;
     case kAmpEgAttack:
         setParameterValue(kAmpEgAttack, value);
         break;
@@ -1191,18 +1233,18 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
     case kAmpEgRelease:
         setParameterValue(kAmpEgRelease, value);
         break;
-
-    case kPitchEgAttack:
-        setParameterValue(kPitchEgAttack, value);
+    // filter
+    case kFilterLFOFreq:
+        setParameterValue(kFilterLFOFreq, value);
         break;
-    case kPitchEgDecay:
-        setParameterValue(kPitchEgDecay, value);
+    case kFilterLFODepth:
+        setParameterValue(kFilterLFODepth, value);
         break;
-    case kPitchEgSustain:
-        setParameterValue(kPitchEgSustain, value);
+    case kFilterCutOff:
+        setParameterValue(kFilterCutOff, value);
         break;
-    case kPitchEgRelease:
-        setParameterValue(kPitchEgRelease, value);
+    case kFilterResonance:
+        setParameterValue(kFilterResonance, value);
         break;
     case kFilterEgAttack:
         setParameterValue(kFilterEgAttack, value);
@@ -1216,8 +1258,24 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
     case kFilterEgRelease:
         setParameterValue(kFilterEgRelease, value);
         break;
-    case kFilterCutOff:
-        setParameterValue(kFilterCutOff, value);
+    // pitch
+    case kPitchLFOFreq:
+        setParameterValue(kPitchLFOType, value);
+        break;
+    case kPitchLFODepth:
+        setParameterValue(kPitchLFOFreq, value);
+        break;
+    case kPitchEgAttack:
+        setParameterValue(kPitchEgAttack, value);
+        break;
+    case kPitchEgDecay:
+        setParameterValue(kPitchEgDecay, value);
+        break;
+    case kPitchEgSustain:
+        setParameterValue(kPitchEgSustain, value);
+        break;
+    case kPitchEgRelease:
+        setParameterValue(kPitchEgRelease, value);
         break;
 
     default:
@@ -1235,24 +1293,6 @@ void DropsUI::onSliderValueChanged(Slider *slider, float value)
 
     switch (id)
     {
-    case kAmpLFOFreq:
-        setParameterValue(kAmpLFOFreq, value);
-        break;
-    case kAmpLFODepth:
-        setParameterValue(kAmpLFODepth, value);
-        break;
-    case kPitchLFOFreq:
-        setParameterValue(kPitchLFOFreq, value);
-        break;
-    case kPitchLFODepth:
-        setParameterValue(kPitchLFODepth, value);
-        break;
-    case kFilterLFODepth:
-        setParameterValue(kFilterLFODepth, value);
-        break;
-    case kFilterLFOFreq:
-        setParameterValue(kFilterLFOFreq, value);
-        break;
     default:
 #ifdef DEBUG
         printf("slider %i, value %f\n", id, value);
@@ -1368,8 +1408,8 @@ void DropsUI::onMenuClicked(Menu *menu, uint menu_id, std::string item)
     //     setParameterValue(kAmpLFOSync, menu_id);
     //     break;
     case kPitchLFOTypeMenu:
-        //   fPitchLFOType->item = item;
-        //   fPitchLFOTypeMenu->hide();
+        fPitchLFOType->item = item;
+        fPitchLFOTypeMenu->hide();
         setParameterValue(kPitchLFOType, menu_id);
         break;
     case kFilterLFOTypeMenu:
@@ -1435,16 +1475,19 @@ void DropsUI::onSVGButtonClicked(SVGButton *svgb)
     case kFilterLowpass:
         fFilterBandpass->is_active = false;
         fFilterHighpass->is_active = false;
+        setParameterValue(kFilterType, 0);
         repaint();
         break;
     case kFilterBandpass:
         fFilterLowpass->is_active = false;
         fFilterHighpass->is_active = false;
+        setParameterValue(kFilterType, 1);
         repaint();
         break;
     case kFilterHighpass:
         fFilterLowpass->is_active = false;
         fFilterBandpass->is_active = false;
+        setParameterValue(kFilterType, 2);
         repaint();
         break;
     default:
