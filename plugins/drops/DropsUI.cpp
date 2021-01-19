@@ -1089,9 +1089,9 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         mouseX = ev.pos.getX();
         float samples_per_pixel = pow(viewMaxZoom, viewZoom);
         sampleLoopStart = static_cast<float>(sampleLoopStart) + distance * samples_per_pixel;
-        //sampleLoopStart = clamp<sf_count_t>(sampleLoopStart, sampleLoopEnd - 1, sampleIn);
+        sampleLoopStart = clamp<sf_count_t>(sampleLoopStart, sampleLoopEnd - 1, 0);
         float loopStartPixel = static_cast<float>(sampleLoopStart - viewStart) / samples_per_pixel + static_cast<float>(display_left);
-        fLoopStart->setAbsoluteX(loopStartPixel - 35);
+        fLoopStart->setAbsoluteX(loopStartPixel - display_left);
         /*
         float value = static_cast<float>(sampleLoopStart) / static_cast<float>(waveForm->size());
         setParameterValue(kSampleLoopStart, value);
@@ -1105,7 +1105,7 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         mouseX = ev.pos.getX();
         float samples_per_pixel = pow(viewMaxZoom, viewZoom);
         sampleLoopEnd = static_cast<float>(sampleLoopEnd) + distance * samples_per_pixel;
-        //sampleLoopEnd = clamp<sf_count_t>(sampleLoopEnd, sampleOut, sampleLoopStart + 1);
+        sampleLoopEnd = clamp<sf_count_t>(sampleLoopEnd, waveForm->size() - 1, sampleLoopStart + 1);
         float loopEndPixel = static_cast<float>(sampleLoopEnd - viewStart) / samples_per_pixel + static_cast<float>(display_left);
         fLoopEnd->setAbsoluteX(loopEndPixel);
         /* 
@@ -1123,7 +1123,7 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         sampleIn = static_cast<float>(sampleIn) + distance * samples_per_pixel;
         sampleIn = clamp<sf_count_t>(sampleIn, sampleOut - 1, 0);
         float sampleInPixel = static_cast<float>(sampleIn - viewStart) / samples_per_pixel + static_cast<float>(display_left);
-        fSampleIn->setAbsoluteX(sampleInPixel - 35);
+        fSampleIn->setAbsoluteX(sampleInPixel - display_left);
         // float value = static_cast<float>(sampleIn) / static_cast<float>(waveForm->size());
         // setParameterValue(kSampleIn, value);
         repaint();
