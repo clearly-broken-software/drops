@@ -22,6 +22,7 @@ DropsUI::DropsUI()
     loadSharedResources();
     plugin = static_cast<DropsPlugin *>(getPluginInstancePointer());
     sampleDir = "";
+    fileName = "";
 
     fontFace(NANOVG_DEJAVU_SANS_TTF);
 
@@ -393,12 +394,12 @@ void DropsUI::makeIcons()
     clearlyBrokenLogo = new SVGImage(this, artwork::clearly_broken_logo, 0.8f);
 }
 
-std::string DropsUI::dirnameOf ( const std::string& fname )
+std::string DropsUI::dirnameOf(const std::string &fname)
 {
-    size_t pos = fname.find_last_of ( "\\/" );
-    return ( std::string::npos == pos )
-           ? ""
-           : fname.substr ( 0, pos );
+    size_t pos = fname.find_last_of("\\/");
+    return (std::string::npos == pos)
+               ? ""
+               : fname.substr(0, pos);
 }
 
 void DropsUI::parameterChanged(uint32_t index, float value)
@@ -416,6 +417,7 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         sig_sampleLoaded = value;
         if (sig_sampleLoaded)
         {
+            fileopen_button->setText(fileName);
             loadSample();
         }
         break;
@@ -906,10 +908,11 @@ void DropsUI::uiFileBrowserSelected(const char *filename)
     // if a file was selected, tell DSP
     if (filename != nullptr)
     {
-        fileopen_button->setText(filename);
+        //fileopen_button->setText(filename);
         setState("filepath", filename);
         sampleDir = dirnameOf(filename);
-        repaint();
+        fileName = filename;
+        // repaint();
     }
 }
 
@@ -1147,7 +1150,7 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         mouseX = ev.pos.getX();
         float samples_per_pixel = pow(viewMaxZoom, viewZoom);
         sampleOut = static_cast<float>(sampleOut) + distance * samples_per_pixel;
-        sampleOut = clamp<sf_count_t>(sampleOut, waveForm->size() -1 , sampleIn + 1);
+        sampleOut = clamp<sf_count_t>(sampleOut, waveForm->size() - 1, sampleIn + 1);
         float sampleOutPixel = static_cast<float>(sampleOut - viewStart) / samples_per_pixel + static_cast<float>(display_left);
         fSampleOut->setAbsoluteX(sampleOutPixel);
         // float value = static_cast<float>(sampleOut) / static_cast<float>(waveForm->size());

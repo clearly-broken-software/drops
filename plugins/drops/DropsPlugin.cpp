@@ -707,7 +707,7 @@ int DropsPlugin::loadSample(const char *fp)
     // get the number of frames in the sample
     // sample range in sfizz is 0 ... frames - 1
     sampleLength = fileHandle.frames() - 1;
-    if (sampleLength == 0)
+    if (sampleLength == -1)
     {
 //TODO: show this in UI
 //file doesn't exist or is of incompatible type, main handles the -1

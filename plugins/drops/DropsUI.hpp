@@ -108,7 +108,7 @@ private:
     // filter tab
     ScopedPointer<VBox> vbox_filter, vbox_filter_lfo;
     ScopedPointer<HBox> hbox_filter_row_1, hbox_filter_row_2, hbox_filter_row_3;
-    ScopedPointer<Knob>   fFilterEgAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease,
+    ScopedPointer<Knob> fFilterEgAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease,
         fFilterCutOff, fFilterResonance;
     ScopedPointer<DropDown> fFilterLFOType;
     ScopedPointer<Menu> fFilterLFOTypeMenu;
@@ -121,7 +121,7 @@ private:
     ScopedPointer<VBox> vbox_pitch, vbox_pitch_lfo;
     ScopedPointer<HBox> hbox_pitch_row_1, hbox_pitch_row_2, hbox_pitch_row_3;
     ScopedPointer<Knob>
-         fPitchEgAttack, fPitchEgDecay, fPitchEgSustain, fPitchEgRelease;
+        fPitchEgAttack, fPitchEgDecay, fPitchEgSustain, fPitchEgRelease;
     ScopedPointer<DropDown> fPitchLFOType;
     ScopedPointer<Menu> fPitchLFOTypeMenu;
     ScopedPointer<Knob> fPitchLFOFreq, fPitchLFODepth;
@@ -133,14 +133,14 @@ private:
         zoomIn, zoomOut, zoomAll, zoomLoop;
     ScopedPointer<HBox> hbox_zoom_icons;
     ScopedPointer<SVGButton> fZoomOut, fZoomIn, fZoomAll, fZoomInOut,
-     fFilterBandpass,fFilterLowpass,fFilterHighpass;
+        fFilterBandpass, fFilterLowpass, fFilterHighpass;
 
     void initWidgets();
     void initTabAmp();
     void initTabPitch();
     void initTabFilter();
     void makeIcons();
-    std::string dirnameOf ( const std::string& fname );
+    std::string dirnameOf(const std::string &fname);
     int loadSample();
     void drawWaveform();
     void drawMinimap();
@@ -168,7 +168,7 @@ private:
     float viewMaxZoom;
     int mouseX;
     Rectangle<int> display;
-    std::string sampleDir;
+    std::string sampleDir, fileName;
 
     DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DropsUI)
 };
