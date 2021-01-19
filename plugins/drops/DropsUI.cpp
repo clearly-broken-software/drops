@@ -1135,7 +1135,7 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         mouseX = ev.pos.getX();
         float samples_per_pixel = pow(viewMaxZoom, viewZoom);
         sampleOut = static_cast<float>(sampleOut) + distance * samples_per_pixel;
-        sampleOut = clamp<sf_count_t>(sampleOut, waveForm->size(), sampleIn + 1);
+        sampleOut = clamp<sf_count_t>(sampleOut, waveForm->size() -1 , sampleIn + 1);
         float sampleOutPixel = static_cast<float>(sampleOut - viewStart) / samples_per_pixel + static_cast<float>(display_left);
         fSampleOut->setAbsoluteX(sampleOutPixel);
         // float value = static_cast<float>(sampleOut) / static_cast<float>(waveForm->size());
