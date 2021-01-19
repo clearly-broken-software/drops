@@ -11,3 +11,9 @@ drops\.kdev4
 
 build*
 .vscode/settings.json
+
+.vscode/
+
+debug.sfz
+
+drops_test.carxp
