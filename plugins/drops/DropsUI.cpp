@@ -21,6 +21,7 @@ DropsUI::DropsUI()
 {
     loadSharedResources();
     plugin = static_cast<DropsPlugin *>(getPluginInstancePointer());
+    sampleDir = "";
 
     fontFace(NANOVG_DEJAVU_SANS_TTF);
 
@@ -60,6 +61,7 @@ DropsUI::DropsUI()
     {
         loadSample();
         std::string filename = plugin->path;
+        sampleDir = dirnameOf(filename.c_str());
         fileopen_button->setText(filename);
     }
 }
@@ -390,6 +392,15 @@ void DropsUI::makeIcons()
     loopRight = new SVGImage(this, loop_right, 1.0f);
     clearlyBrokenLogo = new SVGImage(this, artwork::clearly_broken_logo, 0.8f);
 }
+
+std::string DropsUI::dirnameOf ( const std::string& fname )
+{
+    size_t pos = fname.find_last_of ( "\\/" );
+    return ( std::string::npos == pos )
+           ? ""
+           : fname.substr ( 0, pos );
+}
+
 void DropsUI::parameterChanged(uint32_t index, float value)
 {
 
@@ -897,6 +908,7 @@ void DropsUI::uiFileBrowserSelected(const char *filename)
     {
         fileopen_button->setText(filename);
         setState("filepath", filename);
+        sampleDir = dirnameOf(filename);
         repaint();
     }
 }
@@ -1150,6 +1162,7 @@ void DropsUI::onFileOpenButtonClicked(FileOpenButton *)
 {
     DGL::Window::FileBrowserOptions opts;
     opts.title = "Load SFZ";
+    opts.startDir = sampleDir.c_str();
     opts.buttons.showPlaces = 2;
     getParentWindow().openFileBrowser(opts);
 }
