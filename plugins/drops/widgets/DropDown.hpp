@@ -29,6 +29,7 @@ public:
   float getMenuOffset();
   void setCallback(Callback *cb);
   void setMenu(Menu *menu);
+  void positionMenu();
   void resize();
   void idleCallback() override;
   std::string label;

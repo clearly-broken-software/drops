@@ -112,8 +112,8 @@ private:
 
     //  display
     float fSampleIn, fSampleOut, fSampleLoopStart, fSampleLoopEnd;
-    //  sample tab
-    float fSamplePitchKeyCenter, fSamplePlayMode, fSamplePlayDirection;
+    //  sample
+    float fSamplePitchKeyCenter, fSamplePlayMode, fSamplePlayDirection, fSamplePitch, fSampleOversampling;
     //  amp
     float fAmpLFOType, fAmpLFOFreq, fAmpLFODepth,
         fAmpEGAttack, fAmpEgDecay, fAmpEgSustain, fAmpEgRelease;

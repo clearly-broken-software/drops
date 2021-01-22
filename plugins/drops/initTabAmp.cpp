@@ -240,6 +240,7 @@ void DropsUI::initTabAmp()
 
     fAmpLFOType->setMenu(fAmpLFOTypeMenu);
     fAmpLFOType->resize();
+    fAmpLFOType->positionMenu();
     // fAmpLFOSync->setMenu(fAmpLFOSyncMenu);
 }
 

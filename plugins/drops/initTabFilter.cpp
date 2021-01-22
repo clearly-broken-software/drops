@@ -234,8 +234,8 @@ void DropsUI::initTabFilter()
 
     fFilterLFOType->setMenu(fFilterLFOTypeMenu);
     fFilterLFOType->resize();
-    printf("vbox filter w,h %i, %i\n", vbox_filter_lfo->getWidth(), vbox_filter_lfo->getHeight());
-
+    fFilterLFOType->positionMenu();
+   
     //fFilterLFOSync->setMenu(fFilterLFOSyncMenu);
 }
 

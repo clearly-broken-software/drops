@@ -38,9 +38,10 @@ enum Parameters
    // kSampleXFade,          // loop_crossfade (not implemented)
    // kSampleNormalize,      // amplitude or volume
    kSamplePitchKeyCenter, // pitch_keycenter
-   // kSampleTune,           // tune
+   kSamplePitch,           // tune
    kSamplePlayMode,      // loopmode
    kSamplePlayDirection, // direction
+   kSampleOversampling, // 1,2,4,8
    /*    amp tab */
    kAmpLFOType,   // lfoN_wave
    kAmpLFOFreq,   // lfoN_freq
@@ -90,6 +91,7 @@ enum Widgets
    kKeyCenterMenu,
    kPlayModeMenu,
    kDirectionMenu,
+   kOversamplingMenu,
    kAmpLFOFreqBeat,
    kAmpLFOTypeMenu,
    kAmpLFOSyncMenu,
@@ -141,5 +143,5 @@ static constexpr unsigned int minimap_height = 30;
 
 static constexpr unsigned int sample_inout_font_size = 12;
 
-static constexpr float slider_right_padding = 60.f;
+// static constexpr float slider_right_padding = 60.f;
 #endif

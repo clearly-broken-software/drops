@@ -44,6 +44,8 @@ DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 2)
     fSamplePitchKeyCenter = 60.0f;
     fSamplePlayMode = 0.0f;
     fSamplePlayDirection = 0.0f;
+    fSamplePitch = 100.0f;
+    fSampleOversampling = 1.0f;
     // amp
     fAmpLFOType = 0.0f;
     fAmpLFOFreq = 0.0f;
@@ -125,6 +127,14 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.ranges.def = 60.0f;
         parameter.hints = kParameterIsAutomable | kParameterIsInteger;
         break;
+    case kSamplePitch:
+        parameter.name = "Pitch";
+        parameter.symbol = "pitch";
+        parameter.ranges.min = 0.0f;
+        parameter.ranges.max = 200.0f;
+        parameter.ranges.def = 100.0f;
+        parameter.hints = kParameterIsAutomable | kParameterIsInteger;
+        break;
     case kSamplePlayMode:
         parameter.name = "Playmode";
         parameter.symbol = "playmode";
@@ -139,7 +149,7 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
             ParameterEnumerationValue(2.0f, "loop_continuous"),
             ParameterEnumerationValue(3.0f, "loop_sustain")};
 
-        parameter.hints = kParameterIsAutomable;
+        parameter.hints = kParameterIsAutomable | kParameterIsInteger;
         break;
     case kSamplePlayDirection:
         parameter.name = "Play Direction";
@@ -153,7 +163,23 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
             ParameterEnumerationValue(0.0f, "forward"),
             ParameterEnumerationValue(1.0f, "reverse"),
         };
-        parameter.hints = kParameterIsAutomable;
+        parameter.hints = kParameterIsAutomable | kParameterIsInteger;
+        break;
+    case kSampleOversampling:
+        parameter.name = "Oversampling";
+        parameter.symbol = "oversampling";
+        parameter.ranges.min = 0.0f;
+        parameter.ranges.max = 3.0f;
+        parameter.ranges.def = 0.0f;
+        parameter.enumValues.count = 4;
+        parameter.enumValues.restrictedMode = true;
+        parameter.enumValues.values = new ParameterEnumerationValue[4]{
+            ParameterEnumerationValue(0.0f, "1x"),
+            ParameterEnumerationValue(1.0f, "2x"),
+            ParameterEnumerationValue(2.0f, "3x"),
+            ParameterEnumerationValue(3.0f, "4x"),
+        };
+        parameter.hints = kParameterIsInteger;
         break;
     case kAmpLFOType:
         parameter.name = "Amp LFO Type";
@@ -426,11 +452,17 @@ float DropsPlugin::getParameterValue(uint32_t index) const
     case kSamplePitchKeyCenter:
         val = fSamplePitchKeyCenter;
         break;
+    case kSamplePitch:
+        val = fSamplePitch;
+        break;
     case kSamplePlayMode:
         val = fSamplePlayMode;
         break;
     case kSamplePlayDirection:
         val = fSamplePlayDirection;
+        break;
+    case kSampleOversampling:
+        val = fSampleOversampling;
         break;
     case kAmpLFOType:
         val = fAmpLFOType;
@@ -542,6 +574,9 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         fSamplePitchKeyCenter = value;
         makeSFZ();
         break;
+    case kSamplePitch:
+        fSamplePitch = std::round(value);
+        break;
     case kSamplePlayMode:
         fSamplePlayMode = value;
         makeSFZ();
@@ -550,6 +585,29 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         fSamplePlayDirection = value;
         makeSFZ();
         break;
+    case kSampleOversampling:
+    {
+        const uint index = value;
+        switch (index)
+        {
+        case 0:
+            synth.setOversamplingFactor(1);
+            break;
+        case 1:
+            synth.setOversamplingFactor(2);
+            break;
+        case 2:
+            synth.setOversamplingFactor(4);
+            break;
+        case 3:
+            synth.setOversamplingFactor(8);
+            break;
+        default:
+            synth.setOversamplingFactor(1);
+            break;
+        }
+        break;
+    }
         // amp
     case kAmpLFOType:
         fAmpLFOType = value;
@@ -774,6 +832,8 @@ int DropsPlugin::loadSample(const char *fp)
 void DropsPlugin::initSFZ()
 {
     opcodes["default_path"] = "";
+    opcodes["pitch"] = "0";
+    opcodes["pitch_oncc500"] = "0";
     opcodes["ampeg_attack"] = "0";
     opcodes["ampeg_attack_oncc2010"] = "10";
     opcodes["ampeg_decay"] = "0";
@@ -831,6 +891,7 @@ void DropsPlugin::makeSFZ()
     uint sampleInInFrames = fSampleLength * fSampleIn;
     uint sampleOutInFrames = fSampleLength * fSampleOut;
     opcodes["sample"] = path;
+
     opcodes["loop_start"] = std::to_string(loopstartInFrames);
     opcodes["loop_end"] = std::to_string(loopEndInFrames);
     opcodes["offset"] = std::to_string(sampleInInFrames);
@@ -859,6 +920,8 @@ void DropsPlugin::makeSFZ()
     // buffer << "default_path=\n";
     // buffer << "<global>\n";
     // buffer << "<group>\n";
+    buffer << "pitch=-100\n";
+    buffer << "pitch_oncc500=200\n";
     buffer << "ampeg_attack=0\n";
     buffer << "ampeg_attack_oncc201=10\n";
     buffer << "ampeg_decay=0\n";
@@ -961,6 +1024,8 @@ void DropsPlugin::run(
     synth.hdcc(0, 402, fPitchEgDecay);
     synth.hdcc(0, 403, fPitchEgSustain);
     synth.hdcc(0, 404, fPitchEgRelease);
+    const float n = fSamplePitch / 200.f;
+    synth.hdcc(0, 500, n);
 
     while (framesDone < frames)
     {

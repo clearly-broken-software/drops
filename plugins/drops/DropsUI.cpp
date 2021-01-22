@@ -160,16 +160,16 @@ void DropsUI::initWidgets()
 
     hbox_zoom_icons->positionWidgets(); */
 
-    //    initTabSample();
+    const float fSampleFontSize = 12;
     fSamplePitchKeyCenter = new DropDown(window);
     fSamplePitchKeyCenter->setId(kSamplePitchKeyCenter);
-    fSamplePitchKeyCenter->font_size = 14;
+    fSamplePitchKeyCenter->font_size = fSampleFontSize;
     fSamplePitchKeyCenter->setSize(175,
                                    fSamplePitchKeyCenter->font_size +
                                        fSamplePitchKeyCenter->margin * 2.0f);
     fSamplePitchKeyCenter->setAbsolutePos(175, 77);
     fSamplePitchKeyCenter->setCallback(this);
-    fSamplePitchKeyCenter->label = "PITCH KEY-CENTER :";
+    fSamplePitchKeyCenter->label = "PITCH KEY-CENTER: ";
     fSamplePitchKeyCenter->item = "C4";
     fSamplePitchKeyCenter->foreground_color = black_olive_2;
     fSamplePitchKeyCenter->background_color = black_olive;
@@ -177,9 +177,8 @@ void DropsUI::initWidgets()
 
     fKeyCenterMenu = new Menu(window);
     fKeyCenterMenu->setId(kKeyCenterMenu);
-
     fKeyCenterMenu->setCallback(this);
-    fKeyCenterMenu->font_size = 14;
+    fKeyCenterMenu->font_size = fSampleFontSize;
     fKeyCenterMenu->addItems({
         "127 G9",
         "126 F#9/Gb9",
@@ -310,7 +309,6 @@ void DropsUI::initWidgets()
         "1  ",
         "0 ",
     });
-
     fKeyCenterMenu->hide();
     fKeyCenterMenu->background_color = black_olive;
     fKeyCenterMenu->foreground_color = black_olive_2;
@@ -323,9 +321,30 @@ void DropsUI::initWidgets()
     fSamplePitchKeyCenter->setMenu(fKeyCenterMenu);
     fSamplePitchKeyCenter->resize();
 
+    fSamplePitch = new Slider(window);
+    fSamplePitch->setId(kSamplePitch);
+    fSamplePitch->setCallback(this);
+    fSamplePitch->setSize(200, 14);
+    fSamplePitch->font_size = fSampleFontSize;
+    fSamplePitch->setLabel("TUNE: ");
+    fSamplePitch->background_color = black_olive;
+    fSamplePitch->foreground_color = flame;
+    fSamplePitch->highlight_color = flame_1;
+    fSamplePitch->text_color = floral_white;
+    fSamplePitch->unit = "Ct";
+    Rectangle<float> bounds;
+    fontSize(fSamplePitch->font_size);
+    textBounds(0, 0, "-100 Ct", nullptr, bounds);
+    const float padding = bounds.getWidth();
+    fSamplePitch->right_padding = padding;
+    fSamplePitch->format_str = "%.f";
+    fSamplePitch->min_value = -100.0f;
+    fSamplePitch->max_value = 100.0f;
+    fSamplePitch->default_value = 0.0f;
+
     fSamplePlayDirection = new DropDown(window);
     fSamplePlayDirection->setId(kSamplePlayDirection);
-    fSamplePlayDirection->font_size = 14;
+    fSamplePlayDirection->font_size = fSampleFontSize;
     fSamplePlayDirection->setSize(216,
                                   fSamplePlayDirection->font_size +
                                       fSamplePlayDirection->margin * 2.0f);
@@ -340,9 +359,8 @@ void DropsUI::initWidgets()
     fDirectionMenu = new Menu(window);
     fDirectionMenu->setId(kDirectionMenu);
     fDirectionMenu->setCallback(this);
-    fDirectionMenu->font_size = 14;
+    fDirectionMenu->font_size = fSampleFontSize;
     fDirectionMenu->addItems({"FORWARD", "REVERSE"});
-
     fDirectionMenu->hide();
     fDirectionMenu->background_color = black_olive;
     fDirectionMenu->foreground_color = black_olive_2;
@@ -354,13 +372,12 @@ void DropsUI::initWidgets()
 
     fSamplePlayMode = new DropDown(window);
     fSamplePlayMode->setId(kSamplePlayMode);
-    fSamplePlayMode->font_size = 14;
+    fSamplePlayMode->font_size = fSampleFontSize;
     fSamplePlayMode->setSize(216,
                              fSamplePlayMode->font_size +
                                  fSamplePlayMode->margin * 2.0f);
-    fSamplePlayMode->setAbsolutePos(709, 77);
     fSamplePlayMode->setCallback(this);
-    fSamplePlayMode->label = "LOOP MODE:";
+    fSamplePlayMode->label = "LOOP MODE: ";
     fSamplePlayMode->item = "NO LOOP";
     fSamplePlayMode->foreground_color = floral_white;
     fSamplePlayMode->background_color = black_olive;
@@ -369,9 +386,8 @@ void DropsUI::initWidgets()
     fPlayModeMenu = new Menu(window);
     fPlayModeMenu->setId(kPlayModeMenu);
     fPlayModeMenu->setCallback(this);
-    fPlayModeMenu->font_size = 14;
+    fPlayModeMenu->font_size = fSampleFontSize;
     fPlayModeMenu->addItems({"NO LOOP", "ONE SHOT", "CONTINUOUS", "SUSTAIN"});
-
     fPlayModeMenu->hide();
     fPlayModeMenu->background_color = black_olive;
     fPlayModeMenu->foreground_color = black_olive_2;
@@ -380,6 +396,46 @@ void DropsUI::initWidgets()
 
     fSamplePlayMode->setMenu(fPlayModeMenu);
     fSamplePlayMode->resize();
+
+    fSampleOversampling = new DropDown(window);
+    fSampleOversampling->setId(kSampleOversampling);
+    fSampleOversampling->font_size = fSampleFontSize;
+    fSampleOversampling->setSize(116, fSamplePlayMode->font_size + fSamplePlayMode->margin * 2.0f);
+    fSampleOversampling->setCallback(this);
+    fSampleOversampling->label = "OVERSAMPLING: ";
+    fSampleOversampling->item = "1x";
+    fSampleOversampling->foreground_color = floral_white;
+    fSampleOversampling->background_color = black_olive;
+    fSampleOversampling->text_color = floral_white;
+
+    fOversamplingMenu = new Menu(window);
+    fOversamplingMenu->setId(kOversamplingMenu);
+    fOversamplingMenu->setCallback(this);
+    fOversamplingMenu->font_size = fSampleFontSize;
+    fOversamplingMenu->addItems({"1x", "2x", "4x", "8x"});
+    fOversamplingMenu->hide();
+    fOversamplingMenu->background_color = black_olive;
+    fOversamplingMenu->foreground_color = black_olive_2;
+    fOversamplingMenu->highlight_color = flame;
+    fOversamplingMenu->text_color = floral_white;
+
+    fSampleOversampling->setMenu(fOversamplingMenu);
+    fSampleOversampling->resize();
+
+    hbox_sample = new HBox(window);
+    hbox_sample->setAbsolutePos(0, 77);
+    hbox_sample->setSize(UI_W, 20);
+    hbox_sample->addWidget(fSamplePitchKeyCenter);
+    hbox_sample->addWidget(fSamplePitch);
+    hbox_sample->addWidget(fSamplePlayDirection);
+    hbox_sample->addWidget(fSamplePlayMode);
+    hbox_sample->addWidget(fSampleOversampling);
+    hbox_sample->positionWidgets();
+
+    fSamplePitchKeyCenter->positionMenu();
+    fSamplePlayDirection->positionMenu();
+    fSamplePlayMode->positionMenu();
+    fSampleOversampling->positionMenu();
 
     initTabAmp();
     initTabFilter();
@@ -444,11 +500,17 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         fSamplePitchKeyCenter->setValue(keyValue);
         break;
     }
+    case kSamplePitch:
+        fSamplePitch->setValue(value - 100);
+        break;
     case kSamplePlayMode:
         fSamplePlayMode->setValue(value);
         break;
     case kSamplePlayDirection:
         fSamplePlayDirection->setValue(value);
+        break;
+    case kSampleOversampling:
+        fSampleOversampling->setValue(value);
         break;
         // amp
     case kAmpLFOType:
@@ -558,6 +620,7 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         printf("DropsUI::parameterChanged(%i,%f)\n", index, value);
         break;
     }
+    repaint();
 }
 
 int DropsUI::loadSample()
@@ -1191,6 +1254,9 @@ void DropsUI::onDropDownClicked(DropDown *dropDown)
     case kSamplePlayDirection:
         fDirectionMenu->show();
         break;
+    case kSampleOversampling:
+        fOversamplingMenu->show();
+        break;
     case kAmpLFOType:
         fAmpLFOTypeMenu->show();
         break;
@@ -1309,6 +1375,9 @@ void DropsUI::onSliderValueChanged(Slider *slider, float value)
 
     switch (id)
     {
+    case kSamplePitch:
+        setParameterValue(id, value + 100);
+        break;
     default:
 #ifdef DEBUG
         printf("slider %i, value %f\n", id, value);
@@ -1412,6 +1481,11 @@ void DropsUI::onMenuClicked(Menu *menu, uint menu_id, std::string item)
         fSamplePlayDirection->item = item;
         fDirectionMenu->hide();
         setParameterValue(kSamplePlayDirection, menu_id);
+        break;
+    case kOversamplingMenu:
+        fSampleOversampling->item = item;
+        fOversamplingMenu->hide();
+        setParameterValue(kSampleOversampling, menu_id);
         break;
     case kAmpLFOTypeMenu:
         fAmpLFOType->item = item;

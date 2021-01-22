@@ -124,7 +124,6 @@ bool Slider::onScroll(const ScrollEvent &ev)
     }
     setValue(value);
     callback->onSliderValueChanged(this, value_);
-
     repaint();
     return true;
 }
@@ -150,6 +149,7 @@ bool Slider::onMotion(const MotionEvent &ev)
     const float vper = (mx - label_width_) / slider_area_w;
     const float val = min_value + vper * (max_value - min_value);
     setValue(val);
+    callback->onSliderValueChanged(this, value_);
     repaint();
     return true;
 }
@@ -161,11 +161,11 @@ void Slider::onNanoDisplay()
     const float stroke_width = 2.f; // FIXME: hard coded
 
     // background
-    // beginPath();
-    // fillColor(background_color);
-    // rect(0, 0, width, height);
-    // fill();
-    // closePath();
+    beginPath();
+    fillColor(background_color);
+    rect(0, 0, width, height);
+    fill();
+    closePath();
 
     // label
     const float label_x = 0.0f;

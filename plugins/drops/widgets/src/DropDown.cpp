@@ -116,10 +116,16 @@ float DropDown::getMenuOffset()
 void DropDown::setMenu(Menu *menu)
 {
     menu_ = menu;
-    // get coordinates
-    int x = getAbsoluteX() + getMenuOffset();
-    int y = getAbsoluteY() + getHeight();
+}
+
+void DropDown::positionMenu()
+{
+    if(menu_)
+    {
+    const int x = getAbsoluteX() + getMenuOffset();
+    const int y = getAbsoluteY() + getHeight();
     menu_->setAbsolutePos(x, y);
+    }
 }
 
 void DropDown::resize()

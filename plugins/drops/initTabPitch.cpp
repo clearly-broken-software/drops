@@ -169,6 +169,8 @@ void DropsUI::initTabPitch()
 
     fPitchLFOType->setMenu(fPitchLFOTypeMenu);
     fPitchLFOType->resize();
+    fPitchLFOType->positionMenu();
+
 }
 
 END_NAMESPACE_DISTRHO

@@ -82,18 +82,19 @@ private:
     ScopedPointer<ScrollBar> fScrollBarHandle, fLoopStart, fLoopEnd, fSampleIn,
         fSampleOut, fScrollBarLeft, fScrollBarRight;
 
-    ScopedPointer<HBox> box_tabs;
+    // ScopedPointer<HBox> box_tabs;
     // sample tab
-    ScopedPointer<VBox> vbox_sample;
-    ScopedPointer<HBox> hbox_sample_row_1, hbox_sample_row_2, hbox_sample_row_3;
+    // ScopedPointer<VBox> vbox_sample;
+    // ScopedPointer<HBox> hbox_sample_row_1, hbox_sample_row_2, hbox_sample_row_3;
     // ScopedPointer<Slider> fSampleXFade;
-    ScopedPointer<Slider> fSampleTune;
+    ScopedPointer<HBox> hbox_sample;
+    ScopedPointer<Slider> fSamplePitch;
     // ScopedPointer<DropDown> fSampleNormalize;
     ScopedPointer<DropDown> fSamplePitchKeyCenter,
-        fSamplePlayMode, fSamplePlayDirection;
+        fSamplePlayMode, fSamplePlayDirection, fSampleOversampling;
     ScopedPointer<Menu> fNormalizeMenu, fKeyCenterMenu, fPlayModeMenu,
-        fDirectionMenu;
-    // amp tab
+        fDirectionMenu,fOversamplingMenu;
+    // amp 
     ScopedPointer<VBox> vbox_amp;
     ScopedPointer<HBox> hbox_amp_row_1, hbox_amp_row_2, hbox_amp_row_3;
     ScopedPointer<Knob>
@@ -105,7 +106,7 @@ private:
     // ScopedPointer<Menu> fAmpLFOSyncMenu;
     //ScopedPointer<RadioButton> fAmpLFOFreqBeat;
 
-    // filter tab
+    // filter 
     ScopedPointer<VBox> vbox_filter, vbox_filter_lfo;
     ScopedPointer<HBox> hbox_filter_row_1, hbox_filter_row_2, hbox_filter_row_3;
     ScopedPointer<Knob> fFilterEgAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease,
