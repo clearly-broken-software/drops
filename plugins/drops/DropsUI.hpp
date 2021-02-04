@@ -6,12 +6,12 @@
 #include "external/src/nanosvg.h"
 #include "external/src/nanosvgrast.h"
 
-#include "DistrhoPluginInfo.h"
 #include "DistrhoUI.hpp"
 #include "NanoVG.hpp"
 #include "Window.hpp"
 #include <vector>
 
+#include "DropsGeometry.hpp"
 #include "DropsPlugin.hpp"
 #include "TextButton.hpp"
 #include "FileOpenButton.hpp"
@@ -25,10 +25,11 @@
 #include "HBox.hpp"
 #include "VBox.hpp"
 #include "SVGImage.hpp"
-#include "Artwork.hpp"
+#include "PopUp.hpp"
 #include "DropsColors.hpp"
 #include "SVG_Icons.hpp"
 #include "SVGImage.hpp"
+#include "fonts.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -82,38 +83,34 @@ private:
     ScopedPointer<ScrollBar> fScrollBarHandle, fLoopStart, fLoopEnd, fSampleIn,
         fSampleOut, fScrollBarLeft, fScrollBarRight;
 
-    // ScopedPointer<HBox> box_tabs;
-    // sample tab
-    // ScopedPointer<VBox> vbox_sample;
-    // ScopedPointer<HBox> hbox_sample_row_1, hbox_sample_row_2, hbox_sample_row_3;
-    // ScopedPointer<Slider> fSampleXFade;
     ScopedPointer<HBox> hbox_sample;
     ScopedPointer<Slider> fSamplePitch;
     // ScopedPointer<DropDown> fSampleNormalize;
     ScopedPointer<DropDown> fSamplePitchKeyCenter,
         fSamplePlayMode, fSamplePlayDirection, fSampleOversampling;
     ScopedPointer<Menu> fNormalizeMenu, fKeyCenterMenu, fPlayModeMenu,
-        fDirectionMenu,fOversamplingMenu;
-    // amp 
+        fDirectionMenu, fOversamplingMenu;
+    // amp
     ScopedPointer<VBox> vbox_amp;
     ScopedPointer<HBox> hbox_amp_row_1, hbox_amp_row_2, hbox_amp_row_3;
     ScopedPointer<Knob>
         fAmpEgAttack, fAmpEgDecay, fAmpEgSustain, fAmpEgRelease;
     ScopedPointer<DropDown> fAmpLFOType;
     ScopedPointer<Menu> fAmpLFOTypeMenu;
-    ScopedPointer<Knob> fAmpLFOFreq, fAmpLFODepth;
+    ScopedPointer<Knob> fAmpLFOFreq, fAmpLFODepth,fAmpLFOFade;
     // ScopedPointer<DropDown> fAmpLFOSync;
     // ScopedPointer<Menu> fAmpLFOSyncMenu;
     //ScopedPointer<RadioButton> fAmpLFOFreqBeat;
 
-    // filter 
-    ScopedPointer<VBox> vbox_filter, vbox_filter_lfo;
-    ScopedPointer<HBox> hbox_filter_row_1, hbox_filter_row_2, hbox_filter_row_3;
+    // filter
+    ScopedPointer<VBox> vbox_filter;
+    ScopedPointer<HBox> hbox_filter_row_1, hbox_filter_row_2, hbox_filter_row_3,
+    hbox_filter_row_1_spacer,hbox_filter_row_3_spacer;
     ScopedPointer<Knob> fFilterEgAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease,
         fFilterCutOff, fFilterResonance;
     ScopedPointer<DropDown> fFilterLFOType;
     ScopedPointer<Menu> fFilterLFOTypeMenu;
-    ScopedPointer<Knob> fFilterLFOFreq, fFilterLFODepth;
+    ScopedPointer<Knob> fFilterLFOFreq, fFilterLFODepth,fFilterLFOFade;
     // ScopedPointer<DropDown> fFilterLFOSync;
     // ScopedPointer<Menu> fFilterLFOSyncMenu;
     // ScopedPointer<RadioButton> fFilterLFOFreqBeat;
@@ -125,7 +122,7 @@ private:
         fPitchEgAttack, fPitchEgDecay, fPitchEgSustain, fPitchEgRelease;
     ScopedPointer<DropDown> fPitchLFOType;
     ScopedPointer<Menu> fPitchLFOTypeMenu;
-    ScopedPointer<Knob> fPitchLFOFreq, fPitchLFODepth;
+    ScopedPointer<Knob> fPitchLFOFreq, fPitchLFODepth, fPitchLFOFade;
     // // ScopedPointer<DropDown> fPitchLFOSync;
     // ScopedPointer<Menu> fPitchLFOSyncMenu;
     // ScopedPointer<RadioButton> fPitchLFOFreqBeat;
@@ -135,6 +132,7 @@ private:
     ScopedPointer<HBox> hbox_zoom_icons;
     ScopedPointer<SVGButton> fZoomOut, fZoomIn, fZoomAll, fZoomInOut,
         fFilterBandpass, fFilterLowpass, fFilterHighpass;
+    ScopedPointer<PopUp> fPopUp;
 
     void initWidgets();
     void initTabAmp();
@@ -170,6 +168,7 @@ private:
     int mouseX;
     Rectangle<int> display;
     std::string sampleDir, fileName;
+    FontId mainFont;
 
     DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DropsUI)
 };

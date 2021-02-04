@@ -17,6 +17,7 @@ FILES_DSP = \
 
 FILES_UI  = \
 			DropsUI.cpp \
+			DropsGeometry.cpp \
 			widgets/src/TextButton.cpp \
 			widgets/src/ScrollBar.cpp \
 			widgets/src/Knob.cpp \
@@ -28,8 +29,9 @@ FILES_UI  = \
 			widgets/src/FileOpenButton.cpp \
 			widgets/src/RadioButton.cpp \
 			widgets/src/SVGButton.cpp \
+			widgets/src/PopUp.cpp \
 			SVGImage.cpp \
-			Artwork.cpp \
+			fonts.cpp \
 			SVG_Icons.cpp \
 			initTabAmp.cpp \
 			initTabFilter.cpp \

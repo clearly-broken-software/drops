@@ -121,7 +121,7 @@ void HBox::positionWidgets()
         {
             combined_widget_width += it->widget->getWidth();
         }
-        
+
         int startX = box_x + width / 2 - combined_widget_width / 2;
         for (auto it = items_.begin(); it != items_.end(); it++)
         {
@@ -189,7 +189,7 @@ void HBox::positionWidgets()
     {
         for (auto it = items_.begin(); it != items_.end(); it++)
         {
-            it->widget->setAbsoluteY(box_y + height - it->height);
+            it->widget->setAbsoluteY(box_y + height - it->widget->getHeight());
         }
         break;
     }

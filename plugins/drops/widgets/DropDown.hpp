@@ -7,6 +7,7 @@
 #include "Widget.hpp"
 #include "NanoVG.hpp"
 #include "Menu.hpp"
+#include "fonts.hpp"
 #include <string>
 
 START_NAMESPACE_DISTRHO
@@ -24,11 +25,13 @@ public:
   explicit DropDown(Window &parent) noexcept;
   explicit DropDown(Widget *widget) noexcept;
   void setValue(float value);
-  
+
   void addOption(std::string str);
   float getMenuOffset();
   void setCallback(Callback *cb);
   void setMenu(Menu *menu);
+  void setFont(const char *name, const uchar *data, uint dataSize);
+  void setMenuFont(const char *name, const uchar *data, uint dataSize);
   void positionMenu();
   void resize();
   void idleCallback() override;
@@ -36,7 +39,7 @@ public:
   std::string item;
   float font_size;
   float margin;
-  Color background_color, foreground_color, text_color;
+  Color background_color, foreground_color, highlight_color, text_color;
 
 protected:
   void onNanoDisplay() override;
@@ -47,6 +50,8 @@ private:
   Callback *callback_;
   bool has_mouse_;
   Menu *menu_;
+  FontId main_font_;
+  FontId menu_font_;
 
   DISTRHO_LEAK_DETECTOR(DropDown)
 };

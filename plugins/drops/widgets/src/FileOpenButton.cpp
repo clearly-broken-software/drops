@@ -10,20 +10,23 @@ FileOpenButton::FileOpenButton(Window &parent) noexcept
     background_color = Color(0.8f, 0.8f, 0.8f);
     text_color = Color(0.1f, 0.1f, 0.1f);
     font_size = 16;
-    loadSharedResources();
+    Roboto_ = createFontFromMemory("Roboto",
+                                   reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+                                   fonts::Roboto_RegularDataSize, false);
 }
 
-FileOpenButton::FileOpenButton(Widget * widget) noexcept
+FileOpenButton::FileOpenButton(Widget *widget) noexcept
     : NanoWidget(widget)
 {
     buttonText = "click to load sample";
     background_color = Color(0.8f, 0.8f, 0.8f);
     text_color = Color(0.1f, 0.1f, 0.1f);
     font_size = 16;
-    loadSharedResources();
+    Roboto_ = createFontFromMemory("Roboto",
+                                   reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+                                   fonts::Roboto_RegularDataSize, false);
+    
 }
-
-
 
 bool FileOpenButton::onMouse(const MouseEvent &ev)
 {
@@ -52,6 +55,7 @@ void FileOpenButton::onNanoDisplay()
     beginPath();
     fillColor(text_color);
     fontSize(font_size);
+    fontFaceId(Roboto_);
     textAlign(ALIGN_LEFT | ALIGN_MIDDLE);
     Rectangle<float> bounds;
     textBounds(0, 0, buttonText.c_str(), NULL, bounds);

@@ -19,12 +19,13 @@ START_NAMESPACE_DISTRHO
 DropsUI::DropsUI()
     : UI(UI_W, UI_H)
 {
-    loadSharedResources();
     plugin = static_cast<DropsPlugin *>(getPluginInstancePointer());
     sampleDir = "";
     fileName = "";
-
-    fontFace(NANOVG_DEJAVU_SANS_TTF);
+    mainFont = createFontFromMemory("Roboto_Regular",
+                                    reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+                                    fonts::Roboto_RegularDataSize, false);
+    fontFaceId(mainFont);
 
     viewStart = 0;
     viewEnd = 0;
@@ -160,10 +161,16 @@ void DropsUI::initWidgets()
 
     hbox_zoom_icons->positionWidgets(); */
 
-    const float fSampleFontSize = 12;
+    const float fSampleFontSize = 14;
     fSamplePitchKeyCenter = new DropDown(window);
     fSamplePitchKeyCenter->setId(kSamplePitchKeyCenter);
     fSamplePitchKeyCenter->font_size = fSampleFontSize;
+    fSamplePitchKeyCenter->setFont("RobotoRegular",
+                                   reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+                                   fonts::Roboto_RegularDataSize);
+    fSamplePitchKeyCenter->setMenuFont("RobotoRegular",
+                                       reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+                                       fonts::Roboto_RegularDataSize);
     fSamplePitchKeyCenter->setSize(175,
                                    fSamplePitchKeyCenter->font_size +
                                        fSamplePitchKeyCenter->margin * 2.0f);
@@ -178,6 +185,9 @@ void DropsUI::initWidgets()
     fKeyCenterMenu = new Menu(window);
     fKeyCenterMenu->setId(kKeyCenterMenu);
     fKeyCenterMenu->setCallback(this);
+    fKeyCenterMenu->setFont("RobotoRegular",
+                            reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+                            fonts::Roboto_RegularDataSize);
     fKeyCenterMenu->font_size = fSampleFontSize;
     fKeyCenterMenu->addItems({
         "127 G9",
@@ -316,7 +326,7 @@ void DropsUI::initWidgets()
     fKeyCenterMenu->text_color = floral_white;
     fKeyCenterMenu->item_view_first = 60;
     fKeyCenterMenu->item_view_last = 63;
-    fKeyCenterMenu->max_view_items = 4;
+    fKeyCenterMenu->setMaxViewItems(4);
 
     fSamplePitchKeyCenter->setMenu(fKeyCenterMenu);
     fSamplePitchKeyCenter->resize();
@@ -324,7 +334,7 @@ void DropsUI::initWidgets()
     fSamplePitch = new Slider(window);
     fSamplePitch->setId(kSamplePitch);
     fSamplePitch->setCallback(this);
-    fSamplePitch->setSize(200, 14);
+    fSamplePitch->setSize(200, fSampleFontSize + 2);
     fSamplePitch->font_size = fSampleFontSize;
     fSamplePitch->setLabel("TUNE: ");
     fSamplePitch->background_color = black_olive;
@@ -333,6 +343,7 @@ void DropsUI::initWidgets()
     fSamplePitch->text_color = floral_white;
     fSamplePitch->unit = "Ct";
     Rectangle<float> bounds;
+    fontFaceId(mainFont);
     fontSize(fSamplePitch->font_size);
     textBounds(0, 0, "-100 Ct", nullptr, bounds);
     const float padding = bounds.getWidth();
@@ -345,6 +356,12 @@ void DropsUI::initWidgets()
     fSamplePlayDirection = new DropDown(window);
     fSamplePlayDirection->setId(kSamplePlayDirection);
     fSamplePlayDirection->font_size = fSampleFontSize;
+    fSamplePlayDirection->setFont("RobotoRegular",
+                                  reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+                                  fonts::Roboto_RegularDataSize);
+    fSamplePlayDirection->setMenuFont("RobotoRegular",
+                                      reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+                                      fonts::Roboto_RegularDataSize);
     fSamplePlayDirection->setSize(216,
                                   fSamplePlayDirection->font_size +
                                       fSamplePlayDirection->margin * 2.0f);
@@ -360,6 +377,10 @@ void DropsUI::initWidgets()
     fDirectionMenu->setId(kDirectionMenu);
     fDirectionMenu->setCallback(this);
     fDirectionMenu->font_size = fSampleFontSize;
+    fDirectionMenu->setFont("RobotoRegular",
+                            reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+                            fonts::Roboto_RegularDataSize);
+
     fDirectionMenu->addItems({"FORWARD", "REVERSE"});
     fDirectionMenu->hide();
     fDirectionMenu->background_color = black_olive;
@@ -376,6 +397,12 @@ void DropsUI::initWidgets()
     fSamplePlayMode->setSize(216,
                              fSamplePlayMode->font_size +
                                  fSamplePlayMode->margin * 2.0f);
+    fSamplePlayMode->setFont("RobotoRegular",
+                             reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+                             fonts::Roboto_RegularDataSize);
+    fSamplePlayMode->setMenuFont("RobotoRegular",
+                                 reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+                                 fonts::Roboto_RegularDataSize);
     fSamplePlayMode->setCallback(this);
     fSamplePlayMode->label = "LOOP MODE: ";
     fSamplePlayMode->item = "NO LOOP";
@@ -387,6 +414,9 @@ void DropsUI::initWidgets()
     fPlayModeMenu->setId(kPlayModeMenu);
     fPlayModeMenu->setCallback(this);
     fPlayModeMenu->font_size = fSampleFontSize;
+    fPlayModeMenu->setFont("RobotoRegular",
+                           reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+                           fonts::Roboto_RegularDataSize);
     fPlayModeMenu->addItems({"NO LOOP", "ONE SHOT", "CONTINUOUS", "SUSTAIN"});
     fPlayModeMenu->hide();
     fPlayModeMenu->background_color = black_olive;
@@ -400,6 +430,12 @@ void DropsUI::initWidgets()
     fSampleOversampling = new DropDown(window);
     fSampleOversampling->setId(kSampleOversampling);
     fSampleOversampling->font_size = fSampleFontSize;
+    fSampleOversampling->setFont("RobotoRegular",
+                                 reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+                                 fonts::Roboto_RegularDataSize);
+    fSampleOversampling->setMenuFont("RobotoRegular",
+                                     reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+                                     fonts::Roboto_RegularDataSize);
     fSampleOversampling->setSize(116, fSamplePlayMode->font_size + fSamplePlayMode->margin * 2.0f);
     fSampleOversampling->setCallback(this);
     fSampleOversampling->label = "OVERSAMPLING: ";
@@ -412,6 +448,9 @@ void DropsUI::initWidgets()
     fOversamplingMenu->setId(kOversamplingMenu);
     fOversamplingMenu->setCallback(this);
     fOversamplingMenu->font_size = fSampleFontSize;
+    fOversamplingMenu->setFont("RobotoRegular",
+                               reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+                               fonts::Roboto_RegularDataSize);
     fOversamplingMenu->addItems({"1x", "2x", "4x", "8x"});
     fOversamplingMenu->hide();
     fOversamplingMenu->background_color = black_olive;
@@ -440,6 +479,36 @@ void DropsUI::initWidgets()
     initTabAmp();
     initTabFilter();
     initTabPitch();
+    // setup popup, needs to be last to get it on top
+    fPopUp = new PopUp(window);
+    fPopUp->setFont("RobotoRegular",
+                    reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+                    fonts::Roboto_RegularDataSize);
+    fPopUp->setText("POP UP TEXT");
+    fPopUp->hide();
+    fAmpLFOFreq->setPopUp(fPopUp);
+    fAmpLFODepth->setPopUp(fPopUp);
+    fAmpLFOFade->setPopUp(fPopUp);
+    fAmpEgAttack->setPopUp(fPopUp);
+    fAmpEgDecay->setPopUp(fPopUp);
+    fAmpEgSustain->setPopUp(fPopUp);
+    fAmpEgRelease->setPopUp(fPopUp);
+    fFilterCutOff->setPopUp(fPopUp);
+    fFilterResonance->setPopUp(fPopUp);
+    fFilterLFOFreq->setPopUp(fPopUp);
+    fFilterLFODepth->setPopUp(fPopUp);
+    fFilterLFOFade->setPopUp(fPopUp);
+    fFilterEgAttack->setPopUp(fPopUp);
+    fFilterEgDecay->setPopUp(fPopUp);
+    fFilterEgSustain->setPopUp(fPopUp);
+    fFilterEgRelease->setPopUp(fPopUp);
+    fPitchLFOFreq->setPopUp(fPopUp);
+    fPitchLFODepth->setPopUp(fPopUp);
+    fPitchLFOFade->setPopUp(fPopUp);
+    fPitchEgAttack->setPopUp(fPopUp);
+    fPitchEgDecay->setPopUp(fPopUp);
+    fPitchEgSustain->setPopUp(fPopUp);
+    fPitchEgRelease->setPopUp(fPopUp);
 }
 
 void DropsUI::makeIcons()
@@ -460,8 +529,7 @@ std::string DropsUI::dirnameOf(const std::string &fname)
 
 void DropsUI::parameterChanged(uint32_t index, float value)
 {
-
-    switch (index)
+     switch (index)
     {
     case kSampleLoaded:
     {
@@ -518,6 +586,7 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         repaint();
         break;
     case kAmpLFOFreq:
+        value = (fAmpLFOFreq->max - fAmpLFOFreq->min) * value + fAmpLFOFreq->min;
         fAmpLFOFreq->setValue(value);
         repaint();
         break;
@@ -525,11 +594,17 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         fAmpLFODepth->setValue(value);
         repaint();
         break;
+    case kAmpLFOFade:
+        value = (fAmpLFOFade->max - fAmpLFOFade->min) * value + fAmpLFOFade->min;
+        fAmpLFOFade->setValue(value);
+        break;
     case kAmpEgAttack:
+        value = (fAmpEgAttack->max - fAmpEgAttack->min) * value + fAmpEgAttack->min;
         fAmpEgAttack->setValue(value);
         repaint();
         break;
     case kAmpEgDecay:
+        value = (fAmpEgDecay->max - fAmpEgDecay->min) * value + fAmpEgDecay->min;
         fAmpEgDecay->setValue(value);
         repaint();
         break;
@@ -538,30 +613,37 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         repaint();
         break;
     case kAmpEgRelease:
+        value = (fAmpEgRelease->max - fAmpEgRelease->min) * value + fAmpEgRelease->min;
         fAmpEgRelease->setValue(value);
         repaint();
         break;
     // filter
     case kFilterType:
     {
-        static uint val = static_cast<uint>(value);
+        const uint val = static_cast<uint>(value);
         switch (val)
         {
         case 0:
+        {
             fFilterLowpass->is_active = true;
             fFilterBandpass->is_active = false;
             fFilterHighpass->is_active = false;
-            break;
+        }
+        break;
         case 1:
+        {
             fFilterLowpass->is_active = false;
             fFilterBandpass->is_active = true;
             fFilterHighpass->is_active = false;
-            break;
+        }
+        break;
         case 2:
+        {
             fFilterLowpass->is_active = false;
             fFilterBandpass->is_active = false;
             fFilterHighpass->is_active = true;
-            break;
+        }
+        break;
         default:
             break;
         }
@@ -571,10 +653,14 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         fFilterLFOType->setValue(value);
         break;
     case kFilterLFOFreq:
+        value = (fFilterLFOFreq->max - fFilterLFOFreq->min) * value + fFilterLFOFreq->min;
         fFilterLFOFreq->setValue(value);
         break;
     case kFilterLFODepth:
         fFilterLFODepth->setValue(value);
+        break;
+    case kFilterLFOFade:
+        value = (fFilterLFOFade->max - fFilterLFOFade->min) * value + fFilterLFOFade->min;
         break;
     case kFilterCutOff:
         fFilterCutOff->setValue(value);
@@ -583,15 +669,18 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         fFilterResonance->setValue(value);
         break;
     case kFilterEgAttack:
+        value = (fFilterEgAttack->max - fFilterEgAttack->min) * value + fFilterEgAttack->min;
         fFilterEgAttack->setValue(value);
         break;
     case kFilterEgDecay:
+        value = (fFilterEgDecay->max - fFilterEgDecay->min) * value + fFilterEgDecay->min;
         fFilterEgDecay->setValue(value);
         break;
     case kFilterEgSustain:
         fFilterEgSustain->setValue(value);
         break;
     case kFilterEgRelease:
+        value = (fFilterEgRelease->max - fFilterEgRelease->min) * value + fFilterEgRelease->min;
         fFilterEgRelease->setValue(value);
         break;
     //  pitch
@@ -599,21 +688,29 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         fPitchLFOType->setValue(value);
         break;
     case kPitchLFOFreq:
+        value = (fPitchLFOFreq->max - fPitchLFOFreq->min) * value + fPitchLFOFreq->min;
         fPitchLFOFreq->setValue(value);
+        break;
+    case kPitchLFOFade:
+        value = (fPitchLFOFade->max - fPitchLFOFade->min) * value + fPitchLFOFade->min;
+        fPitchLFOFade->setValue(value);
         break;
     case kPitchLFODepth:
         fPitchLFODepth->setValue(value);
         break;
     case kPitchEgAttack:
+        value = (fPitchEgAttack->max - fPitchEgAttack->min) * value + fPitchEgAttack->min;
         fPitchEgAttack->setValue(value);
         break;
     case kPitchEgDecay:
+        value = (fPitchEgDecay->max - fPitchEgDecay->min) * value + fPitchEgDecay->min;
         fPitchEgDecay->setValue(value);
         break;
     case kPitchEgSustain:
         fPitchEgSustain->setValue(value);
         break;
     case kPitchEgRelease:
+        value = (fFilterEgRelease->max - fFilterEgRelease->min) * value + fFilterEgRelease->min;
         fPitchEgRelease->setValue(value);
         break;
     default:
@@ -700,14 +797,14 @@ void DropsUI::onNanoDisplay()
     // VBOX_AMP xywh {12 329 323 176}
     beginPath();
     fillColor(eerie_black);
-    rect(12, 329, 323, 176);
+    rect(12, 329, 323, 211);
     fill();
     closePath();
 
     beginPath();
     strokeWidth(2.0f);
     strokeColor(saffron);
-    rect(12 + 2, 329 + 2, 323 - 4, 176 - 4);
+    rect(12 + 2, 329 + 2, 323 - 4, 211 - 4);
     stroke();
     closePath();
 
@@ -716,63 +813,170 @@ void DropsUI::onNanoDisplay()
     roundedRect(12 + 2, 329 + 2, 40, 18, 2);
     fill();
     closePath();
+
     beginPath();
     fontSize(16);
-    textAlign(ALIGN_TOP | ALIGN_LEFT);
+    textAlign(ALIGN_MIDDLE | ALIGN_CENTER);
+    float cx = 12 + 2 + 40 / 2;
+    float cy = 329 + 2 + 18 / 2;
     fillColor(eerie_black);
-    text(12 + 4, 329 + 4, "AMP", nullptr);
-    closePath();
-
-    // VBOX_FILTER xywh {339 329 320 176}
-    beginPath();
-    fillColor(eerie_black);
-    rect(339, 329, 323, 176);
-    fill();
+    text(cx, cy, "AMP", nullptr);
     closePath();
 
     beginPath();
-    strokeWidth(2.0f);
-    strokeColor(blue_pigment_1);
-    rect(339 + 2, 329 + 2, 323 - 4, 176 - 4);
+    moveTo(12 + 2, 329 + 211 / 2);
+    lineTo(332, 329 + 211 / 2);
     stroke();
     closePath();
 
+    beginPath();
+    fillColor(saffron);
+    roundedRect(12 + 2, 329 + 211 / 2, 40, 18, 2);
+    fill();
+    closePath();
+    beginPath();
+    fontSize(16);
+    fillColor(eerie_black);
+    cy = 329 + 2 + 211 / 2 + 18 / 2;
+    text(cx, cy, "LFO", nullptr);
+    closePath();
+
+    // VBOX_FILTER xywh {339 329 320 176}
+    // back
+    beginPath();
+    fillColor(eerie_black);
+    rect(339, 329, 323, 211);
+    fill();
+    closePath();
+
+    // outer box
+    beginPath();
+    strokeWidth(2.0f);
+    strokeColor(blue_pigment_1);
+    rect(339 + 2, 329 + 2,
+         323 - 4, 211 - 4);
+    stroke();
+    closePath();
+
+    // back label FILTER
     beginPath();
     fillColor(blue_pigment_1);
     roundedRect(339 + 2, 329 + 2, 56, 18, 2);
     fill();
     closePath();
+    // text label FILTER
     beginPath();
     fontSize(16);
-    textAlign(ALIGN_TOP | ALIGN_LEFT);
     fillColor(eerie_black);
-    text(339 + 4, 329 + 4, "FILTER", nullptr);
+    text(339 + 2 + 56 / 2, 329 + 2 + 18 / 2, "FILTER", nullptr);
+    closePath();
+
+    // line 1
+    beginPath();
+    moveTo(339 + 2,
+           329 + 2 + (211 / 3));
+    lineTo(339 + 2 + 323 - 4,
+           329 + 2 + (211 / 3));
+    stroke();
+    closePath();
+
+    // back label EG
+    // beginPath();
+    // fillColor(blue_pigment_1);
+    // roundedRect(339 + 2,
+    //             329 + 2 + (211 / 3),
+    //             40, 18, 2);
+    // fill();
+    // closePath();
+    // // text
+    // beginPath();
+    // fontSize(16);
+    // fillColor(eerie_black);
+    // cx = 339 + 2 + 40 / 2;
+    // cy = 329 + 2 + 211 / 3 + 18 / 2;
+    // text(cx, cy, "EG", nullptr);
+    // closePath();
+
+    // line 2
+    beginPath();
+    moveTo(339 + 2,
+           329 + 2 + (211 / 3) * 2);
+    lineTo(339 + 2 + 323 - 4,
+           329 + 2 + (211 / 3) * 2);
+    stroke();
+    closePath();
+
+    // back label LFO
+    beginPath();
+    fillColor(blue_pigment_1);
+    roundedRect(339 + 2,
+                329 + 2 + (211 / 3) * 2,
+                40, 18, 2);
+    fill();
+    closePath();
+    // text
+    beginPath();
+    fontSize(16);
+    fillColor(eerie_black);
+    cx = 339 + 2 + 40 / 2;
+    cy = 329 + 2 + (211 / 3) * 2 + 18 / 2;
+    text(cx, cy, "LFO", nullptr);
     closePath();
 
     // VBOX_PITCH xywh {667 329 323 176}
     beginPath();
     fillColor(eerie_black);
-    rect(667, 329, 323, 176);
+    rect(667, 329, 323, 211);
     fill();
     closePath();
 
+    // outer box
     beginPath();
     strokeWidth(2.0f);
     strokeColor(shamrock_green);
-    rect(667 + 2, 329 + 2, 323 - 4, 176 - 4);
+    rect(667 + 2, 329 + 2, 323 - 4, 211 - 4);
     stroke();
     closePath();
 
+    // line 1
+    beginPath();
+    moveTo(667 + 2,
+           329 + 2 + (211 / 2));
+    lineTo(667 + 2 + 323 - 4,
+           329 + 2 + (211 / 2));
+    stroke();
+    closePath();
+
+    // back label PITCH
     beginPath();
     fillColor(shamrock_green);
-    roundedRect(667 + 2, 329 + 2, 56, 18, 2);
+    roundedRect(667 + 2,
+                329 + 2, 56, 18, 2);
     fill();
     closePath();
+    // text label PITCH
     beginPath();
     fontSize(16);
-    textAlign(ALIGN_TOP | ALIGN_LEFT);
     fillColor(eerie_black);
-    text(667 + 4, 329 + 4, "PITCH", nullptr);
+
+    text(667 + 2 + 56 / 2, 329 + 2 + 18 / 2, "PITCH", nullptr);
+    closePath();
+
+    // back LFO
+    beginPath();
+    fillColor(shamrock_green);
+    roundedRect(667 + 2,
+                329 + 211 / 2, 40, 18, 2);
+    fill();
+    closePath();
+    // lable LFO
+    beginPath();
+    fontSize(16);
+    textAlign(ALIGN_CENTER | ALIGN_MIDDLE);
+    fillColor(eerie_black);
+    cy = 329 + 2 + 211 / 2 + 18 / 2;
+    cx = 667 + 2 + 40 / 2;
+    text(cx, cy, "LFO", nullptr);
     closePath();
 }
 
@@ -1070,7 +1274,6 @@ bool DropsUI::onScroll(const ScrollEvent &ev)
 
     // left-right scroll factor
     float scroll_delta = -ev.delta.getX();
-    printf("scroll delta x %f\n", scroll_delta);
     // zoom factor
     float zoom_delta = -ev.delta.getY() * 0.05f;
 
@@ -1280,16 +1483,16 @@ void DropsUI::onDropDownClicked(DropDown *dropDown)
 void DropsUI::knobDragStarted(Knob *knob)
 {
     const uint id = knob->getId();
-#ifdef DEBUG
-    printf("%i , drag started\n", id);
-#endif
+// #ifdef DEBUG
+//     printf("%i , drag started\n", id);
+// #endif
 }
 void DropsUI::knobDragFinished(Knob *knob)
 {
     int id = knob->getId();
-#ifdef DEBUG
-    printf("%i , drag finished\n", id);
-#endif
+// #ifdef DEBUG
+//     printf("%i , drag finished\n", id);
+// #endif
 }
 void DropsUI::knobValueChanged(Knob *knob, float value)
 {
@@ -1302,6 +1505,9 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
         break;
     case kAmpLFODepth:
         setParameterValue(kAmpLFODepth, value);
+        break;
+    case kAmpLFOFade:
+        setParameterValue(kAmpLFOFade, value);
         break;
     case kAmpEgAttack:
         setParameterValue(kAmpEgAttack, value);
@@ -1321,6 +1527,9 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
         break;
     case kFilterLFODepth:
         setParameterValue(kFilterLFODepth, value);
+        break;
+    case kFilterLFOFade:
+        setParameterValue(kFilterLFOFade, value);
         break;
     case kFilterCutOff:
         setParameterValue(kFilterCutOff, value);
@@ -1342,10 +1551,13 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
         break;
     // pitch
     case kPitchLFOFreq:
-        setParameterValue(kPitchLFOType, value);
+        setParameterValue(kPitchLFOFreq, value);
         break;
     case kPitchLFODepth:
-        setParameterValue(kPitchLFOFreq, value);
+        setParameterValue(kPitchLFODepth, value);
+        break;
+    case kPitchLFOFade:
+        setParameterValue(kPitchLFOFade, value);
         break;
     case kPitchEgAttack:
         setParameterValue(kPitchEgAttack, value);
@@ -1454,9 +1666,9 @@ void DropsUI::onScrollBarClicked(ScrollBar *scrollBar, bool dragging)
 void DropsUI::onMenuClicked(Menu *menu, uint menu_id, std::string item)
 {
     const uint id = menu->getId();
-#ifdef DEBUG
-    printf("menu %i ,menu_id %i, item %s\n", id, menu_id, item.c_str());
-#endif
+// #ifdef DEBUG
+//     printf("menu %i ,menu_id %i, item %s\n", id, menu_id, item.c_str());
+// #endif
     switch (id)
     {
     case kPlayModeMenu:

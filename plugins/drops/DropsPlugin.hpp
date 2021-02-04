@@ -18,9 +18,10 @@
 #define DROPS_HPP_INCLUDED
 
 #include "DistrhoPlugin.hpp"
+#include "DropsParams.h"
+#include "DropsGeometry.hpp"
 #include <sfizz.hpp>
 #include <iostream>
-#include "DistrhoPluginInfo.h"
 #include <sndfile.hh>
 #include <unordered_map>
 #include <string>
@@ -113,18 +114,18 @@ private:
     //  display
     float fSampleIn, fSampleOut, fSampleLoopStart, fSampleLoopEnd;
     //  sample
-    float fSamplePitchKeyCenter, fSamplePlayMode, fSamplePlayDirection, fSamplePitch, fSampleOversampling;
+    float fSamplePitchKeyCenter, fSamplePlayMode, fSamplePlayDirection,
+        fSamplePitch, fSampleOversampling;
     //  amp
-    float fAmpLFOType, fAmpLFOFreq, fAmpLFODepth,
+    float fAmpLFOType, fAmpLFOFreq, fAmpLFODepth, fAmpLFOFade,
         fAmpEGAttack, fAmpEgDecay, fAmpEgSustain, fAmpEgRelease;
-    //  pitch
-    float fPitchEGAttack, fPitchEgDecay, fPitchEgSustain, fPitchEgRelease,
-        fPitchEgDepth, fPitchLFOType, fPitchLFOFreq, fPitchLFODepth,
-        fPitchLFOSync;
     //  filter
     float fFilterType, fFilterLFOType, fFilterLFOFreq, fFilterLFODepth,
-        fFilterCutOff, fFilterResonance,
+        fFilterLFOFade, fFilterCutOff, fFilterResonance,
         fFilterEGAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease;
+    //  pitch
+    float fPitchLFOType, fPitchLFOFreq, fPitchLFODepth, fPitchLFOFade,
+        fPitchEGAttack, fPitchEgDecay, fPitchEgSustain, fPitchEgRelease;
 
     double fFilterMaxFreq;
 
@@ -140,9 +141,16 @@ private:
         "bpf_2p",
         "hpf_2p"};
 
+    const char *lfo_types_[5]{
+        "0", // triangle
+        "1", // sine
+        "3", // square
+        "6", // saw up
+        "7", // saw down
+    };
+
     std::unordered_map<std::string, std::string> opcodes;
 
-    const float lfo_max_depth = 20.0f; // -10 .. 10
     const float lfo_max_freq = 20.0f;
     // double bpm;
 

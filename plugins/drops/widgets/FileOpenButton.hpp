@@ -6,6 +6,7 @@
 #include "Window.hpp"
 #include "Widget.hpp"
 #include "NanoVG.hpp"
+#include "fonts.hpp"
 #include <string>
 
 START_NAMESPACE_DISTRHO
@@ -34,6 +35,7 @@ protected:
 private:
   std::string buttonText;
   Callback *callback;
+  FontId Roboto_;
 
   DISTRHO_LEAK_DETECTOR(FileOpenButton)
 };

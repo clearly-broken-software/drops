@@ -287,30 +287,6 @@ void DropsUI::initTabSample()
     // fSampleNormalize->setMenu(fNormalizeMenu);
 }
 
-void DropsUI::hideTabSample()
-{
-    vbox_sample->hide();
-    hbox_sample_row_1->hide();
-    hbox_sample_row_2->hide();
-    // fSampleXFade->hide();
-    //fSampleTune->hide(); FIXME:
-    // fSampleNormalize->hide();
-    fSamplePitchKeyCenter->hide();
-    fSamplePlayMode->hide();
-    fSamplePlayDirection->hide();
-}
 
-void DropsUI::showTabSample()
-{
-    vbox_sample->show();
-    hbox_sample_row_1->show();
-    hbox_sample_row_2->show();
-    // fSampleXFade->show();
-    //fSampleTune->show();
-    // fSampleNormalize->show();
-    fSamplePitchKeyCenter->show();
-    fSamplePlayMode->show();
-    fSamplePlayDirection->show();
-}
 
 END_NAMESPACE_DISTRHO

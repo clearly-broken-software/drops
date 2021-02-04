@@ -7,37 +7,48 @@ START_NAMESPACE_DISTRHO
 void DropsUI::initTabFilter()
 {
     Window &window = getParentWindow();
-    const float margin = 6.f;
-    const float gauge = 6.f;
-    float font_size = 14.f;
-    const uint sz = 32 + margin + gauge + font_size;
+    const float margin = 2.f;
+    const float gauge = 5.f;
+    float font_size = 12.f;
+    const uint sz = 50;
 
-    const Size<uint> knobSize = Size<uint>(sz, sz);
+    const Size<uint> knobSize = Size<uint>(sz + font_size, sz);
 
     vbox_filter = new VBox(window);
     vbox_filter->setId(kVBoxFilter);
     vbox_filter->setAbsolutePos(339, 329);
-    vbox_filter->setSize(320, 176);
-
-    hbox_filter_row_3 = new HBox(vbox_filter);
-    hbox_filter_row_3->setId(kHBoxFilterRow3);
-    hbox_filter_row_3->setSize(320, 66);
-
-    hbox_filter_row_2 = new HBox(vbox_filter);
-    hbox_filter_row_2->setId(kHBoxFilterRow2);
-    hbox_filter_row_2->setSize(320, 66);
-    hbox_filter_row_2->justify_content = HBox::Justify_Content::center;
-    hbox_filter_row_2->align_items = HBox::Align_Items::top;
+    vbox_filter->setSize(320, 211);
+    vbox_filter->justify_content = VBox::Justify_Content::right;
 
     hbox_filter_row_1 = new HBox(vbox_filter);
     hbox_filter_row_1->setId(kHBoxFilterRow1);
-    hbox_filter_row_1->setSize(220, 66);
-    //hbox_filter_row_1->justify_content=HBox::Justify_Content::center;
+    hbox_filter_row_1->setWidth(vbox_filter->getWidth() * .9);
+    hbox_filter_row_1->setHeight(211 / 3 + 20);
+    //hbox_filter_row_1->align_items = HBox::Align_Items::bottom;
 
-    vbox_filter_lfo = new VBox(hbox_filter_row_2);
-    vbox_filter_lfo->setId(kVBoxFilterLfo);
-    vbox_filter_lfo->setSize(66, 66);
-    vbox_filter_lfo->align_items = VBox::Align_Items::top;
+    // hbox_filter_row_1_spacer = new HBox(hbox_filter_row_1);
+    // hbox_filter_row_1_spacer->setHeight(hbox_filter_row_1->getHeight());
+    // //hbox_filter_row_1_spacer->setWidth(hbox_filter_row_1->getWidth() * 3 / 5);
+    // hbox_filter_row_1_spacer->setWidth(120);
+
+    hbox_filter_row_2 = new HBox(vbox_filter);
+    hbox_filter_row_2->setId(kHBoxFilterRow2);
+    hbox_filter_row_2->setWidth(vbox_filter->getWidth());
+    hbox_filter_row_2->setHeight(211 / 3 + 20);
+    //hbox_filter_row_2->align_items = HBox::Align_Items::bottom;
+
+    hbox_filter_row_3 = new HBox(vbox_filter);
+    hbox_filter_row_3->setId(kHBoxFilterRow3);
+    hbox_filter_row_3->setWidth(vbox_filter->getWidth() * .9);
+    hbox_filter_row_3->setHeight(211 / 3 + 20);
+    //hbox_filter_row_3->align_items = HBox::Align_Items::bottom;
+
+    hbox_filter_row_3_spacer = new HBox(hbox_filter_row_3);
+    hbox_filter_row_3_spacer->setHeight(hbox_filter_row_3->getHeight());
+    hbox_filter_row_3_spacer->setWidth(hbox_filter_row_3->getWidth() * 1 / 4); // FIXME: hardcoded :-(
+
+    // hbox_filter_row_2->justify_content = HBox::Justify_Content::center;
+    //  hbox_filter_row_2->align_items = HBox::Align_Items::top;
 
     fFilterLowpass = new SVGButton(hbox_filter_row_1, artwork::filter_lowpass, nullptr, 0.15f);
     fFilterLowpass->setId(kFilterLowpass);
@@ -60,68 +71,8 @@ void DropsUI::initTabFilter()
     fFilterHighpass->highlight_color = black_olive_1;
     fFilterHighpass->active_color = black_olive;
 
-    fFilterLFOType = new DropDown(vbox_filter_lfo);
-    fFilterLFOType->setId(kFilterLFOType);
-    fFilterLFOType->font_size = font_size;
-    fFilterLFOType->setSize(148,
-                            fFilterLFOType->font_size + fFilterLFOType->margin * 2.0f);
-    fFilterLFOType->setCallback(this);
-    fFilterLFOType->label = "LFO TYPE :";
-    fFilterLFOType->item = "SINE";
-    fFilterLFOType->foreground_color = blue_pigment_1;
-    fFilterLFOType->background_color = black_olive;
-    fFilterLFOType->text_color = floral_white;
-    // resize later
-    fFilterLFOTypeMenu = new Menu(vbox_filter_lfo);
-    fFilterLFOTypeMenu->max_view_items = 4;
-    fFilterLFOTypeMenu->setId(kFilterLFOTypeMenu);
-    fFilterLFOTypeMenu->setCallback(this);
-    fFilterLFOTypeMenu->addItems({"TRIANGLE",
-                                  "SINE",
-                                  "75% PULSE",
-                                  "SQUARE",
-                                  "25% PULSE",
-                                  "12.5% PULSE",
-                                  "SAW UP",
-                                  "SAW DOWN"});
-    fFilterLFOTypeMenu->font_size = font_size;
-    fFilterLFOTypeMenu->hide();
-    fFilterLFOTypeMenu->background_color = black_olive;
-    fFilterLFOTypeMenu->foreground_color = black_olive_2;
-    fFilterLFOTypeMenu->highlight_color = blue_pigment_1;
-    fFilterLFOTypeMenu->text_color = floral_white;
-
-    fFilterLFOFreq = new Knob(hbox_filter_row_2);
-    fFilterLFOFreq->setId(kFilterLFOFreq);
-    fFilterLFOFreq->setCallback(this);
-    fFilterLFOFreq->setSize(knobSize);
-    fFilterLFOFreq->label = "FREQ";
-    fFilterLFOFreq->labelSize = font_size;
-    fFilterLFOFreq->gauge_width = gauge;
-    fFilterLFOFreq->margin = margin;
-    fFilterLFOFreq->background_color = black_olive;
-    fFilterLFOFreq->foreground_color = blue_pigment_1;
-    fFilterLFOFreq->highlight_color = blue_pigment_2;
-    fFilterLFOFreq->text_color = floral_white;
-    fFilterLFOFreq->default_value = 0;
-
-    fFilterLFODepth = new Knob(hbox_filter_row_2);
-    fFilterLFODepth->setId(kFilterLFODepth);
-    fFilterLFODepth->setCallback(this);
-    fFilterLFODepth->setSize(knobSize);
-    fFilterLFODepth->label = "DEPTH";
-    fFilterLFODepth->labelSize = font_size;
-    fFilterLFODepth->margin = margin;
-    fFilterLFODepth->gauge_width = gauge;
-    fFilterLFODepth->background_color = black_olive;
-    fFilterLFODepth->foreground_color = blue_pigment_1;
-    fFilterLFODepth->highlight_color = blue_pigment_2;
-    fFilterLFODepth->text_color = floral_white;
-
-    // row 3
-    // smaller font for adsr
-    font_size = 12.f;
-    fFilterCutOff = new Knob(hbox_filter_row_3);
+    // font_size = 12.f;
+    fFilterCutOff = new Knob(hbox_filter_row_1);
     fFilterCutOff->setId(kFilterCutOff);
     fFilterCutOff->setCallback(this);
     fFilterCutOff->setSize(knobSize);
@@ -134,10 +85,12 @@ void DropsUI::initTabFilter()
     fFilterCutOff->highlight_color = blue_pigment_2;
     fFilterCutOff->text_color = floral_white;
     fFilterCutOff->default_value = 1;
-    fFilterCutOff->min = 0;
-    fFilterCutOff->max = 1;
+    const float max_cutoff = getSampleRate() / 2.0f;
+    fFilterCutOff->real_min = 20.0f;
+    fFilterCutOff->real_max = max_cutoff;
+    fFilterCutOff->format_str = "%.f Hz";
 
-    fFilterResonance = new Knob(hbox_filter_row_3);
+    fFilterResonance = new Knob(hbox_filter_row_1);
     fFilterResonance->setId(kFilterResonance);
     fFilterResonance->setCallback(this);
     fFilterResonance->setSize(knobSize);
@@ -150,10 +103,11 @@ void DropsUI::initTabFilter()
     fFilterResonance->highlight_color = blue_pigment_2;
     fFilterResonance->text_color = floral_white;
     fFilterResonance->default_value = 1;
-    fFilterResonance->min = 0;
-    fFilterResonance->max = 1;
+    fFilterResonance->real_min = 0.0f;
+    fFilterResonance->real_max = 40.0f;
+    fFilterResonance->format_str = "%.2f dB";
 
-    fFilterEgAttack = new Knob(hbox_filter_row_3);
+    fFilterEgAttack = new Knob(hbox_filter_row_2);
     fFilterEgAttack->setId(kFilterEgAttack);
     fFilterEgAttack->setSize(knobSize);
     fFilterEgAttack->setCallback(this);
@@ -165,8 +119,14 @@ void DropsUI::initTabFilter()
     fFilterEgAttack->background_color = black_olive;
     fFilterEgAttack->highlight_color = blue_pigment_2;
     fFilterEgAttack->text_color = floral_white;
+    fFilterEgAttack->real_min = 0.0f;
+    fFilterEgAttack->real_max = 10.0f;
+    fFilterEgAttack->min = 1.0f;
+    fFilterEgAttack->max = 101.f;
+    fFilterEgAttack->format_str = "%.2f s";
+    fFilterEgAttack->using_log = true;
 
-    fFilterEgDecay = new Knob(hbox_filter_row_3);
+    fFilterEgDecay = new Knob(hbox_filter_row_2);
     fFilterEgDecay->setId(kFilterEgDecay);
     fFilterEgDecay->setSize(knobSize);
     fFilterEgDecay->setCallback(this);
@@ -178,8 +138,14 @@ void DropsUI::initTabFilter()
     fFilterEgDecay->background_color = black_olive;
     fFilterEgDecay->highlight_color = blue_pigment_2;
     fFilterEgDecay->text_color = floral_white;
+    fFilterEgDecay->real_min = 0.0f;
+    fFilterEgDecay->real_max = 10.f;
+    fFilterEgDecay->min = 1.0f;
+    fFilterEgDecay->max = 101.f;
+    fFilterEgDecay->using_log = true;
+    fFilterEgDecay->format_str = "%.2f s";
 
-    fFilterEgSustain = new Knob(hbox_filter_row_3);
+    fFilterEgSustain = new Knob(hbox_filter_row_2);
     fFilterEgSustain->setId(kFilterEgSustain);
     fFilterEgSustain->setSize(knobSize);
     fFilterEgSustain->setCallback(this);
@@ -191,8 +157,11 @@ void DropsUI::initTabFilter()
     fFilterEgSustain->background_color = black_olive;
     fFilterEgSustain->highlight_color = blue_pigment_2;
     fFilterEgSustain->text_color = floral_white;
+    fFilterEgSustain->real_min = 0.0f;
+    fFilterEgSustain->real_max = 100.f;
+    fFilterEgSustain->format_str = "%.f%%";
 
-    fFilterEgRelease = new Knob(hbox_filter_row_3);
+    fFilterEgRelease = new Knob(hbox_filter_row_2);
     fFilterEgRelease->setId(kFilterEgRelease);
     fFilterEgRelease->setSize(knobSize);
     fFilterEgRelease->setCallback(this);
@@ -204,38 +173,142 @@ void DropsUI::initTabFilter()
     fFilterEgRelease->background_color = black_olive;
     fFilterEgRelease->highlight_color = blue_pigment_2;
     fFilterEgRelease->text_color = floral_white;
+    fFilterEgRelease->real_min = 0.0f;
+    fFilterEgRelease->real_max = 10.f;
+    fFilterEgRelease->min = 1.0f;
+    fFilterEgRelease->max = 101.f;
+    fFilterEgRelease->format_str = "%.2f s";
+    fFilterEgRelease->using_log = true;
 
-    vbox_filter->addWidget(hbox_filter_row_1);
-    hbox_filter_row_1->addWidget(fFilterLowpass);
-    hbox_filter_row_1->addWidget(fFilterBandpass);
-    hbox_filter_row_1->addWidget(fFilterHighpass);
-    // TODO: add buttons
+    fFilterLFOType = new DropDown(hbox_filter_row_3);
+    fFilterLFOType->setId(kFilterLFOType);
+    fFilterLFOType->font_size = font_size + 4;
+    fFilterLFOType->setFont("RobotoRegular",
+                            reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+                            fonts::Roboto_RegularDataSize);
+    fFilterLFOType->setMenuFont("DropsIcons",
+                                reinterpret_cast<const uchar *>(fonts::drops_iconsData),
+                                fonts::drops_iconsDataSize);
+    fFilterLFOType->setSize(148,
+                            fFilterLFOType->font_size + fFilterLFOType->margin * 2.0f);
+    fFilterLFOType->setCallback(this);
+    fFilterLFOType->label = "TYPE :";
+    fFilterLFOType->item = "a";
+    fFilterLFOType->foreground_color = blue_pigment_1;
+    fFilterLFOType->background_color = black_olive;
+    fFilterLFOType->text_color = floral_white;
+    // resize later
 
-    vbox_filter->addWidget(hbox_filter_row_2);
-    hbox_filter_row_2->addWidget(vbox_filter_lfo);
-    vbox_filter_lfo->addWidget(fFilterLFOType);
-    // TODO: add sync
-    hbox_filter_row_2->addWidget(fFilterLFOFreq);
-    hbox_filter_row_2->addWidget(fFilterLFODepth);
+    fFilterLFOTypeMenu = new Menu(hbox_filter_row_3);
+    fFilterLFOTypeMenu->setMaxViewItems(5);
+    fFilterLFOTypeMenu->setId(kFilterLFOTypeMenu);
+    fFilterLFOTypeMenu->setCallback(this);
+    fFilterLFOTypeMenu->font_size = font_size + 4;
+    fFilterLFOTypeMenu->setFont("Drops Icons",
+                                reinterpret_cast<const uchar *>(fonts::drops_iconsData),
+                                fonts::drops_iconsDataSize);
+    fFilterLFOTypeMenu->addItems({"a",
+                                  "b",
+                                  "c",
+                                  "d",
+                                  "e"});
+    fFilterLFOTypeMenu->hide();
+    fFilterLFOTypeMenu->background_color = black_olive;
+    fFilterLFOTypeMenu->foreground_color = black_olive_2;
+    fFilterLFOTypeMenu->highlight_color = blue_pigment_1;
+    fFilterLFOTypeMenu->text_color = floral_white;
 
-    vbox_filter->addWidget(hbox_filter_row_3);
-    hbox_filter_row_3->addWidget(fFilterCutOff);
-    hbox_filter_row_3->addWidget(fFilterResonance);
-    hbox_filter_row_3->addWidget(fFilterEgAttack);
-    hbox_filter_row_3->addWidget(fFilterEgDecay);
-    hbox_filter_row_3->addWidget(fFilterEgSustain);
-    hbox_filter_row_3->addWidget(fFilterEgRelease);
+    fFilterLFOFreq = new Knob(hbox_filter_row_3);
+    fFilterLFOFreq->setId(kFilterLFOFreq);
+    fFilterLFOFreq->setCallback(this);
+    fFilterLFOFreq->setSize(knobSize);
+    fFilterLFOFreq->label = "FREQ";
+    fFilterLFOFreq->labelSize = font_size;
+    fFilterLFOFreq->gauge_width = gauge;
+    fFilterLFOFreq->margin = margin;
+    fFilterLFOFreq->background_color = black_olive;
+    fFilterLFOFreq->foreground_color = blue_pigment_1;
+    fFilterLFOFreq->highlight_color = blue_pigment_2;
+    fFilterLFOFreq->text_color = floral_white;
+    fFilterLFOFreq->default_value = 0;
+    fFilterLFOFreq->real_min = 0.0f;
+    fFilterLFOFreq->real_max = 20.f;
+    fFilterLFOFreq->min = 1.0f;
+    fFilterLFOFreq->max = 101.f;
+    fFilterLFOFreq->format_str = "%.2f Hz";
+    fFilterLFOFreq->using_log = false;
 
-    vbox_filter->positionWidgets();
-    hbox_filter_row_1->positionWidgets();
-    hbox_filter_row_2->positionWidgets();
-    vbox_filter_lfo->positionWidgets();
-    hbox_filter_row_3->positionWidgets();
+    fFilterLFODepth = new Knob(hbox_filter_row_3);
+    fFilterLFODepth->setId(kFilterLFODepth);
+    fFilterLFODepth->setCallback(this);
+    fFilterLFODepth->setSize(knobSize);
+    fFilterLFODepth->label = "DEPTH";
+    fFilterLFODepth->labelSize = font_size;
+    fFilterLFODepth->margin = margin;
+    fFilterLFODepth->gauge_width = gauge;
+    fFilterLFODepth->background_color = black_olive;
+    fFilterLFODepth->foreground_color = blue_pigment_1;
+    fFilterLFODepth->highlight_color = blue_pigment_2;
+    fFilterLFODepth->text_color = floral_white;
+    fFilterLFODepth->default_value = 0.5f;
+    fFilterLFODepth->real_min = 0.0f;
+    fFilterLFODepth->real_max = max_cutoff / 2.0f;
+    fFilterLFODepth->format_str = "%.f Hz";
+
+    fFilterLFOFade = new Knob(hbox_filter_row_3);
+    fFilterLFOFade->setId(kFilterLFOFade);
+    fFilterLFOFade->setCallback(this);
+    fFilterLFOFade->setSize(knobSize);
+    fFilterLFOFade->label = "FADE";
+    fFilterLFOFade->labelSize = font_size;
+    fFilterLFOFade->margin = margin;
+    fFilterLFOFade->gauge_width = gauge;
+    fFilterLFOFade->background_color = black_olive;
+    fFilterLFOFade->foreground_color = blue_pigment_1;
+    fFilterLFOFade->highlight_color = blue_pigment_2;
+    fFilterLFOFade->text_color = floral_white;
+    fFilterLFOFade->default_value = 0.0f;
+    fFilterLFOFade->real_min = 0.0f;
+    fFilterLFOFade->real_max = 10.0f;
+    fFilterLFOFade->min = 1.0f;
+    fFilterLFOFade->max = 101.f;
+    fFilterLFOFade->format_str = "%.2f s";
+    fFilterLFOFade->using_log = true;
 
     fFilterLFOType->setMenu(fFilterLFOTypeMenu);
     fFilterLFOType->resize();
+
+    vbox_filter->addWidget(hbox_filter_row_1);
+    //  hbox_filter_row_1->addWidget(hbox_filter_row_1_spacer);
+    hbox_filter_row_1->addWidget(fFilterLowpass);
+    hbox_filter_row_1->addWidget(fFilterBandpass);
+    hbox_filter_row_1->addWidget(fFilterHighpass);
+    hbox_filter_row_1->addWidget(fFilterCutOff);
+    hbox_filter_row_1->addWidget(fFilterResonance);
+
+    vbox_filter->addWidget(hbox_filter_row_2);
+    hbox_filter_row_2->addWidget(fFilterEgAttack);
+    hbox_filter_row_2->addWidget(fFilterEgDecay);
+    hbox_filter_row_2->addWidget(fFilterEgSustain);
+    hbox_filter_row_2->addWidget(fFilterEgRelease);
+
+    vbox_filter->addWidget(hbox_filter_row_3);
+    hbox_filter_row_3->addWidget(hbox_filter_row_3_spacer);
+    hbox_filter_row_3_spacer->addWidget(fFilterLFOType);
+    hbox_filter_row_3->addWidget(fFilterLFOFreq);
+    hbox_filter_row_3->addWidget(fFilterLFODepth);
+    hbox_filter_row_3->addWidget(fFilterLFOFade);
+
+    vbox_filter->positionWidgets();
+
+    hbox_filter_row_1->positionWidgets();
+    //hbox_filter_row_1_spacer->positionWidgets();
+    hbox_filter_row_2->positionWidgets();
+    hbox_filter_row_3->positionWidgets();
+    hbox_filter_row_3_spacer->positionWidgets();
+
     fFilterLFOType->positionMenu();
-   
+
     //fFilterLFOSync->setMenu(fFilterLFOSyncMenu);
 }
 

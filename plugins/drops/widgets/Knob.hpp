@@ -6,12 +6,14 @@
 #include "Window.hpp"
 #include "Widget.hpp"
 #include "NanoVG.hpp"
+#include "PopUp.hpp"
 #include <iostream>
 #include <string>
 
 START_NAMESPACE_DISTRHO
 
-class Knob : public NanoWidget
+class Knob : public NanoWidget,
+             public IdleCallback
 {
 public:
     class Callback
@@ -25,10 +27,13 @@ public:
     explicit Knob(Window &parent) noexcept;
     explicit Knob(Widget *widget) noexcept;
     void setCallback(Callback *cb);
-    void setValue(float val) noexcept;
+    void setValue(float val, bool sendCallback = false) noexcept;
     float getValue() noexcept;
+    void setPopUp(PopUp *popUp);
+    void idleCallback() override;
 
     std::string label; // public, no getter or setter
+    std::string unit;  // Hz, dB, Ct
     float labelSize;
     float gauge_width;
     Color background_color;
@@ -40,6 +45,11 @@ public:
     float step_value;
     float min;
     float max;
+    float real_min;
+    float real_max;
+    char *format_str; // also include unit !
+    bool using_log;
+    bool is_centered;
 
 protected:
     void onNanoDisplay() override;
@@ -49,6 +59,7 @@ protected:
 
 private:
     Callback *callback;
+    PopUp *popUp;
     bool dragging_;
     float value_;
     float value_tmp_;
@@ -59,13 +70,16 @@ private:
 
     float tmp_value_;
     bool using_default_;
-    bool using_log_;
 
     int last_mouse_x_;
     int last_mouse_y_;
     bool is_ready_;
     float _logscale(float value) const;
     float _invlogscale(float value) const;
+    void updatePopUp();
+
+    int countdown_;
+    bool is_counting_down_;
 
     DISTRHO_LEAK_DETECTOR(Knob)
 };

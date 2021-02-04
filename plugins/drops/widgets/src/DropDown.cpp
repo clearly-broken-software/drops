@@ -6,7 +6,7 @@ START_NAMESPACE_DISTRHO
 DropDown::DropDown(Window &parent) noexcept
     : NanoWidget(parent)
 {
-    loadSharedResources();
+    //loadSharedResources();
     label = "Dropdown: ";
     item = "item";
     font_size = 14.f;
@@ -15,12 +15,14 @@ DropDown::DropDown(Window &parent) noexcept
     has_mouse_ = false;
     background_color = Color(0.0f, 0.0f, 0.0f);
     foreground_color = Color(0.5f, 0.5f, 0.5f);
+    highlight_color = Color(0.3f, 0.3f, 0.3f);
     text_color = Color(1.0f, 1.0f, 1.0f);
+    main_font_ = 0;
 }
 DropDown::DropDown(Widget *widget) noexcept
     : NanoWidget(widget)
 {
-    loadSharedResources();
+    //loadSharedResources();
     label = "Dropdown: ";
     item = "item";
     font_size = 14.f;
@@ -29,7 +31,9 @@ DropDown::DropDown(Widget *widget) noexcept
     has_mouse_ = false;
     background_color = Color(0.0f, 0.0f, 0.0f);
     foreground_color = Color(0.5f, 0.5f, 0.5f);
+    highlight_color = Color(0.3f, 0.3f, 0.3f);
     text_color = Color(1.0f, 1.0f, 1.0f);
+    main_font_ = 0;
 }
 
 bool DropDown::onMouse(const MouseEvent &ev)
@@ -75,20 +79,26 @@ void DropDown::onNanoDisplay()
 {
     const float width = getWidth();
     const float height = getHeight();
+    Color fill_color(background_color);
     // background
+    if (has_mouse_)
+        fill_color = highlight_color;
     beginPath();
-    fillColor(background_color);
+    fillColor(fill_color);
     rect(0, 0, width, height);
     fill();
     closePath();
     // label
     beginPath();
     fillColor(text_color);
+    fontFaceId(main_font_);
     fontSize(font_size);
     textAlign(ALIGN_TOP);
-    // item
     const float item_x_offset = getMenuOffset();
     text(0, margin, label.c_str(), nullptr);
+    closePath();
+    beginPath();
+    fontFaceId(menu_font_);
     text(item_x_offset, margin, item.c_str(), nullptr);
     closePath();
 }
@@ -108,6 +118,7 @@ void DropDown::setValue(float val)
 float DropDown::getMenuOffset()
 {
     Rectangle<float> bounds;
+    fontFaceId(main_font_);
     fontSize(font_size);
     textBounds(0, 0, label.c_str(), nullptr, bounds);
     return bounds.getX() + bounds.getWidth();
@@ -120,11 +131,11 @@ void DropDown::setMenu(Menu *menu)
 
 void DropDown::positionMenu()
 {
-    if(menu_)
+    if (menu_)
     {
-    const int x = getAbsoluteX() + getMenuOffset();
-    const int y = getAbsoluteY() + getHeight();
-    menu_->setAbsolutePos(x, y);
+        const int x = getAbsoluteX() + getMenuOffset();
+        const int y = getAbsoluteY() + getHeight();
+        menu_->setAbsolutePos(x, y);
     }
 }
 
@@ -142,6 +153,16 @@ void DropDown::resize()
         itemWidth = bounds.getWidth();
     }
     setWidth(getMenuOffset() + itemWidth);
+}
+
+void DropDown::setFont(const char *fontName, const uchar *data, uint dataSize)
+{
+    main_font_ = createFontFromMemory(fontName, data, dataSize, false);
+}
+
+void DropDown::setMenuFont(const char *fontName, const uchar *data, uint dataSize)
+{
+    menu_font_ = createFontFromMemory(fontName, data, dataSize, false);
 }
 
 END_NAMESPACE_DISTRHO

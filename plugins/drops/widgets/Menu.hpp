@@ -6,6 +6,8 @@
 #include "Window.hpp"
 #include "Widget.hpp"
 #include "NanoVG.hpp"
+#include "fonts.hpp"
+#include "DropsGeometry.hpp"
 #include <string>
 #include <sstream>
 #include <initializer_list>
@@ -28,12 +30,13 @@ public:
   void setCallback(Callback *cb);
   void idleCallback();
   std::string getItem(uint index);
+  void setFont(const char *name, const uchar *data, uint dataSize);
+  void setMaxViewItems(int maxViewItems);
 
   float font_size;
   float margin;
   int timer, time_out;
   bool dropdown_has_mouse;
-  int max_view_items; // number of items in a menu
   int item_view_first, item_view_last;
 
   Color background_color;
@@ -52,12 +55,15 @@ private:
   void scrollMenu(int dir);
 
   std::vector<const char *> items_;
-  
 
   Callback *callback_;
   int highlighted_item_;
   bool has_mouse_;
   bool max_size_reached_;
+
+  int max_view_items; // number of items in a menu
+
+  FontId menu_font_;
 
   DISTRHO_LEAK_DETECTOR(Menu)
 };

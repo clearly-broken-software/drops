@@ -7,7 +7,6 @@ Menu::Menu(Window &parent) noexcept
     : NanoWidget(parent)
 {
     parent.addIdleCallback(this);
-    loadSharedResources();
     highlighted_item_ = -1;
     font_size = 14;
     margin = 2.f;
@@ -18,12 +17,12 @@ Menu::Menu(Window &parent) noexcept
     item_view_last = max_view_items - 1;
     has_mouse_ = false;
     dropdown_has_mouse = false;
+    menu_font_ = 0;
 }
 Menu::Menu(Widget *widget) noexcept
     : NanoWidget(widget)
 {
     widget->getParentWindow().addIdleCallback(this);
-    loadSharedResources();
     highlighted_item_ = -1;
     font_size = 14;
     margin = 2.f;
@@ -34,6 +33,7 @@ Menu::Menu(Widget *widget) noexcept
     item_view_last = max_view_items - 1;
     has_mouse_ = false;
     dropdown_has_mouse = false;
+    menu_font_ = 0;
 }
 
 void Menu::idleCallback()
@@ -139,6 +139,13 @@ void Menu::onNanoDisplay()
 {
     int width = getWidth();
     int height = getHeight();
+
+    if(getAbsoluteY()+height>UI_H)
+    {
+        setAbsoluteY(UI_H - height - margin);
+    }
+    
+    fontFaceId(menu_font_);
     beginPath();
     fillColor(background_color);
     rect(0, 0, width, height);
@@ -227,6 +234,12 @@ void Menu::addItems(std::initializer_list<const char *> item_list)
     resize();
 }
 
+void Menu::setMaxViewItems(int maxViewItems)
+{
+    max_view_items = maxViewItems;
+    item_view_last = max_view_items -1;
+}
+
 void Menu::resize()
 {
 
@@ -264,6 +277,11 @@ void Menu::scrollMenu(int dir)
 std::string Menu::getItem(uint index)
 {
     return items_[index];
+}
+
+void Menu::setFont(const char *fontName, const uchar *data, uint dataSize)
+{
+    menu_font_ = createFontFromMemory(fontName, data, dataSize, false);
 }
 
 END_NAMESPACE_DISTRHO
