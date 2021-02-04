@@ -27,6 +27,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <mutex>
 START_NAMESPACE_DISTRHO
 
 // -----------------------------------------------------------------------
@@ -106,6 +107,7 @@ private:
     std::string path;
     double sampleRate;
     sfz::Sfizz synth;
+    std::mutex synthMutex;
     std::vector<signed char> waveForm;
     std::vector<char> miniMap;
 

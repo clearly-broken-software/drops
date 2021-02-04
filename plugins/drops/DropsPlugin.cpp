@@ -609,6 +609,7 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         break;
     case kSampleOversampling:
     {
+        std::lock_guard<std::mutex> lock(synthMutex);
         const uint index = value;
         switch (index)
         {
@@ -1022,6 +1023,7 @@ void DropsPlugin::makeSFZ()
     std::cout << "----------------- SFZ FILE ------------------\n";
 #endif
 
+    std::lock_guard<std::mutex> lock(synthMutex);
     synth.loadSfzString("", tmpSFZ);
 }
 
@@ -1036,6 +1038,13 @@ void DropsPlugin::run(
     uint32_t midiEventCount      // Number of MIDI events in block
 )
 {
+    std::unique_lock<std::mutex> lock(synthMutex, std::try_to_lock);
+    if (!lock.owns_lock()) { // synth is locked?
+        std::fill_n(outputs[0], frames, 0.0f);
+        std::fill_n(outputs[1], frames, 0.0f);
+        return;
+    }
+
     // output ports, stereo
     //float *const outL = outputs[0];
     //float *const outR = outputs[1];
