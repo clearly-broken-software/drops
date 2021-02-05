@@ -520,6 +520,9 @@ float DropsPlugin::getParameterValue(uint32_t index) const
     case kFilterCutOff:
         val = fFilterCutOff;
         break;
+    case kFilterLFOFade:
+        val = fFilterLFOFade;
+        break;
     case kFilterResonance:
         val = fFilterResonance;
         break;

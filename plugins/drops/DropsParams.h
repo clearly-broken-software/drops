@@ -38,7 +38,7 @@ enum Parameters
    kFilterLFOType,   // lfoN_wave
    kFilterLFOFreq,   // lofN_freq
    kFilterLFODepth,  // lfoN_filter
-   kFilterLFOFade,
+   kFilterLFOFade,   // lfoN-fade
    kFilterCutOff,    // cutoff , cutoff_oncc200
    kFilterResonance, // resonance
    kFilterEgAttack,  // fileg_attack
