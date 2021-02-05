@@ -47,7 +47,7 @@ public:
     float max;
     float real_min;
     float real_max;
-    char *format_str; // also include unit !
+    const char *format_str; // also include unit !
     bool using_log;
     bool is_centered;
 

@@ -529,7 +529,7 @@ std::string DropsUI::dirnameOf(const std::string &fname)
 
 void DropsUI::parameterChanged(uint32_t index, float value)
 {
-     switch (index)
+    switch (index)
     {
     case kSampleLoaded:
     {
@@ -1029,7 +1029,7 @@ void DropsUI::drawMinimap()
     closePath();
     beginPath();
 
-    for (int i = 0; i < display_width; i++)
+    for (uint i = 0; i < display_width; i++)
     {
         moveTo(i + display_left, display_bottom + minimap_height);
         lineTo(i + display_left, display_bottom + minimap_height - miniMap->at(i));
@@ -1217,10 +1217,10 @@ void DropsUI::scrollWaveform(bool LeftOrRight)
         return;
     }
     viewEnd += static_cast<int>(samples_to_scroll);
-    if (viewEnd > waveForm->size())
+    if (viewEnd > static_cast<sf_count_t>(waveForm->size()))
     {
-        viewEnd = waveForm->size();
-        viewStart = viewEnd - length;
+        viewEnd = static_cast<sf_count_t>(waveForm->size());
+        viewStart = viewEnd - static_cast<sf_count_t>(length);
         setMarkers();
         setScrollbarWidgets();
         repaint();
@@ -1302,7 +1302,7 @@ bool DropsUI::onScroll(const ScrollEvent &ev)
     else if (scroll_delta != 0.0)
     {
         if ((scroll_delta < 0 && viewStart == 0) ||
-            (scroll_delta > 0 && viewEnd == waveForm->size()))
+            (scroll_delta > 0 && viewEnd == static_cast<sf_count_t>(waveForm->size())))
         {
             // can't scroll any further
             return false;
@@ -1321,7 +1321,7 @@ bool DropsUI::onScroll(const ScrollEvent &ev)
     uint length = int(samples_per_pixel * float(display_width));
 
     viewEnd = start + length;
-    if (viewEnd > waveForm->size())
+    if (viewEnd > static_cast<sf_count_t>(waveForm->size()))
     {
         viewEnd = waveForm->size();
         start = viewEnd - length;
@@ -1354,9 +1354,9 @@ bool DropsUI::onMotion(const MotionEvent &ev)
             viewEnd = viewEnd + ((float)distance * samples_per_pixel);
         }
 
-        if (viewEnd > waveForm->size())
+        if (viewEnd > static_cast<sf_count_t>(waveForm->size()))
         {
-            viewEnd = waveForm->size();
+            viewEnd = static_cast<sf_count_t>(waveForm->size());
             viewStart = (float)waveForm->size() - (float)display_width * pow(viewMaxZoom, viewZoom);
         }
         setScrollbarWidgets();
@@ -1436,9 +1436,9 @@ void DropsUI::onFileOpenButtonClicked(FileOpenButton *)
     getParentWindow().openFileBrowser(opts);
 }
 
-void DropsUI::onTextButtonClicked(TextButton *tb)
-{
-}
+// void DropsUI::onTextButtonClicked(TextButton *tb)
+// {
+// }
 
 void DropsUI::onDropDownClicked(DropDown *dropDown)
 {
@@ -1480,19 +1480,19 @@ void DropsUI::onDropDownClicked(DropDown *dropDown)
         break;
     }
 }
-void DropsUI::knobDragStarted(Knob *knob)
+void DropsUI::knobDragStarted(Knob *)
 {
-    const uint id = knob->getId();
-// #ifdef DEBUG
-//     printf("%i , drag started\n", id);
-// #endif
+    // const uint id = knob->getId();
+    // #ifdef DEBUG
+    //     printf("%i , drag started\n", id);
+    // #endif
 }
-void DropsUI::knobDragFinished(Knob *knob)
+void DropsUI::knobDragFinished(Knob *)
 {
-    int id = knob->getId();
-// #ifdef DEBUG
-//     printf("%i , drag finished\n", id);
-// #endif
+    // int id = knob->getId();
+    // #ifdef DEBUG
+    //     printf("%i , drag finished\n", id);
+    // #endif
 }
 void DropsUI::knobValueChanged(Knob *knob, float value)
 {
@@ -1666,9 +1666,9 @@ void DropsUI::onScrollBarClicked(ScrollBar *scrollBar, bool dragging)
 void DropsUI::onMenuClicked(Menu *menu, uint menu_id, std::string item)
 {
     const uint id = menu->getId();
-// #ifdef DEBUG
-//     printf("menu %i ,menu_id %i, item %s\n", id, menu_id, item.c_str());
-// #endif
+    // #ifdef DEBUG
+    //     printf("menu %i ,menu_id %i, item %s\n", id, menu_id, item.c_str());
+    // #endif
     switch (id)
     {
     case kPlayModeMenu:
@@ -1829,9 +1829,9 @@ void DropsUI::zoomButtons(float zoom_delta)
     // and ensure we stay in view.
     uint length = int(samples_per_pixel * float(display_width));
     viewEnd = start + length;
-    if (viewEnd > waveForm->size())
+    if (viewEnd > static_cast<sf_count_t>(waveForm->size()))
     {
-        viewEnd = waveForm->size();
+        viewEnd = static_cast<sf_count_t>(waveForm->size());
         start = viewEnd - length;
     }
     samples_per_pixel = pow(viewMaxZoom, viewZoom);

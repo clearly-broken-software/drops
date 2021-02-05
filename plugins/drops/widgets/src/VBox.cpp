@@ -51,7 +51,7 @@ void VBox::setWidgetJustify_Content(uint id, Justify_Content j_c)
     }
 }
 
-void VBox::setWidgetResize(uint id, bool resize)
+void VBox::setWidgetResize(uint id, bool ) // FIXME: do something about the bool resize
 {
     for (auto it = items_.begin(); it != items_.end(); it++)
     {
@@ -92,7 +92,7 @@ void VBox::positionWidgets()
 
             it->widget->setAbsoluteX(box_x);
             const uint ww = it->widget->getWidth();
-            it->width = width;
+            it->width = ww;
             it->x = box_x;
         }
         break;

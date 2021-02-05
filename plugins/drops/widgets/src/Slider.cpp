@@ -202,7 +202,6 @@ void Slider::onNanoDisplay()
     float normalized_val = (value_ - min_value) / (max_value - min_value);
     float normalized_X = line_x + (line_end_x - line_x) * normalized_val;
     const float hw = handle_.getWidth();
-    const float hh = handle_.getHeight();
     handle_.setX(normalized_X - hw / 2.f);
     const float hx = handle_.getX();
     const float hy = handle_.getY();

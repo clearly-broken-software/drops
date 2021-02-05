@@ -13,7 +13,7 @@
 
 #include "DropsGeometry.hpp"
 #include "DropsPlugin.hpp"
-#include "TextButton.hpp"
+// #include "TextButton.hpp"
 #include "FileOpenButton.hpp"
 #include "ScrollBar.hpp"
 #include "Knob.hpp"
@@ -36,7 +36,7 @@ START_NAMESPACE_DISTRHO
 // -----------------------------------------------------------------------------------------------------------
 
 class DropsUI : public UI,
-                public TextButton::Callback,
+                // public TextButton::Callback,
                 public ScrollBar::Callback,
                 public Knob::Callback,
                 public DropDown::Callback,
@@ -58,7 +58,7 @@ protected:
     bool onMouse(const MouseEvent &ev) override;
     bool onScroll(const ScrollEvent &) override;
     bool onMotion(const MotionEvent &) override;
-    void onTextButtonClicked(TextButton *textButton) override;
+    // void onTextButtonClicked(TextButton *textButton) override;
     void onFileOpenButtonClicked(FileOpenButton *fileOpenButton) override;
     void onScrollBarClicked(ScrollBar *scrollBar, bool dragging) override;
     void onDropDownClicked(DropDown *dropdown) override;
@@ -79,7 +79,6 @@ private:
 
     DropsPlugin *plugin;
     ScopedPointer<FileOpenButton> fileopen_button;
-    ScopedPointer<TextButton> button_sample, button_amp, button_pitch, button_filter;
     ScopedPointer<ScrollBar> fScrollBarHandle, fLoopStart, fLoopEnd, fSampleIn,
         fSampleOut, fScrollBarLeft, fScrollBarRight;
 
@@ -152,7 +151,7 @@ private:
     bool scrollbarDragging, loopstartDragging, loopendDragging, sampleInDragging, sampleOutDragging;
     bool sig_sampleLoaded;
     bool showWaveForm;
-    char *filepath;
+    std::string filepath;
     sf_count_t sampleLength;
     int sampleChannels;
     float scale;

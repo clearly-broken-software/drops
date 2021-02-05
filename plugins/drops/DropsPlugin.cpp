@@ -946,7 +946,7 @@ void DropsPlugin::makeSFZ()
     opcodes["lfo03_wave"] = lfo_types_[static_cast<int>(fFilterLFOType)];
     opcodes["lfo03_freq"] = std::to_string(fPitchLFOFreq * lfo_max_freq);
     opcodes["lfo03_pitch"] = std::to_string(fPitchLFODepth * 1200); // FIXME: Hardcoded
-    opcodes["lfo03_fade"] = std::to_string(fPitchLFOFade * 10.0f); // FIXME: Hardcoded
+    opcodes["lfo03_fade"] = std::to_string(fPitchLFOFade * 10.0f);  // FIXME: Hardcoded
 
     opcodes["cutoff"] = std::to_string(fFilterCutOff * fFilterMaxFreq);
     opcodes["pitch_keycenter"] = std::to_string(static_cast<int>(fSamplePitchKeyCenter));
@@ -1018,7 +1018,7 @@ void DropsPlugin::makeSFZ()
     buffer << "direction=" << opcodes["direction"] << "\n";
     // replace decimal comma wih decimal point
     std::string tmpSFZ = buffer.str();
-    std::replace( tmpSFZ.begin(), tmpSFZ.end(), ',', '.');
+    std::replace(tmpSFZ.begin(), tmpSFZ.end(), ',', '.');
 
 #ifdef DEBUG
     std::cout << "----------------- SFZ FILE ------------------\n";
@@ -1042,7 +1042,8 @@ void DropsPlugin::run(
 )
 {
     std::unique_lock<std::mutex> lock(synthMutex, std::try_to_lock);
-    if (!lock.owns_lock()) { // synth is locked?
+    if (!lock.owns_lock())
+    { // synth is locked?
         std::fill_n(outputs[0], frames, 0.0f);
         std::fill_n(outputs[1], frames, 0.0f);
         return;

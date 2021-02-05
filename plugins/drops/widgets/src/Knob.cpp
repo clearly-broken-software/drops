@@ -255,7 +255,6 @@ void Knob::onNanoDisplay()
     fontSize(labelSize);
     Rectangle<float> bounds;
     textBounds(0.f, 0.f, label.c_str(), NULL, bounds);
-    const float label_width = bounds.getWidth();
     const float label_height = bounds.getHeight();
 
     // label

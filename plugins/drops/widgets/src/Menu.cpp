@@ -140,7 +140,7 @@ void Menu::onNanoDisplay()
     int width = getWidth();
     int height = getHeight();
 
-    if(getAbsoluteY()+height>UI_H)
+    if(getAbsoluteY()+height>static_cast<int>(UI_H))
     {
         setAbsoluteY(UI_H - height - margin);
     }
@@ -230,7 +230,7 @@ void Menu::addItems(std::initializer_list<const char *> item_list)
         items_.push_back(elem);
         max_size_reached_ = items_.size() > max_view_items ? true : false;
     } */
-    max_size_reached_ = items_.size() > max_view_items ? true : false;
+    max_size_reached_ = static_cast<int>(items_.size()) > max_view_items ? true : false;
     resize();
 }
 
