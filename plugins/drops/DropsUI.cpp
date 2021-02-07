@@ -495,13 +495,15 @@ void DropsUI::initWidgets()
     fAmpEgRelease->setPopUp(fPopUp);
     fFilterCutOff->setPopUp(fPopUp);
     fFilterResonance->setPopUp(fPopUp);
-    fFilterLFOFreq->setPopUp(fPopUp);
-    fFilterLFODepth->setPopUp(fPopUp);
-    fFilterLFOFade->setPopUp(fPopUp);
+    fFilterEGDepth->setPopUp(fPopUp);
     fFilterEgAttack->setPopUp(fPopUp);
     fFilterEgDecay->setPopUp(fPopUp);
     fFilterEgSustain->setPopUp(fPopUp);
     fFilterEgRelease->setPopUp(fPopUp);
+    fFilterLFOFreq->setPopUp(fPopUp);
+    fFilterLFODepth->setPopUp(fPopUp);
+    fFilterLFOFade->setPopUp(fPopUp);
+
     fPitchLFOFreq->setPopUp(fPopUp);
     fPitchLFODepth->setPopUp(fPopUp);
     fPitchLFOFade->setPopUp(fPopUp);
@@ -714,7 +716,7 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         fPitchEgRelease->setValue(value);
         break;
     default:
-        printf("DropsUI::parameterChanged(%i,%f)\n", index, value);
+        //       printf("DropsUI::parameterChanged(%i,%f)\n", index, value);
         break;
     }
     repaint();
@@ -1500,15 +1502,6 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
 
     switch (id)
     {
-    case kAmpLFOFreq:
-        setParameterValue(kAmpLFOFreq, value);
-        break;
-    case kAmpLFODepth:
-        setParameterValue(kAmpLFODepth, value);
-        break;
-    case kAmpLFOFade:
-        setParameterValue(kAmpLFOFade, value);
-        break;
     case kAmpEgAttack:
         setParameterValue(kAmpEgAttack, value);
         break;
@@ -1521,21 +1514,25 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
     case kAmpEgRelease:
         setParameterValue(kAmpEgRelease, value);
         break;
+    case kAmpLFOFreq:
+        setParameterValue(kAmpLFOFreq, value);
+        break;
+    case kAmpLFODepth:
+        setParameterValue(kAmpLFODepth, value);
+        break;
+    case kAmpLFOFade:
+        setParameterValue(kAmpLFOFade, value);
+        break;
+
     // filter
-    case kFilterLFOFreq:
-        setParameterValue(kFilterLFOFreq, value);
-        break;
-    case kFilterLFODepth:
-        setParameterValue(kFilterLFODepth, value);
-        break;
-    case kFilterLFOFade:
-        setParameterValue(kFilterLFOFade, value);
-        break;
     case kFilterCutOff:
         setParameterValue(kFilterCutOff, value);
         break;
     case kFilterResonance:
         setParameterValue(kFilterResonance, value);
+        break;
+    case kFilterEgDepth:
+        setParameterValue(kFilterEgDepth, value);
         break;
     case kFilterEgAttack:
         setParameterValue(kFilterEgAttack, value);
@@ -1549,15 +1546,18 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
     case kFilterEgRelease:
         setParameterValue(kFilterEgRelease, value);
         break;
+    case kFilterLFOFreq:
+        setParameterValue(kFilterLFOFreq, value);
+        break;
+    case kFilterLFODepth:
+        setParameterValue(kFilterLFODepth, value);
+        break;
+    case kFilterLFOFade:
+        setParameterValue(kFilterLFOFade, value);
+        break;
     // pitch
-    case kPitchLFOFreq:
-        setParameterValue(kPitchLFOFreq, value);
-        break;
-    case kPitchLFODepth:
-        setParameterValue(kPitchLFODepth, value);
-        break;
-    case kPitchLFOFade:
-        setParameterValue(kPitchLFOFade, value);
+    case kPitchEgDepth:
+        setParameterValue(kPitchEgDepth, value);
         break;
     case kPitchEgAttack:
         setParameterValue(kPitchEgAttack, value);
@@ -1570,6 +1570,15 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
         break;
     case kPitchEgRelease:
         setParameterValue(kPitchEgRelease, value);
+        break;
+    case kPitchLFOFreq:
+        setParameterValue(kPitchLFOFreq, value);
+        break;
+    case kPitchLFODepth:
+        setParameterValue(kPitchLFODepth, value);
+        break;
+    case kPitchLFOFade:
+        setParameterValue(kPitchLFOFade, value);
         break;
 
     default:

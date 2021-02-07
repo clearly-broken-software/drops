@@ -107,6 +107,22 @@ void DropsUI::initTabFilter()
     fFilterResonance->real_max = 40.0f;
     fFilterResonance->format_str = "%.2f dB";
 
+    fFilterEGDepth = new Knob(hbox_filter_row_2);
+    fFilterEGDepth->setId(kFilterEgDepth);
+    fFilterEGDepth->setSize(knobSize);
+    fFilterEGDepth->setCallback(this);
+    fFilterEGDepth->label = "DEPTH";
+    fFilterEGDepth->labelSize = font_size;
+    fFilterEGDepth->margin = margin;
+    fFilterEGDepth->gauge_width = gauge;
+    fFilterEGDepth->foreground_color = blue_pigment_1;
+    fFilterEGDepth->background_color = black_olive;
+    fFilterEGDepth->highlight_color = blue_pigment_2;
+    fFilterEGDepth->text_color = floral_white;
+    fFilterEGDepth->real_min = 0.0f;
+    fFilterEGDepth->real_max = 12000.0f;
+    fFilterEGDepth->format_str = "%.f Ct";
+   
     fFilterEgAttack = new Knob(hbox_filter_row_2);
     fFilterEgAttack->setId(kFilterEgAttack);
     fFilterEgAttack->setSize(knobSize);
@@ -287,6 +303,7 @@ void DropsUI::initTabFilter()
     hbox_filter_row_1->addWidget(fFilterResonance);
 
     vbox_filter->addWidget(hbox_filter_row_2);
+    hbox_filter_row_2->addWidget(fFilterEGDepth);
     hbox_filter_row_2->addWidget(fFilterEgAttack);
     hbox_filter_row_2->addWidget(fFilterEgDecay);
     hbox_filter_row_2->addWidget(fFilterEgSustain);

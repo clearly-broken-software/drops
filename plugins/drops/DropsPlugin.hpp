@@ -116,18 +116,20 @@ private:
     //  display
     float fSampleIn, fSampleOut, fSampleLoopStart, fSampleLoopEnd;
     //  sample
-    float fSamplePitchKeyCenter, fSamplePlayMode, fSamplePlayDirection,
-        fSamplePitch, fSampleOversampling;
+    float fSamplePitchKeyCenter, fSamplePitch, fSamplePlayMode,
+        fSamplePlayDirection, fSampleOversampling;
     //  amp
-    float fAmpLFOType, fAmpLFOFreq, fAmpLFODepth, fAmpLFOFade,
-        fAmpEGAttack, fAmpEgDecay, fAmpEgSustain, fAmpEgRelease;
+    float fAmpEGAttack, fAmpEgDecay, fAmpEgSustain, fAmpEgRelease,
+        fAmpLFOType, fAmpLFOFreq, fAmpLFODepth, fAmpLFOFade;
+
     //  filter
-    float fFilterType, fFilterLFOType, fFilterLFOFreq, fFilterLFODepth,
-        fFilterLFOFade, fFilterCutOff, fFilterResonance,
+    float fFilterType, fFilterCutOff, fFilterResonance, fFilterEGDepth,
+        fFilterLFOType, fFilterLFOFreq, fFilterLFODepth, fFilterLFOFade,
         fFilterEGAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease;
     //  pitch
-    float fPitchLFOType, fPitchLFOFreq, fPitchLFODepth, fPitchLFOFade,
-        fPitchEGAttack, fPitchEgDecay, fPitchEgSustain, fPitchEgRelease;
+    float fPitchEGDepth, fPitchEGAttack, fPitchEgDecay, fPitchEgSustain,
+        fPitchEgRelease, fPitchLFOType, fPitchLFOFreq, fPitchLFODepth, 
+        fPitchLFOFade;
 
     double fFilterMaxFreq;
 
@@ -153,9 +155,14 @@ private:
 
     std::unordered_map<std::string, std::string> opcodes;
 
+    // some constants
     const float lfo_max_freq = 20.0f;
-    // double bpm;
-
+    const float filter_eg_depth = 12000.0f;
+    const float pitch_eg_depth = 2400.0f; // 2 octave
+    const float amp_lfo_depth = 12.f;
+    const float pitch_lfo_depth = 1200;
+    const float lfo_fade = 10.f;
+   
     friend class DropsUI;
     /*
      * Set our plugin class as non-copyable and add a leak detector just in case.

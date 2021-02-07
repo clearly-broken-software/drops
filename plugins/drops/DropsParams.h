@@ -18,46 +18,47 @@ enum Parameters
    // kSampleXFade,          // loop_crossfade (not implemented)
    // kSampleNormalize,      // amplitude or volume
    kSamplePitchKeyCenter, // pitch_keycenter
-   kSamplePitch,           // tune
-   kSamplePlayMode,      // loopmode
-   kSamplePlayDirection, // direction
-   kSampleOversampling, // 1,2,4,8
+   kSamplePitch,          // tune
+   kSamplePlayMode,       // loopmode
+   kSamplePlayDirection,  // direction
+   kSampleOversampling,   // 1,2,4,8
+
    /*    amp tab */
-   kAmpLFOType,   // lfoN_wave
-   kAmpLFOFreq,   // lfoN_freq
-   kAmpLFODepth,  // lfoN_amplitude
-   kAmpLFOFade,   // lfoN_fade
    kAmpEgAttack,  // ampeg_attack
    kAmpEgDecay,   // ampeg_decay
    kAmpEgSustain, // ampeg_sustain
    kAmpEgRelease, // ampeg_release
-
+   kAmpLFOType,   // lfoN_wave
+   kAmpLFOFreq,   // lfoN_freq
+   kAmpLFODepth,  // lfoN_amplitude
+   kAmpLFOFade,   // lfoN_fade
    // kAmpLFOSync,   //
+
    /* filter tab */
    kFilterType,      // fil_type
-   kFilterLFOType,   // lfoN_wave
-   kFilterLFOFreq,   // lofN_freq
-   kFilterLFODepth,  // lfoN_filter
-   kFilterLFOFade,   // lfoN-fade
    kFilterCutOff,    // cutoff , cutoff_oncc200
    kFilterResonance, // resonance
+   kFilterEgDepth,   // fileg_depth
    kFilterEgAttack,  // fileg_attack
    kFilterEgDecay,   // fileg_decay
    kFilterEgSustain, // fileg_sustain
    kFilterEgRelease, // fileg_release
-   //kFilterEgDepth,   // fileg_depth
+   kFilterLFOType,  // lfoN_wave
+   kFilterLFOFreq,  // lofN_freq
+   kFilterLFODepth, // lfoN_filter
+   kFilterLFOFade,  // lfoN_fade
    //kFilterLFOSync,
 
    /*  pitch tab */
-   kPitchLFOType,   // lfoN_wave
-   kPitchLFOFreq,   // lfoN_freq
-   kPitchLFODepth,  // lfoN_pitch
-   kPitchLFOFade,
+   kPitchEgDepth,   // pitcheg_depth
    kPitchEgAttack,  // pitcheg_attack
    kPitchEgDecay,   // pitcheg_decay
    kPitchEgSustain, // pitcheg_sustain
    kPitchEgRelease, // pitcheg_release
-   // kPitchEgDepth,   // pitcheg_depth
+   kPitchLFOType,   // lfoN_wave
+   kPitchLFOFreq,   // lfoN_freq
+   kPitchLFODepth,  // lfoN_pitch
+   kPitchLFOFade,   // lfoN_fade
    // kPitchLFOSync,
 
    kSampleLoaded, // output port to signal UI
@@ -112,4 +113,3 @@ enum Widgets
    kZoomAll,
    kZoomInOut,
 };
-

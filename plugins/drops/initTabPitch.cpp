@@ -20,13 +20,29 @@ void DropsUI::initTabPitch()
 
     hbox_pitch_row_1 = new HBox(vbox_pitch);
     hbox_pitch_row_1->setId(kHBoxPitchRow1);
-    hbox_pitch_row_1->setWidth(vbox_pitch->getWidth() * 0.8);
+    hbox_pitch_row_1->setWidth(vbox_pitch->getWidth());
     hbox_pitch_row_1->setHeight(sz);
 
     hbox_pitch_row_2 = new HBox(vbox_pitch);
     hbox_pitch_row_2->setId(kHBoxPitchRow2);
     hbox_pitch_row_2->setHeight(sz);
     hbox_pitch_row_2->setWidth(vbox_pitch->getWidth());
+
+    fPitchEgDepth = new Knob(hbox_pitch_row_1);
+    fPitchEgDepth->setId(kPitchEgAttack);
+    fPitchEgDepth->setSize(knobSize);
+    fPitchEgDepth->setCallback(this);
+    fPitchEgDepth->labelSize = font_size;
+    fPitchEgDepth->gauge_width = gauge;
+    fPitchEgDepth->margin = margin;
+    fPitchEgDepth->label = "DEPTH";
+    fPitchEgDepth->foreground_color = shamrock_green;
+    fPitchEgDepth->background_color = black_olive;
+    fPitchEgDepth->highlight_color = shamrock_green_1;
+    fPitchEgDepth->text_color = floral_white;
+    fPitchEgDepth->real_min = 0.0f;
+    fPitchEgDepth->real_max = 1200.0f;
+    fPitchEgDepth->format_str = "%.f s";
 
     fPitchEgAttack = new Knob(hbox_pitch_row_1);
     fPitchEgAttack->setId(kPitchEgAttack);
@@ -101,6 +117,7 @@ void DropsUI::initTabPitch()
     fPitchEgRelease->format_str = "%.2f s";
     fPitchEgRelease->using_log = true;
 
+    hbox_pitch_row_1->addWidget(fPitchEgDepth);
     hbox_pitch_row_1->addWidget(fPitchEgAttack);
     hbox_pitch_row_1->addWidget(fPitchEgDecay);
     hbox_pitch_row_1->addWidget(fPitchEgSustain);
@@ -164,7 +181,7 @@ void DropsUI::initTabPitch()
     fPitchLFODepth->min = 1.0f;
     fPitchLFODepth->max = 101.f;
     fPitchLFODepth->format_str = "%.f Ct";
-    fPitchLFODepth->using_log = false; 
+    fPitchLFODepth->using_log = false;
 
     fPitchLFOFade = new Knob(hbox_pitch_row_2);
     fPitchLFOFade->setId(kPitchLFOFade);

@@ -84,7 +84,6 @@ private:
 
     ScopedPointer<HBox> hbox_sample;
     ScopedPointer<Slider> fSamplePitch;
-    // ScopedPointer<DropDown> fSampleNormalize;
     ScopedPointer<DropDown> fSamplePitchKeyCenter,
         fSamplePlayMode, fSamplePlayDirection, fSampleOversampling;
     ScopedPointer<Menu> fNormalizeMenu, fKeyCenterMenu, fPlayModeMenu,
@@ -97,15 +96,12 @@ private:
     ScopedPointer<DropDown> fAmpLFOType;
     ScopedPointer<Menu> fAmpLFOTypeMenu;
     ScopedPointer<Knob> fAmpLFOFreq, fAmpLFODepth,fAmpLFOFade;
-    // ScopedPointer<DropDown> fAmpLFOSync;
-    // ScopedPointer<Menu> fAmpLFOSyncMenu;
-    //ScopedPointer<RadioButton> fAmpLFOFreqBeat;
 
     // filter
     ScopedPointer<VBox> vbox_filter;
     ScopedPointer<HBox> hbox_filter_row_1, hbox_filter_row_2, hbox_filter_row_3,
-    hbox_filter_row_1_spacer,hbox_filter_row_3_spacer;
-    ScopedPointer<Knob> fFilterEgAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease,
+    hbox_filter_row_3_spacer;
+    ScopedPointer<Knob> fFilterEGDepth, fFilterEgAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease,
         fFilterCutOff, fFilterResonance;
     ScopedPointer<DropDown> fFilterLFOType;
     ScopedPointer<Menu> fFilterLFOTypeMenu;
@@ -117,7 +113,7 @@ private:
     // pitch tab
     ScopedPointer<VBox> vbox_pitch, vbox_pitch_lfo;
     ScopedPointer<HBox> hbox_pitch_row_1, hbox_pitch_row_2, hbox_pitch_row_3;
-    ScopedPointer<Knob>
+    ScopedPointer<Knob> fPitchEgDepth,
         fPitchEgAttack, fPitchEgDecay, fPitchEgSustain, fPitchEgRelease;
     ScopedPointer<DropDown> fPitchLFOType;
     ScopedPointer<Menu> fPitchLFOTypeMenu;
