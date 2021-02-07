@@ -582,20 +582,7 @@ void DropsUI::parameterChanged(uint32_t index, float value)
     case kSampleOversampling:
         fSampleOversampling->setValue(value);
         break;
-        // amp
-    case kAmpLFOType:
-        fAmpLFOType->setValue(value);
-        repaint();
-        break;
-    case kAmpLFOFreq:
-        value = (fAmpLFOFreq->max - fAmpLFOFreq->min) * value + fAmpLFOFreq->min;
-        fAmpLFOFreq->setValue(value);
-        repaint();
-        break;
-    case kAmpLFODepth:
-        fAmpLFODepth->setValue(value);
-        repaint();
-        break;
+    // amp
     case kAmpLFOFade:
         value = (fAmpLFOFade->max - fAmpLFOFade->min) * value + fAmpLFOFade->min;
         fAmpLFOFade->setValue(value);
@@ -612,6 +599,19 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         break;
     case kAmpEgSustain:
         fAmpEgSustain->setValue(value);
+        repaint();
+        break;
+    case kAmpLFOType:
+        fAmpLFOType->setValue(value);
+        repaint();
+        break;
+    case kAmpLFOFreq:
+        value = (fAmpLFOFreq->max - fAmpLFOFreq->min) * value + fAmpLFOFreq->min;
+        fAmpLFOFreq->setValue(value);
+        repaint();
+        break;
+    case kAmpLFODepth:
+        fAmpLFODepth->setValue(value);
         repaint();
         break;
     case kAmpEgRelease:
@@ -676,20 +676,23 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         value = (fFilterEgRelease->max - fFilterEgRelease->min) * value + fFilterEgRelease->min;
         fFilterEgRelease->setValue(value);
         break;
+    case kFilterLFOType:
+        fFilterLFOType->setValue(value);
+        break;
+    case kFilterLFOFreq:
+        value = (fFilterLFOFreq->max - fFilterLFOFreq->min) * value + fFilterLFOFreq->min;
+        fFilterLFOFreq->setValue(value);
+        break;
+    case kFilterLFODepth:
+        fFilterLFODepth->setValue(value);
+        break;
+    case kFilterLFOFade:
+        value = (fFilterLFOFade->max - fFilterLFOFade->min) * value + fFilterLFOFade->min;
+        break;
+
     //  pitch
-    case kPitchLFOType:
-        fPitchLFOType->setValue(value);
-        break;
-    case kPitchLFOFreq:
-        value = (fPitchLFOFreq->max - fPitchLFOFreq->min) * value + fPitchLFOFreq->min;
-        fPitchLFOFreq->setValue(value);
-        break;
-    case kPitchLFOFade:
-        value = (fPitchLFOFade->max - fPitchLFOFade->min) * value + fPitchLFOFade->min;
-        fPitchLFOFade->setValue(value);
-        break;
-    case kPitchLFODepth:
-        fPitchLFODepth->setValue(value);
+    case kPitchEgDepth:
+        fPitchEgDepth->setValue(value);
         break;
     case kPitchEgAttack:
         value = (fPitchEgAttack->max - fPitchEgAttack->min) * value + fPitchEgAttack->min;
@@ -706,6 +709,21 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         value = (fFilterEgRelease->max - fFilterEgRelease->min) * value + fFilterEgRelease->min;
         fPitchEgRelease->setValue(value);
         break;
+    case kPitchLFOType:
+        fPitchLFOType->setValue(value);
+        break;
+    case kPitchLFOFreq:
+        value = (fPitchLFOFreq->max - fPitchLFOFreq->min) * value + fPitchLFOFreq->min;
+        fPitchLFOFreq->setValue(value);
+        break;
+    case kPitchLFOFade:
+        value = (fPitchLFOFade->max - fPitchLFOFade->min) * value + fPitchLFOFade->min;
+        fPitchLFOFade->setValue(value);
+        break;
+    case kPitchLFODepth:
+        fPitchLFODepth->setValue(value);
+        break;
+
     default:
         //       printf("DropsUI::parameterChanged(%i,%f)\n", index, value);
         break;
