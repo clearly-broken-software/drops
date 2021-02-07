@@ -29,7 +29,7 @@ void DropsUI::initTabPitch()
     hbox_pitch_row_2->setWidth(vbox_pitch->getWidth());
 
     fPitchEgDepth = new Knob(hbox_pitch_row_1);
-    fPitchEgDepth->setId(kPitchEgAttack);
+    fPitchEgDepth->setId(kPitchEgDepth);
     fPitchEgDepth->setSize(knobSize);
     fPitchEgDepth->setCallback(this);
     fPitchEgDepth->labelSize = font_size;
@@ -41,8 +41,8 @@ void DropsUI::initTabPitch()
     fPitchEgDepth->highlight_color = shamrock_green_1;
     fPitchEgDepth->text_color = floral_white;
     fPitchEgDepth->real_min = 0.0f;
-    fPitchEgDepth->real_max = 1200.0f;
-    fPitchEgDepth->format_str = "%.f s";
+    fPitchEgDepth->real_max = 2400.0f;
+    fPitchEgDepth->format_str = "%.f Ct";
 
     fPitchEgAttack = new Knob(hbox_pitch_row_1);
     fPitchEgAttack->setId(kPitchEgAttack);

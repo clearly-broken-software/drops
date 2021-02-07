@@ -63,7 +63,7 @@ protected:
     void onScrollBarClicked(ScrollBar *scrollBar, bool dragging) override;
     void onDropDownClicked(DropDown *dropdown) override;
     void knobDragStarted(Knob *knob) override;
-    void knobDragFinished(Knob *knob) override;
+    void knobDragFinished(Knob *knob, float value) override;
     void knobValueChanged(Knob *knob, float value) override;
     void onSliderValueChanged(Slider *slider, float value) override;
     void onMenuClicked(Menu *menu, uint id, std::string item);

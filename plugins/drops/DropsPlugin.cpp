@@ -939,7 +939,7 @@ void DropsPlugin::initSFZ()
     opcodes["lfo02_freq"] = "0";
     opcodes["lfo02_cutoff"] = "24000";
     opcodes["lof02_fade"] = "0";
-    opcodes["pitcheg_depth"] = "1200";
+    opcodes["pitcheg_depth"] = "2400";
     opcodes["pitcheg_attack"] = "0";
     opcodes["pitcheg_attack_oncc401"] = "10";
     opcodes["pitcheg_decay"] = "0";
@@ -1041,7 +1041,7 @@ void DropsPlugin::makeSFZ()
     buffer << "lfo02_cutoff=" << opcodes["lfo02_cutoff"] << "\n";
     buffer << "lfo02_fade=" << opcodes["lfo02_fade"] << "\n";
 
-    buffer << "pitcheg_depth=1200\n";
+    buffer << "pitcheg_depth=" << opcodes["pitcheg_depth"] << "\n";
     buffer << "pitcheg_attack=0 \n";
     buffer << "pitcheg_attack_oncc401=10\n";
     buffer << "pitcheg_decay=0\n";

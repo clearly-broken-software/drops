@@ -493,6 +493,7 @@ void DropsUI::initWidgets()
     fAmpEgDecay->setPopUp(fPopUp);
     fAmpEgSustain->setPopUp(fPopUp);
     fAmpEgRelease->setPopUp(fPopUp);
+
     fFilterCutOff->setPopUp(fPopUp);
     fFilterResonance->setPopUp(fPopUp);
     fFilterEGDepth->setPopUp(fPopUp);
@@ -504,13 +505,14 @@ void DropsUI::initWidgets()
     fFilterLFODepth->setPopUp(fPopUp);
     fFilterLFOFade->setPopUp(fPopUp);
 
-    fPitchLFOFreq->setPopUp(fPopUp);
-    fPitchLFODepth->setPopUp(fPopUp);
-    fPitchLFOFade->setPopUp(fPopUp);
+    fPitchEgDepth->setPopUp(fPopUp);
     fPitchEgAttack->setPopUp(fPopUp);
     fPitchEgDecay->setPopUp(fPopUp);
     fPitchEgSustain->setPopUp(fPopUp);
     fPitchEgRelease->setPopUp(fPopUp);
+    fPitchLFOFreq->setPopUp(fPopUp);
+    fPitchLFODepth->setPopUp(fPopUp);
+    fPitchLFOFade->setPopUp(fPopUp);
 }
 
 void DropsUI::makeIcons()
@@ -1498,14 +1500,7 @@ void DropsUI::knobDragStarted(Knob *)
     //     printf("%i , drag started\n", id);
     // #endif
 }
-void DropsUI::knobDragFinished(Knob *)
-{
-    // int id = knob->getId();
-    // #ifdef DEBUG
-    //     printf("%i , drag finished\n", id);
-    // #endif
-}
-void DropsUI::knobValueChanged(Knob *knob, float value)
+void DropsUI::knobDragFinished(Knob *knob, float value)
 {
     uint id = knob->getId();
 
@@ -1591,12 +1586,107 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
         break;
 
     default:
-#ifdef DEBUG
-        printf("knobValueChanged(%i, %f)\n", id, value);
-#endif
         break;
     }
     repaint();
+    // int id = knob->getId();
+    // #ifdef DEBUG
+    //     printf("%i , drag finished\n", id);
+    // #endif
+}
+void DropsUI::knobValueChanged(Knob *knob, float value)
+{
+
+    //     uint id = knob->getId();
+
+    //     switch (id)
+    //     {
+    //     case kAmpEgAttack:
+    //         setParameterValue(kAmpEgAttack, value);
+    //         break;
+    //     case kAmpEgDecay:
+    //         setParameterValue(kAmpEgDecay, value);
+    //         break;
+    //     case kAmpEgSustain:
+    //         setParameterValue(kAmpEgSustain, value);
+    //         break;
+    //     case kAmpEgRelease:
+    //         setParameterValue(kAmpEgRelease, value);
+    //         break;
+    //     case kAmpLFOFreq:
+    //         setParameterValue(kAmpLFOFreq, value);
+    //         break;
+    //     case kAmpLFODepth:
+    //         setParameterValue(kAmpLFODepth, value);
+    //         break;
+    //     case kAmpLFOFade:
+    //         setParameterValue(kAmpLFOFade, value);
+    //         break;
+
+    //     // filter
+    //     case kFilterCutOff:
+    //         setParameterValue(kFilterCutOff, value);
+    //         break;
+    //     case kFilterResonance:
+    //         setParameterValue(kFilterResonance, value);
+    //         break;
+    //     case kFilterEgDepth:
+    //         setParameterValue(kFilterEgDepth, value);
+    //         break;
+    //     case kFilterEgAttack:
+    //         setParameterValue(kFilterEgAttack, value);
+    //         break;
+    //     case kFilterEgDecay:
+    //         setParameterValue(kFilterEgDecay, value);
+    //         break;
+    //     case kFilterEgSustain:
+    //         setParameterValue(kFilterEgSustain, value);
+    //         break;
+    //     case kFilterEgRelease:
+    //         setParameterValue(kFilterEgRelease, value);
+    //         break;
+    //     case kFilterLFOFreq:
+    //         setParameterValue(kFilterLFOFreq, value);
+    //         break;
+    //     case kFilterLFODepth:
+    //         setParameterValue(kFilterLFODepth, value);
+    //         break;
+    //     case kFilterLFOFade:
+    //         setParameterValue(kFilterLFOFade, value);
+    //         break;
+    //     // pitch
+    //     case kPitchEgDepth:
+    //         setParameterValue(kPitchEgDepth, value);
+    //         break;
+    //     case kPitchEgAttack:
+    //         setParameterValue(kPitchEgAttack, value);
+    //         break;
+    //     case kPitchEgDecay:
+    //         setParameterValue(kPitchEgDecay, value);
+    //         break;
+    //     case kPitchEgSustain:
+    //         setParameterValue(kPitchEgSustain, value);
+    //         break;
+    //     case kPitchEgRelease:
+    //         setParameterValue(kPitchEgRelease, value);
+    //         break;
+    //     case kPitchLFOFreq:
+    //         setParameterValue(kPitchLFOFreq, value);
+    //         break;
+    //     case kPitchLFODepth:
+    //         setParameterValue(kPitchLFODepth, value);
+    //         break;
+    //     case kPitchLFOFade:
+    //         setParameterValue(kPitchLFOFade, value);
+    //         break;
+
+    //     default:
+    // #ifdef DEBUG
+    //         printf("knobValueChanged(%i, %f)\n", id, value);
+    // #endif
+    //         break;
+    //     }
+    //    repaint();
 }
 
 void DropsUI::onSliderValueChanged(Slider *slider, float value)

@@ -117,8 +117,10 @@ bool Knob::onMouse(const MouseEvent &ev)
     }
     else if (dragging_)
     {
+        float normValue = (value_ - min) / (max - min);
+
         if (callback != nullptr)
-            callback->knobDragFinished(this);
+            callback->knobDragFinished(this, normValue);
         if (popUp != nullptr && !contains(ev.pos))
         {
             popUp->hide();
@@ -206,7 +208,7 @@ bool Knob::onMotion(const MotionEvent &ev)
         tmp_value_ = value = max;
     }
 
-    setValue(value, true);
+    setValue(value, false);
 
     last_mouse_x_ = ev.pos.getX();
     last_mouse_y_ = ev.pos.getY();

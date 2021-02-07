@@ -21,7 +21,7 @@ public:
     public:
         virtual ~Callback() {}
         virtual void knobDragStarted(Knob *knob) = 0;
-        virtual void knobDragFinished(Knob *knob) = 0;
+        virtual void knobDragFinished(Knob *knob, float value) = 0;
         virtual void knobValueChanged(Knob *knob, float value) = 0;
     };
     explicit Knob(Window &parent) noexcept;
