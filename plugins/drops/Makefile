@@ -27,7 +27,6 @@ FILES_UI  = \
 			widgets/src/HBox.cpp \
 			widgets/src/VBox.cpp \
 			widgets/src/FileOpenButton.cpp \
-			widgets/src/RadioButton.cpp \
 			widgets/src/SVGButton.cpp \
 			widgets/src/PopUp.cpp \
 			SVGImage.cpp \
