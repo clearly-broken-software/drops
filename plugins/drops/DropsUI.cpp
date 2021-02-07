@@ -651,24 +651,15 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         }
         break;
     }
-    case kFilterLFOType:
-        fFilterLFOType->setValue(value);
-        break;
-    case kFilterLFOFreq:
-        value = (fFilterLFOFreq->max - fFilterLFOFreq->min) * value + fFilterLFOFreq->min;
-        fFilterLFOFreq->setValue(value);
-        break;
-    case kFilterLFODepth:
-        fFilterLFODepth->setValue(value);
-        break;
-    case kFilterLFOFade:
-        value = (fFilterLFOFade->max - fFilterLFOFade->min) * value + fFilterLFOFade->min;
-        break;
     case kFilterCutOff:
+        value = (fFilterCutOff->max - fFilterCutOff->min) * value + fFilterCutOff->min;
         fFilterCutOff->setValue(value);
         break;
     case kFilterResonance:
         fFilterResonance->setValue(value);
+        break;
+    case kFilterEgDepth:
+        fFilterEGDepth->setValue(value);
         break;
     case kFilterEgAttack:
         value = (fFilterEgAttack->max - fFilterEgAttack->min) * value + fFilterEgAttack->min;

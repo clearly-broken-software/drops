@@ -88,6 +88,9 @@ void DropsUI::initTabFilter()
     const float max_cutoff = getSampleRate() / 2.0f;
     fFilterCutOff->real_min = 20.0f;
     fFilterCutOff->real_max = max_cutoff;
+    fFilterCutOff->min = 1.0f;
+    fFilterCutOff->max = 101.f;
+    fFilterCutOff->using_log = true;
     fFilterCutOff->format_str = "%.f Hz";
 
     fFilterResonance = new Knob(hbox_filter_row_1);
