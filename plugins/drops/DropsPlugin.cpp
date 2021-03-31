@@ -768,6 +768,10 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         fPitchLFODepth = value;
         makeSFZ();
         break;
+    case kPitchLFOFade:
+        fPitchLFOFade = value;
+        makeSFZ();
+        break;
 
     case kSampleLoaded:
         break;
@@ -991,7 +995,7 @@ void DropsPlugin::makeSFZ()
     opcodes["lfo02_cutoff"] = std::to_string(fFilterLFODepth * (fFilterMaxFreq * .5));
     opcodes["lfo02_fade"] = std::to_string(fFilterLFOFade * lfo_fade);
 
-    opcodes["lfo03_wave"] = lfo_types_[static_cast<int>(fFilterLFOType)];
+    opcodes["lfo03_wave"] = lfo_types_[static_cast<int>(fPitchLFOType)];
     opcodes["lfo03_freq"] = std::to_string(fPitchLFOFreq * lfo_max_freq);
     opcodes["lfo03_pitch"] = std::to_string(fPitchLFODepth * pitch_lfo_depth);
     opcodes["lfo03_fade"] = std::to_string(fPitchLFOFade * lfo_fade);
