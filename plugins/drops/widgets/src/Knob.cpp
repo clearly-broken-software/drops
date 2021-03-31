@@ -155,7 +155,10 @@ bool Knob::onScroll(const ScrollEvent &ev)
     {
         tmp_value_ = value = max;
     }
+    printf("scroll knob value %f\n", value);
     setValue(value, true);
+    float normValue = (value_ - min) / (max - min);
+    callback->knobDragFinished(this, normValue);
     return false;
 }
 

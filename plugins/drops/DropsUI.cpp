@@ -723,6 +723,7 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         fPitchLFOFade->setValue(value);
         break;
     case kPitchLFODepth:
+        value = (fPitchLFOFade->max - fPitchLFOFade->min) * value + fPitchLFOFade->min;
         fPitchLFODepth->setValue(value);
         break;
 
@@ -1597,96 +1598,95 @@ void DropsUI::knobDragFinished(Knob *knob, float value)
 void DropsUI::knobValueChanged(Knob *knob, float value)
 {
 
-    //     uint id = knob->getId();
+    uint id = knob->getId();
 
-    //     switch (id)
-    //     {
-    //     case kAmpEgAttack:
-    //         setParameterValue(kAmpEgAttack, value);
-    //         break;
-    //     case kAmpEgDecay:
-    //         setParameterValue(kAmpEgDecay, value);
-    //         break;
-    //     case kAmpEgSustain:
-    //         setParameterValue(kAmpEgSustain, value);
-    //         break;
-    //     case kAmpEgRelease:
-    //         setParameterValue(kAmpEgRelease, value);
-    //         break;
-    //     case kAmpLFOFreq:
-    //         setParameterValue(kAmpLFOFreq, value);
-    //         break;
-    //     case kAmpLFODepth:
-    //         setParameterValue(kAmpLFODepth, value);
-    //         break;
-    //     case kAmpLFOFade:
-    //         setParameterValue(kAmpLFOFade, value);
-    //         break;
+    switch (id)
+    {
+    case kAmpEgAttack:
+        setParameterValue(kAmpEgAttack, value);
+        break;
+    case kAmpEgDecay:
+        setParameterValue(kAmpEgDecay, value);
+        break;
+    case kAmpEgSustain:
+        setParameterValue(kAmpEgSustain, value);
+        break;
+    case kAmpEgRelease:
+        setParameterValue(kAmpEgRelease, value);
+        break;
+    case kAmpLFOFreq:
+        setParameterValue(kAmpLFOFreq, value);
+        break;
+    case kAmpLFODepth:
+        setParameterValue(kAmpLFODepth, value);
+        break;
+    case kAmpLFOFade:
+        setParameterValue(kAmpLFOFade, value);
+        break;
 
-    //     // filter
-    //     case kFilterCutOff:
-    //         setParameterValue(kFilterCutOff, value);
-    //         break;
-    //     case kFilterResonance:
-    //         setParameterValue(kFilterResonance, value);
-    //         break;
-    //     case kFilterEgDepth:
-    //         setParameterValue(kFilterEgDepth, value);
-    //         break;
-    //     case kFilterEgAttack:
-    //         setParameterValue(kFilterEgAttack, value);
-    //         break;
-    //     case kFilterEgDecay:
-    //         setParameterValue(kFilterEgDecay, value);
-    //         break;
-    //     case kFilterEgSustain:
-    //         setParameterValue(kFilterEgSustain, value);
-    //         break;
-    //     case kFilterEgRelease:
-    //         setParameterValue(kFilterEgRelease, value);
-    //         break;
-    //     case kFilterLFOFreq:
-    //         setParameterValue(kFilterLFOFreq, value);
-    //         break;
-    //     case kFilterLFODepth:
-    //         setParameterValue(kFilterLFODepth, value);
-    //         break;
-    //     case kFilterLFOFade:
-    //         setParameterValue(kFilterLFOFade, value);
-    //         break;
-    //     // pitch
-    //     case kPitchEgDepth:
-    //         setParameterValue(kPitchEgDepth, value);
-    //         break;
-    //     case kPitchEgAttack:
-    //         setParameterValue(kPitchEgAttack, value);
-    //         break;
-    //     case kPitchEgDecay:
-    //         setParameterValue(kPitchEgDecay, value);
-    //         break;
-    //     case kPitchEgSustain:
-    //         setParameterValue(kPitchEgSustain, value);
-    //         break;
-    //     case kPitchEgRelease:
-    //         setParameterValue(kPitchEgRelease, value);
-    //         break;
-    //     case kPitchLFOFreq:
-    //         setParameterValue(kPitchLFOFreq, value);
-    //         break;
-    //     case kPitchLFODepth:
-    //         setParameterValue(kPitchLFODepth, value);
-    //         break;
-    //     case kPitchLFOFade:
-    //         setParameterValue(kPitchLFOFade, value);
-    //         break;
+    // filter
+    case kFilterCutOff:
+        setParameterValue(kFilterCutOff, value);
+        break;
+    case kFilterResonance:
+        setParameterValue(kFilterResonance, value);
+        break;
+    case kFilterEgDepth:
+        setParameterValue(kFilterEgDepth, value);
+        break;
+    case kFilterEgAttack:
+        setParameterValue(kFilterEgAttack, value);
+        break;
+    case kFilterEgDecay:
+        setParameterValue(kFilterEgDecay, value);
+        break;
+    case kFilterEgSustain:
+        setParameterValue(kFilterEgSustain, value);
+        break;
+    case kFilterEgRelease:
+        setParameterValue(kFilterEgRelease, value);
+        break;
+    case kFilterLFOFreq:
+        setParameterValue(kFilterLFOFreq, value);
+        break;
+    case kFilterLFODepth:
+        setParameterValue(kFilterLFODepth, value);
+        break;
+    case kFilterLFOFade:
+        setParameterValue(kFilterLFOFade, value);
+        break;
+    // pitch
+    case kPitchEgDepth:
+        setParameterValue(kPitchEgDepth, value);
+        break;
+    case kPitchEgAttack:
+        setParameterValue(kPitchEgAttack, value);
+        break;
+    case kPitchEgDecay:
+        setParameterValue(kPitchEgDecay, value);
+        break;
+    case kPitchEgSustain:
+        setParameterValue(kPitchEgSustain, value);
+        break;
+    case kPitchEgRelease:
+        setParameterValue(kPitchEgRelease, value);
+        break;
+    case kPitchLFOFreq:
+        setParameterValue(kPitchLFOFreq, value);
+        break;
+    case kPitchLFODepth:
+        setParameterValue(kPitchLFODepth, value);
+        break;
+    case kPitchLFOFade:
+        setParameterValue(kPitchLFOFade, value);
+        break;
 
-    //     default:
-    // #ifdef DEBUG
-    //         printf("knobValueChanged(%i, %f)\n", id, value);
-    // #endif
-    //         break;
-    //     }
-    //    repaint();
+    default:
+#ifdef DEBUG
+        printf("knobValueChanged(%i, %f)\n", id, value);
+#endif
+        break;
+    }
 }
 
 void DropsUI::onSliderValueChanged(Slider *slider, float value)
