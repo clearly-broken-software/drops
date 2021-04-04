@@ -66,6 +66,13 @@ DropsUI::DropsUI()
         sampleDir = dirnameOf(filename.c_str());
         fileopen_button->setText(filename);
     }
+    ampLFOSync = false;
+    filterLFOSync = false;
+    pitchLFOSync = false;
+    filterLFOFreq = 0.0f;
+    filterLFOSyncFreq = 0.0f;
+    ampLFOFreq = 0.0f;
+    ampLFOSyncFreq = 0.0f;
 }
 
 DropsUI::~DropsUI()
@@ -607,9 +614,24 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         fAmpLFOType->setValue(value);
         repaint();
         break;
+    case kAmpLFOSync:
+    {
+        const bool synced = static_cast<bool>(value);
+        ampLFOSync = synced;
+        fAmpLFOSync->isActive = synced;
+        knobToSync(fAmpLFOFreq, synced);
+    }
+    break;
     case kAmpLFOFreq:
-        value = (fAmpLFOFreq->max - fAmpLFOFreq->min) * value + fAmpLFOFreq->min;
-        fAmpLFOFreq->setValue(value);
+        if (ampLFOSync)
+        {
+            fAmpLFOFreq->setValue(value);
+        }
+        else
+        {
+            value = (fAmpLFOFreq->max - fAmpLFOFreq->min) * value + fAmpLFOFreq->min;
+            fAmpLFOFreq->setValue(value);
+        }
         repaint();
         break;
     case kAmpLFODepth:
@@ -681,9 +703,24 @@ void DropsUI::parameterChanged(uint32_t index, float value)
     case kFilterLFOType:
         fFilterLFOType->setValue(value);
         break;
+    case kFilterLFOSync:
+    {
+        const bool synced = static_cast<bool>(value);
+        filterLFOSync = synced;
+        fFilterLFOSync->isActive = synced;
+        knobToSync(fFilterLFOFreq, synced);
+    }
+    break;
     case kFilterLFOFreq:
-        value = (fFilterLFOFreq->max - fFilterLFOFreq->min) * value + fFilterLFOFreq->min;
-        fFilterLFOFreq->setValue(value);
+        if (filterLFOSync)
+        {
+            fFilterLFOFreq->setValue(value);
+        }
+        else
+        {
+            value = (fFilterLFOFreq->max - fFilterLFOFreq->min) * value + fFilterLFOFreq->min;
+            fFilterLFOFreq->setValue(value);
+        }
         break;
     case kFilterLFODepth:
         fFilterLFODepth->setValue(value);
@@ -714,10 +751,27 @@ void DropsUI::parameterChanged(uint32_t index, float value)
     case kPitchLFOType:
         fPitchLFOType->setValue(value);
         break;
+    case kPitchLFOSync:
+    {
+        const bool synced = static_cast<bool>(value);
+        pitchLFOSync = synced;
+        fPitchLFOSync->isActive = synced;
+        knobToSync(fPitchLFOFreq, synced);
+    }
+    break;
     case kPitchLFOFreq:
-        value = (fPitchLFOFreq->max - fPitchLFOFreq->min) * value + fPitchLFOFreq->min;
-        fPitchLFOFreq->setValue(value);
+        if (pitchLFOSync)
+        {
+            fPitchLFOFreq->setValue(value);
+        }
+        else
+        {
+            value = (fPitchLFOFreq->max - fPitchLFOFreq->min) * value + fPitchLFOFreq->min;
+            fPitchLFOFreq->setValue(value);
+        }
+        repaint();
         break;
+
     case kPitchLFOFade:
         value = (fPitchLFOFade->max - fPitchLFOFade->min) * value + fPitchLFOFade->min;
         fPitchLFOFade->setValue(value);
@@ -1477,9 +1531,6 @@ void DropsUI::onDropDownClicked(DropDown *dropDown)
     case kAmpLFOType:
         fAmpLFOTypeMenu->show();
         break;
-    // case kAmpLFOSync:
-    //     fAmpLFOSyncMenu->show();
-    //     break;
     case kPitchLFOType:
         fPitchLFOTypeMenu->show();
         break;
@@ -1520,8 +1571,18 @@ void DropsUI::knobDragFinished(Knob *knob, float value)
         setParameterValue(kAmpEgRelease, value);
         break;
     case kAmpLFOFreq:
-        setParameterValue(kAmpLFOFreq, value);
+        if (ampLFOSync)
+        {
+            ampLFOSyncFreq = value;
+            setParameterValue(kAmpLFOSyncFreq, value);
+        }
+        else
+        {
+            ampLFOFreq = value;
+            setParameterValue(kAmpLFOFreq, value);
+        }
         break;
+
     case kAmpLFODepth:
         setParameterValue(kAmpLFODepth, value);
         break;
@@ -1552,7 +1613,16 @@ void DropsUI::knobDragFinished(Knob *knob, float value)
         setParameterValue(kFilterEgRelease, value);
         break;
     case kFilterLFOFreq:
-        setParameterValue(kFilterLFOFreq, value);
+        if (filterLFOSync)
+        {
+            filterLFOSyncFreq = value;
+            setParameterValue(kFilterLFOSyncFreq, value);
+        }
+        else
+        {
+            filterLFOFreq = value;
+            setParameterValue(kFilterLFOFreq, value);
+        }
         break;
     case kFilterLFODepth:
         setParameterValue(kFilterLFODepth, value);
@@ -1577,7 +1647,16 @@ void DropsUI::knobDragFinished(Knob *knob, float value)
         setParameterValue(kPitchEgRelease, value);
         break;
     case kPitchLFOFreq:
-        setParameterValue(kPitchLFOFreq, value);
+        if (pitchLFOSync)
+        {
+            pitchLFOSyncFreq = value;
+            setParameterValue(kPitchLFOSyncFreq, value);
+        }
+        else
+        {
+            pitchLFOFreq = value;
+            setParameterValue(kPitchLFOFreq, value);
+        }
         break;
     case kPitchLFODepth:
         setParameterValue(kPitchLFODepth, value);
@@ -1615,7 +1694,16 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
         setParameterValue(kAmpEgRelease, value);
         break;
     case kAmpLFOFreq:
-        setParameterValue(kAmpLFOFreq, value);
+        if (ampLFOSync)
+        {
+            ampLFOSyncFreq = value;
+            setParameterValue(kAmpLFOSyncFreq, value);
+        }
+        else
+        {
+            ampLFOFreq = value;
+            setParameterValue(kAmpLFOFreq, value);
+        }
         break;
     case kAmpLFODepth:
         setParameterValue(kAmpLFODepth, value);
@@ -1647,7 +1735,16 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
         setParameterValue(kFilterEgRelease, value);
         break;
     case kFilterLFOFreq:
-        setParameterValue(kFilterLFOFreq, value);
+        if (filterLFOSync)
+        {
+            filterLFOSyncFreq = value;
+            setParameterValue(kFilterLFOSyncFreq, value);
+        }
+        else
+        {
+            filterLFOFreq = value;
+            setParameterValue(kFilterLFOFreq, value);
+        }
         break;
     case kFilterLFODepth:
         setParameterValue(kFilterLFODepth, value);
@@ -1672,8 +1769,18 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
         setParameterValue(kPitchEgRelease, value);
         break;
     case kPitchLFOFreq:
-        setParameterValue(kPitchLFOFreq, value);
+        if (pitchLFOSync)
+        {
+            pitchLFOSyncFreq = value;
+            setParameterValue(kPitchLFOSyncFreq, value);
+        }
+        else
+        {
+            pitchLFOFreq = value;
+            setParameterValue(kPitchLFOFreq, value);
+        }
         break;
+
     case kPitchLFODepth:
         setParameterValue(kPitchLFODepth, value);
         break;
@@ -1683,7 +1790,7 @@ void DropsUI::knobValueChanged(Knob *knob, float value)
 
     default:
 #ifdef DEBUG
-        printf("knobValueChanged(%i, %f)\n", id, value);
+        // printf("knobValueChanged(%i, %f)\n", id, value);
 #endif
         break;
     }
@@ -1812,11 +1919,6 @@ void DropsUI::onMenuClicked(Menu *menu, uint menu_id, std::string item)
         fAmpLFOTypeMenu->hide();
         setParameterValue(kAmpLFOType, menu_id);
         break;
-    // case kAmpLFOSyncMenu:
-    //     fAmpLFOSync->item = item;
-    //     fAmpLFOSyncMenu->hide();
-    //     setParameterValue(kAmpLFOSync, menu_id);
-    //     break;
     case kPitchLFOTypeMenu:
         fPitchLFOType->item = item;
         fPitchLFOTypeMenu->hide();
@@ -1907,7 +2009,71 @@ void DropsUI::onSVGButtonClicked(SVGButton *svgb)
         break;
     }
 }
+void DropsUI::onCheckBoxClicked(CheckBox *checkbox, bool is_checked)
+{
+    float value = static_cast<float>(is_checked);
+    const int id = checkbox->getId();
+    switch (id)
+    {
+    case kAmpLFOSync:
+        ampLFOSync = is_checked;
+        knobToSync(fAmpLFOFreq, is_checked);
+        if (is_checked)
+        {
+            fAmpLFOFreq->setValue(ampLFOSyncFreq);
+        }
+        else
+        {
+            // denormalize
+            const float max = fAmpLFOFreq->max;
+            const float min = fAmpLFOFreq->min;
+            const float denormVal = ampLFOFreq * (max - min) + min;
+            fAmpLFOFreq->setValue(denormVal);
+        }
+        setParameterValue(kAmpLFOSync, value);
+        break;
+    case kFilterLFOSync:
+        filterLFOSync = is_checked;
+        knobToSync(fFilterLFOFreq, is_checked);
+        if (is_checked)
+        {
+            fFilterLFOFreq->setValue(filterLFOSyncFreq);
+        }
+        else
+        {
+            // denormalize
+            const float max = fFilterLFOFreq->max;
+            const float min = fFilterLFOFreq->min;
+            const float denormVal = filterLFOFreq * (max - min) + min;
+            fFilterLFOFreq->setValue(denormVal);
+        }
+        setParameterValue(kFilterLFOSync, value);
+        break;
+    case kPitchLFOSync:
+        pitchLFOSync = is_checked;
+        knobToSync(fPitchLFOFreq, is_checked);
+        if (is_checked)
+        {
+            fPitchLFOFreq->setValue(pitchLFOSyncFreq);
+        }
+        else
+        {
+            // denormalize
+            const float max = fPitchLFOFreq->max;
+            const float min = fPitchLFOFreq->min;
+            const float denormVal = pitchLFOFreq * (max - min) + min;
+            fPitchLFOFreq->setValue(denormVal);
+        }
+        setParameterValue(kPitchLFOSync, value);
+        break;
 
+    default:
+#ifdef DEBUG
+        printf("undefined checkbox clicked\n");
+#endif
+        break;
+    }
+}
 void DropsUI::zoomButtons(float zoom_delta)
 {
     if (waveForm->size() <= display_width)
@@ -1947,6 +2113,26 @@ void DropsUI::zoomButtons(float zoom_delta)
     setScrollbarWidgets();
     setMarkers();
     repaint();
+}
+
+void DropsUI::knobToSync(Knob *knob, bool isSynced)
+{
+    if (isSynced)
+    {
+        knob->min = 0;
+        knob->max = 17;
+        knob->real_min = 0;
+        knob->real_max = 17;
+        knob->step_value = 1;
+    }
+    else
+    {
+        knob->real_min = 0.0f;
+        knob->real_max = 20.f;
+        knob->min = 1.0f;
+        knob->max = 101.f;
+        knob->step_value = 0;
+    }
 }
 
 UI *createUI()

@@ -29,11 +29,12 @@ enum Parameters
    kAmpEgSustain, // ampeg_sustain
    kAmpEgRelease, // ampeg_release
    kAmpLFOType,   // lfoN_wave
+   kAmpLFOSync,   
    kAmpLFOFreq,   // lfoN_freq
+   kAmpLFOSyncFreq,
    kAmpLFODepth,  // lfoN_amplitude
    kAmpLFOFade,   // lfoN_fade
-   // kAmpLFOSync,   //
-
+ 
    /* filter tab */
    kFilterType,      // fil_type
    kFilterCutOff,    // cutoff , cutoff_oncc200
@@ -43,12 +44,14 @@ enum Parameters
    kFilterEgDecay,   // fileg_decay
    kFilterEgSustain, // fileg_sustain
    kFilterEgRelease, // fileg_release
-   kFilterLFOType,  // lfoN_wave
+   kFilterLFOType,   // lfoN_wave
+   kFilterLFOSync,   
    kFilterLFOFreq,  // lofN_freq
+   kFilterLFOSyncFreq,
    kFilterLFODepth, // lfoN_filter
    kFilterLFOFade,  // lfoN_fade
-   //kFilterLFOSync,
-
+   
+   
    /*  pitch tab */
    kPitchEgDepth,   // pitcheg_depth
    kPitchEgAttack,  // pitcheg_attack
@@ -56,6 +59,8 @@ enum Parameters
    kPitchEgSustain, // pitcheg_sustain
    kPitchEgRelease, // pitcheg_release
    kPitchLFOType,   // lfoN_wave
+   kPitchLFOSync,
+   kPitchLFOSyncFreq,
    kPitchLFOFreq,   // lfoN_freq
    kPitchLFODepth,  // lfoN_pitch
    kPitchLFOFade,   // lfoN_fade
@@ -78,7 +83,6 @@ enum Widgets
    kOversamplingMenu,
    kAmpLFOFreqBeat,
    kAmpLFOTypeMenu,
-   kAmpLFOSyncMenu,
    kVBoxSample,
    kHBoxSampleRow1,
    kHBoxSampleRow2,
@@ -94,8 +98,7 @@ enum Widgets
    kVBoxPitchLfo,
    kPitchLFOFreqBeat,
    kPitchLFOTypeMenu,
-   kPitchLFOSyncMenu,
-
+   
    kVBoxFilter,
    kHBoxFilterRow1,
    kHBoxFilterRow2,

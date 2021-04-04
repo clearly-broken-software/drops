@@ -125,7 +125,7 @@ void DropsUI::initTabFilter()
     fFilterEGDepth->real_min = 0.0f;
     fFilterEGDepth->real_max = 12000.0f;
     fFilterEGDepth->format_str = "%.f Ct";
-   
+
     fFilterEgAttack = new Knob(hbox_filter_row_2);
     fFilterEgAttack->setId(kFilterEgAttack);
     fFilterEgAttack->setSize(knobSize);
@@ -218,6 +218,22 @@ void DropsUI::initTabFilter()
     fFilterLFOType->text_color = floral_white;
     // resize later
 
+    fFilterLFOSync = new CheckBox(hbox_filter_row_3);
+    fFilterLFOSync->setId(kFilterLFOSync);
+    fFilterLFOSync->setSize(knobSize);
+    fFilterLFOSync->setCallback(this);
+    fFilterLFOSync->background_color = black_olive;
+    fFilterLFOSync->foreground_color = blue_pigment_1;
+    fFilterLFOSync->highlight_color = blue_pigment_2;
+    fFilterLFOSync->text_color = floral_white;
+    fFilterLFOSync->setFont("RobotoRegular",
+                            reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+                            fonts::Roboto_RegularDataSize);
+    fFilterLFOSync->margin = 6.f;
+    fFilterLFOSync->label = "SYNC";
+    fFilterLFOSync->boxSize = 20;
+    fFilterLFOSync->labelSize = font_size;
+
     fFilterLFOTypeMenu = new Menu(hbox_filter_row_3);
     fFilterLFOTypeMenu->setMaxViewItems(5);
     fFilterLFOTypeMenu->setId(kFilterLFOTypeMenu);
@@ -256,6 +272,26 @@ void DropsUI::initTabFilter()
     fFilterLFOFreq->max = 101.f;
     fFilterLFOFreq->format_str = "%.2f Hz";
     fFilterLFOFreq->using_log = false;
+    fFilterLFOFreq->setStepText({
+        "1/16",
+        "1/8",
+        "1/4",
+        "1/2",
+        "1/1",
+        "2/1",
+        "1/16T",
+        "1/8T",
+        "1/4T",
+        "1/2T",
+        "1/1T",
+        "2/1T",
+        "1/16.",
+        "1/8.",
+        "1/4.",
+        "1/2.",
+        "1/1.",
+        "2/1.",
+    });
 
     fFilterLFODepth = new Knob(hbox_filter_row_3);
     fFilterLFODepth->setId(kFilterLFODepth);
@@ -315,6 +351,7 @@ void DropsUI::initTabFilter()
     vbox_filter->addWidget(hbox_filter_row_3);
     hbox_filter_row_3->addWidget(hbox_filter_row_3_spacer);
     hbox_filter_row_3_spacer->addWidget(fFilterLFOType);
+    hbox_filter_row_3->addWidget(fFilterLFOSync);
     hbox_filter_row_3->addWidget(fFilterLFOFreq);
     hbox_filter_row_3->addWidget(fFilterLFODepth);
     hbox_filter_row_3->addWidget(fFilterLFOFade);

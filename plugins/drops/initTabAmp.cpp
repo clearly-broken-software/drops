@@ -26,7 +26,7 @@ void DropsUI::initTabAmp()
     hbox_amp_row_2 = new HBox(vbox_amp);
     hbox_amp_row_2->setId(kHBoxAmpRow2);
     hbox_amp_row_2->setHeight(sz);
-    hbox_amp_row_2->setWidth(vbox_amp->getWidth());
+    hbox_amp_row_2->setWidth(vbox_amp->getWidth() * 0.9);
 
     fAmpEgAttack = new Knob(hbox_amp_row_1);
     fAmpEgAttack->setId(kAmpEgAttack);
@@ -126,6 +126,22 @@ void DropsUI::initTabAmp()
     fAmpLFOType->background_color = black_olive;
     fAmpLFOType->text_color = floral_white;
 
+    fAmpLFOSync = new CheckBox(hbox_amp_row_2);
+    fAmpLFOSync->setId(kAmpLFOSync);
+    fAmpLFOSync->setSize(knobSize);
+    fAmpLFOSync->setCallback(this);
+    fAmpLFOSync->background_color = black_olive;
+    fAmpLFOSync->foreground_color = saffron;
+    fAmpLFOSync->highlight_color = saffron_1;
+    fAmpLFOSync->text_color = floral_white;
+    fAmpLFOSync->setFont("RobotoRegular",
+                         reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+                         fonts::Roboto_RegularDataSize);
+    fAmpLFOSync->margin = 6.f;
+    fAmpLFOSync->label = "SYNC";
+    fAmpLFOSync->boxSize = 20;
+    fAmpLFOSync->labelSize = font_size;
+
     fAmpLFOFreq = new Knob(hbox_amp_row_2);
     fAmpLFOFreq->setId(kAmpLFOFreq);
     fAmpLFOFreq->setCallback(this);
@@ -145,6 +161,26 @@ void DropsUI::initTabAmp()
     fAmpLFOFreq->max = 101.f;
     fAmpLFOFreq->format_str = "%.2f Hz";
     fAmpLFOFreq->using_log = false;
+    fAmpLFOFreq->setStepText({
+        "1/16",
+        "1/8",
+        "1/4",
+        "1/2",
+        "1/1",
+        "2/1",
+        "1/16T",
+        "1/8T",
+        "1/4T",
+        "1/2T",
+        "1/1T",
+        "2/1T",
+        "1/16.",
+        "1/8.",
+        "1/4.",
+        "1/2.",
+        "1/1.",
+        "2/1.",
+    });
 
     fAmpLFODepth = new Knob(hbox_amp_row_2);
     fAmpLFODepth->setId(kAmpLFODepth);
@@ -162,7 +198,7 @@ void DropsUI::initTabAmp()
     fAmpLFODepth->real_min = 0.0f;
     fAmpLFODepth->real_max = 12.f;
     fAmpLFODepth->format_str = "%.f dB";
-    
+
     fAmpLFOFade = new Knob(hbox_amp_row_2);
     fAmpLFOFade->setId(kAmpLFOFade);
     fAmpLFOFade->setCallback(this);
@@ -206,6 +242,7 @@ void DropsUI::initTabAmp()
     fAmpLFOType->resize();
 
     hbox_amp_row_2->addWidget(fAmpLFOType);
+    hbox_amp_row_2->addWidget(fAmpLFOSync);
     hbox_amp_row_2->addWidget(fAmpLFOFreq);
     hbox_amp_row_2->addWidget(fAmpLFODepth);
     hbox_amp_row_2->addWidget(fAmpLFOFade);

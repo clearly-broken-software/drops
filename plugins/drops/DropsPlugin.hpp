@@ -120,18 +120,20 @@ private:
         fSamplePlayDirection, fSampleOversampling;
     //  amp
     float fAmpEGAttack, fAmpEgDecay, fAmpEgSustain, fAmpEgRelease,
-        fAmpLFOType, fAmpLFOFreq, fAmpLFODepth, fAmpLFOFade;
-
+        fAmpLFOType, fAmpLFOSync, fAmpLFOFreq, fAmpLFOSyncFreq, fAmpLFODepth,
+        fAmpLFOFade;
     //  filter
     float fFilterType, fFilterCutOff, fFilterResonance, fFilterEGDepth,
-        fFilterLFOType, fFilterLFOFreq, fFilterLFODepth, fFilterLFOFade,
+        fFilterLFOType, fFilterLFOSync, fFilterLFOFreq, fFilterLFOSyncFreq,
+        fFilterLFODepth, fFilterLFOFade,
         fFilterEGAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease;
     //  pitch
     float fPitchEGDepth, fPitchEGAttack, fPitchEgDecay, fPitchEgSustain,
-        fPitchEgRelease, fPitchLFOType, fPitchLFOFreq, fPitchLFODepth, 
+        fPitchEgRelease, fPitchLFOType, fPitchLFOSync, fPitchLFOFreq, fPitchLFOSyncFreq, fPitchLFODepth,
         fPitchLFOFade;
 
     double fFilterMaxFreq;
+    float bpm;
 
     const char *play_modes_[4]{
         "no_loop", "one_shot",
@@ -152,6 +154,26 @@ private:
         "6", // saw up
         "7", // saw down
     };
+    const char *lfo_sync_[18]{
+        "0.25",     // 1/16
+        "0.5",      // 1/8
+        "1",        // 1/4
+        "2",        // 1/2
+        "4",        // 1/1
+        "8",        // 2/1
+        "0.166666", // 1/16T
+        "0.333333", // 1/8T
+        "0.666666", // 1/4T
+        "1.333333", // 1/2T
+        "2.666666", // 1/1T
+        "5.333333", // 2/1T
+        "0.375",    // 1/16.
+        "0.75",     // 1/8.
+        "1.5",      // 1/4.
+        "3",        // 1/2.
+        "6",        // 1/1.
+        "12",       // 2/1.
+    };
 
     std::unordered_map<std::string, std::string> opcodes;
 
@@ -162,7 +184,7 @@ private:
     const float amp_lfo_depth = 12.f;
     const float pitch_lfo_depth = 1200;
     const float lfo_fade = 10.f;
-   
+
     friend class DropsUI;
     /*
      * Set our plugin class as non-copyable and add a leak detector just in case.

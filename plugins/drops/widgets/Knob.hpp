@@ -31,6 +31,8 @@ public:
     float getValue() noexcept;
     void setPopUp(PopUp *popUp);
     void idleCallback() override;
+    void setStepText(std::initializer_list<const char*> strings);
+     void setFont(const char *name, const uchar *data, uint dataSize);
 
     std::string label; // public, no getter or setter
     std::string unit;  // Hz, dB, Ct
@@ -60,6 +62,7 @@ protected:
 private:
     Callback *callback;
     PopUp *popUp;
+    std::vector<const char*>stepText;
     bool dragging_;
     float value_;
     float value_tmp_;

@@ -11,7 +11,8 @@ void DropsUI::initTabPitch()
     const float gauge = 6.f;
     const float font_size = 14.f;
     const uint sz = 60;
-    const Size<uint> knobSize = Size<uint>(sz + font_size, sz);
+    //const Size<uint> knobSize = Size<uint>(sz + font_size, sz);
+    const Size<uint> knobSize = Size<uint>(sz, sz);
 
     vbox_pitch = new VBox(window);
     vbox_pitch->setId(kVBoxPitch);
@@ -26,7 +27,7 @@ void DropsUI::initTabPitch()
     hbox_pitch_row_2 = new HBox(vbox_pitch);
     hbox_pitch_row_2->setId(kHBoxPitchRow2);
     hbox_pitch_row_2->setHeight(sz);
-    hbox_pitch_row_2->setWidth(vbox_pitch->getWidth());
+    hbox_pitch_row_2->setWidth(vbox_pitch->getWidth()*.95 );
 
     fPitchEgDepth = new Knob(hbox_pitch_row_1);
     fPitchEgDepth->setId(kPitchEgDepth);
@@ -143,6 +144,20 @@ void DropsUI::initTabPitch()
     fPitchLFOType->background_color = black_olive;
     fPitchLFOType->text_color = floral_white;
 
+    fPitchLFOSync = new CheckBox(hbox_pitch_row_2);
+    fPitchLFOSync->setId(kPitchLFOSync);
+    fPitchLFOSync->setSize(knobSize);
+    fPitchLFOSync->setCallback(this);
+    fPitchLFOSync->background_color = black_olive;
+    fPitchLFOSync->foreground_color = shamrock_green;
+    fPitchLFOSync->highlight_color = shamrock_green_1;
+    fPitchLFOSync->text_color = floral_white;
+    fPitchLFOSync->setFont("RobotoRegular", reinterpret_cast<const uchar *>(fonts::Roboto_RegularData), fonts::Roboto_RegularDataSize);
+    fPitchLFOSync->margin = 6.f;
+    fPitchLFOSync->label = "SYNC";
+    fPitchLFOSync->boxSize = 20;
+    fPitchLFOSync->labelSize = font_size;
+
     fPitchLFOFreq = new Knob(hbox_pitch_row_2);
     fPitchLFOFreq->setId(kPitchLFOFreq);
     fPitchLFOFreq->setCallback(this);
@@ -162,6 +177,26 @@ void DropsUI::initTabPitch()
     fPitchLFOFreq->max = 101.f;
     fPitchLFOFreq->format_str = "%.2f Hz";
     fPitchLFOFreq->using_log = false;
+    fPitchLFOFreq->setStepText({
+        "1/16",
+        "1/8",
+        "1/4",
+        "1/2",
+        "1/1",
+        "2/1",
+        "1/16T",
+        "1/8T",
+        "1/4T",
+        "1/2T",
+        "1/1T",
+        "2/1T",
+        "1/16.",
+        "1/8.",
+        "1/4.",
+        "1/2.",
+        "1/1.",
+        "2/1.",
+    });
 
     fPitchLFODepth = new Knob(hbox_pitch_row_2);
     fPitchLFODepth->setId(kPitchLFODepth);
@@ -226,6 +261,7 @@ void DropsUI::initTabPitch()
     fPitchLFOType->resize();
 
     hbox_pitch_row_2->addWidget(fPitchLFOType);
+    hbox_pitch_row_2->addWidget(fPitchLFOSync);
     hbox_pitch_row_2->addWidget(fPitchLFOFreq);
     hbox_pitch_row_2->addWidget(fPitchLFODepth);
     hbox_pitch_row_2->addWidget(fPitchLFOFade);

@@ -29,6 +29,7 @@ FILES_UI  = \
 			widgets/src/FileOpenButton.cpp \
 			widgets/src/SVGButton.cpp \
 			widgets/src/PopUp.cpp \
+			widgets/src/CheckBox.cpp \
 			SVGImage.cpp \
 			fonts.cpp \
 			SVG_Icons.cpp \

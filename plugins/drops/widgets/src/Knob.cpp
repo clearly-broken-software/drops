@@ -36,6 +36,7 @@ Knob::Knob(Window &parent) noexcept
     format_str = "%.2f";
     is_counting_down_ = false;
     countdown_ = 30;
+    step_value = 0.f;
 }
 
 Knob::Knob(Widget *parent) noexcept
@@ -71,6 +72,7 @@ Knob::Knob(Widget *parent) noexcept
     format_str = "%.2f";
     is_counting_down_ = false;
     countdown_ = 30;
+    step_value = 0.f;
 }
 
 float Knob::getValue() noexcept
@@ -117,7 +119,17 @@ bool Knob::onMouse(const MouseEvent &ev)
     }
     else if (dragging_)
     {
-        float normValue = (value_ - min) / (max - min);
+        float normValue = 0.0f;
+
+        normValue = (value_ - min) / (max - min);
+        if (d_isZero(step_value))
+        {
+            normValue = (value_ - min) / (max - min);
+        }
+        else
+        {
+            normValue = value_;
+        }
 
         if (callback != nullptr)
             callback->knobDragFinished(this, normValue);
@@ -155,10 +167,23 @@ bool Knob::onScroll(const ScrollEvent &ev)
     {
         tmp_value_ = value = max;
     }
-    printf("scroll knob value %f\n", value);
+    else if (d_isNotZero(step_value))
+    {
+        tmp_value_ = value;
+        const float rest = std::fmod(value, step_value);
+        value = value - rest + (rest > step_value / 2.0f ? step_value : 0.0f);
+    }
     setValue(value, true);
     float normValue = (value_ - min) / (max - min);
-    callback->knobDragFinished(this, normValue);
+    if (d_isZero(step_value))
+    {
+        callback->knobDragFinished(this, normValue);
+    }
+    else
+    {
+        callback->knobDragFinished(this, value_);
+    }
+
     return false;
 }
 
@@ -210,6 +235,12 @@ bool Knob::onMotion(const MotionEvent &ev)
     {
         tmp_value_ = value = max;
     }
+    else if (d_isNotZero(step_value))
+    {
+        tmp_value_ = value;
+        const float rest = std::fmod(value, step_value);
+        value = value - rest + (rest > step_value / 2.0f ? step_value : 0.0f);
+    }
 
     setValue(value, false);
 
@@ -230,7 +261,6 @@ void Knob::idleCallback()
     // if < 0 show popUp
     if (countdown_ < 0)
     {
-        //  printf("show popup\n");
         int y = getAbsoluteY() + getHeight();
         popUp->setAbsoluteY(y);
         popUp->background_color = background_color;
@@ -245,15 +275,10 @@ void Knob::onNanoDisplay()
 {
     const float height = getHeight();
     const float width = getWidth();
+
     float normValue = (((using_log ? _invlogscale(value_) : value_) - min) / (max - min));
     if (normValue < 0.0f)
         normValue = 0.0f;
-
-    //beginPath();
-    // fillColor(Color(127,127,127));
-    // rect(0,0,width,height);
-    // fill();
-    // closePath();
 
     // measure string
     fontFaceId(font_);
@@ -261,19 +286,17 @@ void Knob::onNanoDisplay()
     Rectangle<float> bounds;
     textBounds(0.f, 0.f, label.c_str(), NULL, bounds);
     const float label_height = bounds.getHeight();
-
     // label
     const float label_x = width * .5f; //- label_width / 2.0f;
     const float label_y = height - label_height;
     const float radius = (height - label_height - margin) / 2.0f;
     const float center_x = (width * .5f);
     const float center_y = radius + margin;
-    beginPath();
+      beginPath();
     fillColor(text_color);
     textAlign(ALIGN_CENTER | ALIGN_TOP);
     text(label_x, label_y, label.c_str(), NULL);
     closePath();
-
     //Gauge (empty)
     beginPath();
     strokeWidth(gauge_width);
@@ -281,7 +304,6 @@ void Knob::onNanoDisplay()
     arc(center_x, center_y, radius - gauge_width / 2, 0.75f * M_PI, 0.25f * M_PI, NanoVG::Winding::CW);
     stroke();
     closePath();
-
     //Gauge (value)
     beginPath();
     strokeWidth(gauge_width);
@@ -331,12 +353,21 @@ void Knob::onNanoDisplay()
 }
 void Knob::setValue(float val, bool sendCallback) noexcept
 {
+    if (d_isEqual(value_, val))
+        return;
+
     value_ = std::max(min, std::min(val, max));
+    float normValue = 0.0f;
     tmp_value_ = value_;
-    float normValue = (value_ - min) / (max - min);
-    // float normValue = (((using_log ? _invlogscale(value_) : value_) - min) / (max - min));
-    // if (normValue < 0.0f)
-    //     normValue = 0.0f;
+    if (d_isZero(step_value))
+    {
+        normValue = (value_ - min) / (max - min);
+    }
+    else
+    {
+        normValue = value_;
+    }
+
     if (popUp != nullptr)
         updatePopUp();
 
@@ -378,16 +409,29 @@ void Knob::updatePopUp()
     popUp->background_color = background_color;
     popUp->foreground_color = foreground_color;
     popUp->text_color = text_color;
-    // normalize val
-    float val = (value_ - min) / (max - min);
-    // multiply by real value
-    val = fabs(real_min - real_max) * val + real_min;
-    char val_str[36];
-    sprintf(val_str, format_str, val);
-    popUp->setText(val_str);
+    if (d_isZero(step_value))
+    { // normalize val
+        float val = (value_ - min) / (max - min);
+        // multiply by real value
+        val = fabs(real_min - real_max) * val + real_min;
+        char val_str[36];
+        sprintf(val_str, format_str, val);
+        popUp->setText(val_str);
+    }
+    else
+    {
+        int index = value_; // todo: check out of bounds
+        popUp->setText(stepText[index]);
+    }
     popUp->resize();
     const int pop_x = getAbsoluteX() + getWidth() / 2 - popUp->getWidth() / 2;
     popUp->setAbsoluteX(pop_x);
+}
+
+void Knob::setStepText(std::initializer_list<const char *> strings)
+{
+    stepText.clear();
+    stepText.insert(stepText.end(), strings.begin(), strings.end());
 }
 
 END_NAMESPACE_DISTRHO

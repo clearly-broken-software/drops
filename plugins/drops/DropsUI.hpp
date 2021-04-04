@@ -30,6 +30,7 @@
 #include "SVG_Icons.hpp"
 #include "SVGImage.hpp"
 #include "fonts.hpp"
+#include "CheckBox.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -44,7 +45,8 @@ class DropsUI : public UI,
                 public Slider::Callback,
                 public FileOpenButton::Callback,
                 // public RadioButton::Callback,
-                public SVGButton::Callback
+                public SVGButton::Callback,
+                public CheckBox::Callback
 {
 public:
     DropsUI();
@@ -69,6 +71,7 @@ protected:
     void onMenuClicked(Menu *menu, uint id, std::string item);
     // void onRadioButtonClicked(RadioButton *radio);
     void onSVGButtonClicked(SVGButton *button);
+    void onCheckBoxClicked(CheckBox *checkbox, bool is_checked);
 
 private:
     template <class T>
@@ -76,6 +79,7 @@ private:
     {
         return std::min(upper, std::max(x, lower));
     }
+    void knobToSync(Knob *knob, bool isSynced);
 
     DropsPlugin *plugin;
     ScopedPointer<FileOpenButton> fileopen_button;
@@ -88,39 +92,37 @@ private:
         fSamplePlayMode, fSamplePlayDirection, fSampleOversampling;
     ScopedPointer<Menu> fNormalizeMenu, fKeyCenterMenu, fPlayModeMenu,
         fDirectionMenu, fOversamplingMenu;
+    
     // amp
     ScopedPointer<VBox> vbox_amp;
     ScopedPointer<HBox> hbox_amp_row_1, hbox_amp_row_2, hbox_amp_row_3;
     ScopedPointer<Knob>
         fAmpEgAttack, fAmpEgDecay, fAmpEgSustain, fAmpEgRelease;
     ScopedPointer<DropDown> fAmpLFOType;
+    ScopedPointer<CheckBox> fAmpLFOSync;
     ScopedPointer<Menu> fAmpLFOTypeMenu;
-    ScopedPointer<Knob> fAmpLFOFreq, fAmpLFODepth,fAmpLFOFade;
+    ScopedPointer<Knob> fAmpLFOFreq, fAmpLFODepth, fAmpLFOFade;
 
     // filter
     ScopedPointer<VBox> vbox_filter;
     ScopedPointer<HBox> hbox_filter_row_1, hbox_filter_row_2, hbox_filter_row_3,
-    hbox_filter_row_3_spacer;
+        hbox_filter_row_3_spacer;
     ScopedPointer<Knob> fFilterEGDepth, fFilterEgAttack, fFilterEgDecay, fFilterEgSustain, fFilterEgRelease,
         fFilterCutOff, fFilterResonance;
     ScopedPointer<DropDown> fFilterLFOType;
     ScopedPointer<Menu> fFilterLFOTypeMenu;
-    ScopedPointer<Knob> fFilterLFOFreq, fFilterLFODepth,fFilterLFOFade;
-    // ScopedPointer<DropDown> fFilterLFOSync;
-    // ScopedPointer<Menu> fFilterLFOSyncMenu;
-    // ScopedPointer<RadioButton> fFilterLFOFreqBeat;
+    ScopedPointer<CheckBox> fFilterLFOSync;
+    ScopedPointer<Knob> fFilterLFOFreq, fFilterLFODepth, fFilterLFOFade;
 
-    // pitch tab
+    // pitch
     ScopedPointer<VBox> vbox_pitch, vbox_pitch_lfo;
     ScopedPointer<HBox> hbox_pitch_row_1, hbox_pitch_row_2, hbox_pitch_row_3;
     ScopedPointer<Knob> fPitchEgDepth,
         fPitchEgAttack, fPitchEgDecay, fPitchEgSustain, fPitchEgRelease;
     ScopedPointer<DropDown> fPitchLFOType;
     ScopedPointer<Menu> fPitchLFOTypeMenu;
+    ScopedPointer<CheckBox> fPitchLFOSync;
     ScopedPointer<Knob> fPitchLFOFreq, fPitchLFODepth, fPitchLFOFade;
-    // // ScopedPointer<DropDown> fPitchLFOSync;
-    // ScopedPointer<Menu> fPitchLFOSyncMenu;
-    // ScopedPointer<RadioButton> fPitchLFOFreqBeat;
 
     ScopedPointer<SVGImage> dropsLogo, clearlyBrokenLogo, loopLeft, loopRight,
         zoomIn, zoomOut, zoomAll, zoomLoop;
@@ -164,6 +166,11 @@ private:
     Rectangle<int> display;
     std::string sampleDir, fileName;
     FontId mainFont;
+    bool ampLFOSync,filterLFOSync,pitchLFOSync;
+    float ampLFOFreq, ampLFOSyncFreq;
+    float filterLFOFreq,filterLFOSyncFreq;
+    float pitchLFOFreq,pitchLFOSyncFreq;
+    
 
     DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DropsUI)
 };
