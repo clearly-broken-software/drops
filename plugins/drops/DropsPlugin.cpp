@@ -913,7 +913,7 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         makeSFZ();
         break;
     case kPitchLFOSyncFreq:
-        fFilterLFOSyncFreq = value;
+        fPitchLFOSyncFreq = value;
         makeSFZ();
         break;
     case kPitchLFODepth:
@@ -1154,7 +1154,7 @@ void DropsPlugin::makeSFZ()
     opcodes["lfo03_freq"] = std::to_string(fPitchLFOFreq * lfo_max_freq);
     opcodes["lfo03_pitch"] = std::to_string(fPitchLFODepth * pitch_lfo_depth);
     opcodes["lfo03_fade"] = std::to_string(fPitchLFOFade * lfo_fade);
-    opcodes["lof03_beats"] = lfo_sync_[static_cast<int>(fPitchLFOSyncFreq)];
+    opcodes["lfo03_beats"] = lfo_sync_[static_cast<int>(fPitchLFOSyncFreq)];
 
     opcodes["cutoff"] = std::to_string(fFilterCutOff * fFilterMaxFreq);
     opcodes["fileg_depth"] = std::to_string(fFilterEGDepth * filter_eg_depth);
@@ -1229,7 +1229,7 @@ void DropsPlugin::makeSFZ()
     buffer << "pitcheg_release=0.001\n";
     buffer << "pitcheg_release_oncc404=10\n";
     buffer << "lfo03_wave=" << opcodes["lfo03_wave"] << "\n";
-    if (static_cast<bool>(fFilterLFOSync))
+    if (static_cast<bool>(fPitchLFOSync))
     {
         buffer << "lfo03_beats=" << opcodes["lfo03_beats"] << "\n";
         buffer << "lfo03_count=1"
