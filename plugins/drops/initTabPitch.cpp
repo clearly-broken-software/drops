@@ -27,7 +27,7 @@ void DropsUI::initTabPitch()
     hbox_pitch_row_2 = new HBox(vbox_pitch);
     hbox_pitch_row_2->setId(kHBoxPitchRow2);
     hbox_pitch_row_2->setHeight(sz);
-    hbox_pitch_row_2->setWidth(vbox_pitch->getWidth()*.95 );
+    hbox_pitch_row_2->setWidth(vbox_pitch->getWidth() * .95);
 
     fPitchEgDepth = new Knob(hbox_pitch_row_1);
     fPitchEgDepth->setId(kPitchEgDepth);
@@ -44,6 +44,7 @@ void DropsUI::initTabPitch()
     fPitchEgDepth->real_min = 0.0f;
     fPitchEgDepth->real_max = 2400.0f;
     fPitchEgDepth->format_str = "%.f Ct";
+    fPitchEgDepth->setParamOnMove = true;
 
     fPitchEgAttack = new Knob(hbox_pitch_row_1);
     fPitchEgAttack->setId(kPitchEgAttack);
@@ -63,6 +64,7 @@ void DropsUI::initTabPitch()
     fPitchEgAttack->max = 101.f;
     fPitchEgAttack->format_str = "%.2f s";
     fPitchEgAttack->using_log = true;
+    fPitchEgAttack->setParamOnMove = true;
 
     fPitchEgDecay = new Knob(hbox_pitch_row_1);
     fPitchEgDecay->setId(kPitchEgDecay);
@@ -82,6 +84,7 @@ void DropsUI::initTabPitch()
     fPitchEgDecay->max = 101.f;
     fPitchEgDecay->using_log = true;
     fPitchEgDecay->format_str = "%.2f s";
+    fPitchEgDecay->setParamOnMove = true;
 
     fPitchEgSustain = new Knob(hbox_pitch_row_1);
     fPitchEgSustain->setId(kPitchEgSustain);
@@ -98,6 +101,7 @@ void DropsUI::initTabPitch()
     fPitchEgSustain->real_min = 0.0f;
     fPitchEgSustain->real_max = 100.f;
     fPitchEgSustain->format_str = "%.f%%";
+    fPitchEgSustain->setParamOnMove = true;
 
     fPitchEgRelease = new Knob(hbox_pitch_row_1);
     fPitchEgRelease->setId(kPitchEgRelease);
@@ -117,6 +121,7 @@ void DropsUI::initTabPitch()
     fPitchEgRelease->max = 101.f;
     fPitchEgRelease->format_str = "%.2f s";
     fPitchEgRelease->using_log = true;
+    fPitchEgRelease->setParamOnMove = true;
 
     hbox_pitch_row_1->addWidget(fPitchEgDepth);
     hbox_pitch_row_1->addWidget(fPitchEgAttack);
@@ -197,6 +202,7 @@ void DropsUI::initTabPitch()
         "1/1.",
         "2/1.",
     });
+    fPitchLFOFreq->setParamOnMove = true;
 
     fPitchLFODepth = new Knob(hbox_pitch_row_2);
     fPitchLFODepth->setId(kPitchLFODepth);
@@ -217,6 +223,7 @@ void DropsUI::initTabPitch()
     fPitchLFODepth->max = 101.f;
     fPitchLFODepth->format_str = "%.f Ct";
     fPitchLFODepth->using_log = false;
+    fPitchLFODepth->setParamOnMove = true;
 
     fPitchLFOFade = new Knob(hbox_pitch_row_2);
     fPitchLFOFade->setId(kPitchLFOFade);
@@ -237,6 +244,7 @@ void DropsUI::initTabPitch()
     fPitchLFOFade->max = 101.f;
     fPitchLFOFade->format_str = "%.2f s";
     fPitchLFOFade->using_log = true;
+    fPitchLFOFreq->setParamOnMove = true;
 
     fPitchLFOTypeMenu = new Menu(hbox_pitch_row_2);
     fPitchLFOTypeMenu->setMaxViewItems(5);

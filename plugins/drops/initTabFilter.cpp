@@ -92,6 +92,7 @@ void DropsUI::initTabFilter()
     fFilterCutOff->max = 101.f;
     fFilterCutOff->using_log = true;
     fFilterCutOff->format_str = "%.f Hz";
+    fFilterCutOff->setParamOnMove = true;
 
     fFilterResonance = new Knob(hbox_filter_row_1);
     fFilterResonance->setId(kFilterResonance);
@@ -109,6 +110,7 @@ void DropsUI::initTabFilter()
     fFilterResonance->real_min = 0.0f;
     fFilterResonance->real_max = 40.0f;
     fFilterResonance->format_str = "%.2f dB";
+    fFilterResonance->setParamOnMove = true;
 
     fFilterEGDepth = new Knob(hbox_filter_row_2);
     fFilterEGDepth->setId(kFilterEgDepth);
@@ -125,6 +127,7 @@ void DropsUI::initTabFilter()
     fFilterEGDepth->real_min = 0.0f;
     fFilterEGDepth->real_max = 12000.0f;
     fFilterEGDepth->format_str = "%.f Ct";
+    fFilterEGDepth->setParamOnMove = true;
 
     fFilterEgAttack = new Knob(hbox_filter_row_2);
     fFilterEgAttack->setId(kFilterEgAttack);
@@ -144,6 +147,7 @@ void DropsUI::initTabFilter()
     fFilterEgAttack->max = 101.f;
     fFilterEgAttack->format_str = "%.2f s";
     fFilterEgAttack->using_log = true;
+    fFilterEgAttack->setParamOnMove = true;
 
     fFilterEgDecay = new Knob(hbox_filter_row_2);
     fFilterEgDecay->setId(kFilterEgDecay);
@@ -163,6 +167,7 @@ void DropsUI::initTabFilter()
     fFilterEgDecay->max = 101.f;
     fFilterEgDecay->using_log = true;
     fFilterEgDecay->format_str = "%.2f s";
+    fFilterEgDecay->setParamOnMove = true;
 
     fFilterEgSustain = new Knob(hbox_filter_row_2);
     fFilterEgSustain->setId(kFilterEgSustain);
@@ -179,6 +184,7 @@ void DropsUI::initTabFilter()
     fFilterEgSustain->real_min = 0.0f;
     fFilterEgSustain->real_max = 100.f;
     fFilterEgSustain->format_str = "%.f%%";
+    fFilterEgSustain->setParamOnMove = true;
 
     fFilterEgRelease = new Knob(hbox_filter_row_2);
     fFilterEgRelease->setId(kFilterEgRelease);
@@ -198,6 +204,7 @@ void DropsUI::initTabFilter()
     fFilterEgRelease->max = 101.f;
     fFilterEgRelease->format_str = "%.2f s";
     fFilterEgRelease->using_log = true;
+    fFilterEgRelease->setParamOnMove = true;
 
     fFilterLFOType = new DropDown(hbox_filter_row_3);
     fFilterLFOType->setId(kFilterLFOType);
@@ -292,6 +299,7 @@ void DropsUI::initTabFilter()
         "1/1.",
         "2/1.",
     });
+    fFilterLFOFreq->setParamOnMove = true;
 
     fFilterLFODepth = new Knob(hbox_filter_row_3);
     fFilterLFODepth->setId(kFilterLFODepth);
@@ -309,6 +317,7 @@ void DropsUI::initTabFilter()
     fFilterLFODepth->real_min = 0.0f;
     fFilterLFODepth->real_max = max_cutoff / 2.0f;
     fFilterLFODepth->format_str = "%.f Hz";
+    fFilterLFODepth->setParamOnMove = true;
 
     fFilterLFOFade = new Knob(hbox_filter_row_3);
     fFilterLFOFade->setId(kFilterLFOFade);
@@ -329,6 +338,7 @@ void DropsUI::initTabFilter()
     fFilterLFOFade->max = 101.f;
     fFilterLFOFade->format_str = "%.2f s";
     fFilterLFOFade->using_log = true;
+    fFilterLFOFade->setParamOnMove = true;
 
     fFilterLFOType->setMenu(fFilterLFOTypeMenu);
     fFilterLFOType->resize();

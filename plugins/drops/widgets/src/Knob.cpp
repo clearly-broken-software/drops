@@ -37,6 +37,7 @@ Knob::Knob(Window &parent) noexcept
     is_counting_down_ = false;
     countdown_ = 30;
     step_value = 0.f;
+    setParamOnMove = true;
 }
 
 Knob::Knob(Widget *parent) noexcept
@@ -73,12 +74,14 @@ Knob::Knob(Widget *parent) noexcept
     is_counting_down_ = false;
     countdown_ = 30;
     step_value = 0.f;
+    setParamOnMove = true;
 }
 
 float Knob::getValue() noexcept
 {
     return value_;
 }
+
 bool Knob::onMouse(const MouseEvent &ev)
 {
     if (!isVisible())
@@ -119,20 +122,22 @@ bool Knob::onMouse(const MouseEvent &ev)
     }
     else if (dragging_)
     {
-        float normValue = 0.0f;
-
-        normValue = (value_ - min) / (max - min);
-        if (d_isZero(step_value))
+        if (!setParamOnMove)
         {
+            float normValue = 0.0f;
             normValue = (value_ - min) / (max - min);
-        }
-        else
-        {
-            normValue = value_;
-        }
+            if (d_isZero(step_value))
+            {
+                normValue = (value_ - min) / (max - min);
+            }
+            else
+            {
+                normValue = value_;
+            }
 
-        if (callback != nullptr)
-            callback->knobDragFinished(this, normValue);
+            if (callback != nullptr)
+                callback->knobDragFinished(this, normValue);
+        }
         if (popUp != nullptr && !contains(ev.pos))
         {
             popUp->hide();
@@ -140,7 +145,6 @@ bool Knob::onMouse(const MouseEvent &ev)
         }
         dragging_ = false;
         repaint();
-        return false;
     }
     has_mouse_ = false;
     return false;
@@ -242,7 +246,7 @@ bool Knob::onMotion(const MotionEvent &ev)
         value = value - rest + (rest > step_value / 2.0f ? step_value : 0.0f);
     }
 
-    setValue(value, false);
+    setValue(value, setParamOnMove);
 
     last_mouse_x_ = ev.pos.getX();
     last_mouse_y_ = ev.pos.getY();
@@ -292,7 +296,7 @@ void Knob::onNanoDisplay()
     const float radius = (height - label_height - margin) / 2.0f;
     const float center_x = (width * .5f);
     const float center_y = radius + margin;
-      beginPath();
+    beginPath();
     fillColor(text_color);
     textAlign(ALIGN_CENTER | ALIGN_TOP);
     text(label_x, label_y, label.c_str(), NULL);

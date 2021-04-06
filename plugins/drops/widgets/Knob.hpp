@@ -31,8 +31,8 @@ public:
     float getValue() noexcept;
     void setPopUp(PopUp *popUp);
     void idleCallback() override;
-    void setStepText(std::initializer_list<const char*> strings);
-     void setFont(const char *name, const uchar *data, uint dataSize);
+    void setStepText(std::initializer_list<const char *> strings);
+    void setFont(const char *name, const uchar *data, uint dataSize);
 
     std::string label; // public, no getter or setter
     std::string unit;  // Hz, dB, Ct
@@ -52,6 +52,7 @@ public:
     const char *format_str; // also include unit !
     bool using_log;
     bool is_centered;
+    bool setParamOnMove;
 
 protected:
     void onNanoDisplay() override;
@@ -62,7 +63,7 @@ protected:
 private:
     Callback *callback;
     PopUp *popUp;
-    std::vector<const char*>stepText;
+    std::vector<const char *> stepText;
     bool dragging_;
     float value_;
     float value_tmp_;

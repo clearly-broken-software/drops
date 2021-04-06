@@ -46,6 +46,7 @@ void DropsUI::initTabAmp()
     fAmpEgAttack->max = 101.f;
     fAmpEgAttack->format_str = "%.2f s";
     fAmpEgAttack->using_log = true;
+    fAmpEgAttack->setParamOnMove = true;
 
     fAmpEgDecay = new Knob(hbox_amp_row_1);
     fAmpEgDecay->setId(kAmpEgDecay);
@@ -65,6 +66,7 @@ void DropsUI::initTabAmp()
     fAmpEgDecay->max = 101.f;
     fAmpEgDecay->using_log = true;
     fAmpEgDecay->format_str = "%.2f s";
+    fAmpEgAttack->setParamOnMove = true;
 
     fAmpEgSustain = new Knob(hbox_amp_row_1);
     fAmpEgSustain->setId(kAmpEgSustain);
@@ -81,6 +83,7 @@ void DropsUI::initTabAmp()
     fAmpEgSustain->real_min = 0.0f;
     fAmpEgSustain->real_max = 100.f;
     fAmpEgSustain->format_str = "%.f%%";
+    fAmpEgSustain->setParamOnMove = true;
 
     fAmpEgRelease = new Knob(hbox_amp_row_1);
     fAmpEgRelease->setId(kAmpEgRelease);
@@ -100,6 +103,7 @@ void DropsUI::initTabAmp()
     fAmpEgRelease->max = 101.f;
     fAmpEgRelease->format_str = "%.2f s";
     fAmpEgRelease->using_log = true;
+    fAmpEgRelease->setParamOnMove = true;
 
     hbox_amp_row_1->addWidget(fAmpEgAttack);
     hbox_amp_row_1->addWidget(fAmpEgDecay);
@@ -181,6 +185,7 @@ void DropsUI::initTabAmp()
         "1/1.",
         "2/1.",
     });
+    fAmpLFOFreq->setParamOnMove = true;
 
     fAmpLFODepth = new Knob(hbox_amp_row_2);
     fAmpLFODepth->setId(kAmpLFODepth);
@@ -198,6 +203,7 @@ void DropsUI::initTabAmp()
     fAmpLFODepth->real_min = 0.0f;
     fAmpLFODepth->real_max = 12.f;
     fAmpLFODepth->format_str = "%.f dB";
+    fAmpLFODepth->setParamOnMove = true;
 
     fAmpLFOFade = new Knob(hbox_amp_row_2);
     fAmpLFOFade->setId(kAmpLFOFade);
@@ -218,6 +224,7 @@ void DropsUI::initTabAmp()
     fAmpLFOFade->max = 101.f;
     fAmpLFOFade->format_str = "%.2f s";
     fAmpLFOFade->using_log = true;
+    fAmpLFOFade->setParamOnMove = true;
 
     fAmpLFOTypeMenu = new Menu(hbox_amp_row_2);
     fAmpLFOTypeMenu->setMaxViewItems(5);
