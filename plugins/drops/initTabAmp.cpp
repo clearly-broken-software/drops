@@ -136,7 +136,8 @@ void DropsUI::initTabAmp()
     fAmpLFOSync->setCallback(this);
     fAmpLFOSync->background_color = black_olive;
     fAmpLFOSync->foreground_color = saffron;
-    fAmpLFOSync->highlight_color = saffron_1;
+    fAmpLFOSync->highlight_color_active = saffron_1;
+    fAmpLFOSync->highlight_color_inactive = black_olive_1;
     fAmpLFOSync->text_color = floral_white;
     fAmpLFOSync->setFont("RobotoRegular",
                          reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),

@@ -155,7 +155,8 @@ void DropsUI::initTabPitch()
     fPitchLFOSync->setCallback(this);
     fPitchLFOSync->background_color = black_olive;
     fPitchLFOSync->foreground_color = shamrock_green;
-    fPitchLFOSync->highlight_color = shamrock_green_1;
+    fPitchLFOSync->highlight_color_active = shamrock_green_1;
+    fPitchLFOSync->highlight_color_inactive = black_olive_1;
     fPitchLFOSync->text_color = floral_white;
     fPitchLFOSync->setFont("RobotoRegular", reinterpret_cast<const uchar *>(fonts::Roboto_RegularData), fonts::Roboto_RegularDataSize);
     fPitchLFOSync->margin = 6.f;

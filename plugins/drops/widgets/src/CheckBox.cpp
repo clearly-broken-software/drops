@@ -8,7 +8,8 @@ CheckBox::CheckBox(Window &parent) noexcept
 {
     background_color = Color(0.8f, 0.8f, 0.8f);
     foreground_color = Color(0.1f, 0.1f, 0.1f);
-    highlight_color = Color(1.0f, 0.5f, 0.5f);
+    highlight_color_active = Color(1.0f, 0.5f, 0.5f);
+    highlight_color_inactive = Color(0.0f, 1.0f, 0.0f);
     has_mouse_ = false;
     isActive = false;
 }
@@ -18,7 +19,9 @@ CheckBox::CheckBox(Widget *widget) noexcept
 {
     background_color = Color(0.8f, 0.8f, 0.8f);
     foreground_color = Color(0.1f, 0.1f, 0.1f);
-    highlight_color = Color(1.0f, 0.5f, 0.5f);
+    highlight_color_active = Color(1.0f, 0.5f, 0.5f);
+    highlight_color_inactive = Color(0.0f, 1.0f, 0.0f);
+
     has_mouse_ = false;
     isActive = false;
 }
@@ -29,6 +32,7 @@ bool CheckBox::onMouse(const MouseEvent &ev)
     {
         isActive = !isActive;
         callback->onCheckBoxClicked(this, isActive);
+        repaint();
         return true; // TODO check if this should be true/false
     }
     else
@@ -56,7 +60,7 @@ void CheckBox::onNanoDisplay()
 {
     float width = getWidth();
     float height = getHeight();
-   
+
     // label
     fontFaceId(main_font_);
     fontSize(labelSize);
@@ -73,10 +77,15 @@ void CheckBox::onNanoDisplay()
     closePath();
 
     //box
-    if (has_mouse_)
+    if (has_mouse_ && isActive)
     {
-        fill_color_ = highlight_color;
+        fill_color_ = highlight_color_active;
     }
+    else if (has_mouse_&&!isActive)
+    {
+        fill_color_ = highlight_color_inactive;
+    }
+    
     else if (isActive)
     {
         fill_color_ = foreground_color;

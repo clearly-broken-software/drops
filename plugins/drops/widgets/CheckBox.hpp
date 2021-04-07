@@ -24,7 +24,8 @@ public:
   void setFont(const char *name, const uchar *data, uint dataSize);
   Color background_color;
   Color foreground_color;
-  Color highlight_color;
+  Color highlight_color_active;
+  Color highlight_color_inactive;
   Color text_color;
   float labelSize;
   float margin;

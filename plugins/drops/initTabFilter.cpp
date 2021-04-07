@@ -231,7 +231,8 @@ void DropsUI::initTabFilter()
     fFilterLFOSync->setCallback(this);
     fFilterLFOSync->background_color = black_olive;
     fFilterLFOSync->foreground_color = blue_pigment_1;
-    fFilterLFOSync->highlight_color = blue_pigment_2;
+    fFilterLFOSync->highlight_color_inactive = black_olive_1;
+    fFilterLFOSync->highlight_color_active = blue_pigment_2;
     fFilterLFOSync->text_color = floral_white;
     fFilterLFOSync->setFont("RobotoRegular",
                             reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
