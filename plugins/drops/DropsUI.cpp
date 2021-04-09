@@ -1931,20 +1931,6 @@ void DropsUI::onMenuClicked(Menu *menu, uint menu_id, std::string item)
     }
 }
 
-// void DropsUI::onRadioButtonClicked(RadioButton *rb)
-// {
-//     const uint id = rb->getId();
-//     switch (id)
-//     {
-//     case kAmpLFOFreqBeat:
-//         printf("active_option %i\n", rb->active_option);
-//         break;
-
-//     default:
-//         break;
-//     }
-// }
-
 void DropsUI::onSVGButtonClicked(SVGButton *svgb)
 {
     const uint id = svgb->getId();

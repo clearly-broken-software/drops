@@ -101,6 +101,8 @@ private:
     void initSFZ();
     void makeSFZ();
     int loadSample(const char *fp);
+//    void simpleMessageReceiver(void *data, int delay, const char *path, const char *sig, const sfizz_arg_t *args);
+
     sf_count_t sampleLength;
     bool sig_sampleLoaded;
     bool loadedSample;
@@ -147,12 +149,12 @@ private:
         "bpf_2p",
         "hpf_2p"};
 
-    const char *lfo_types_[5]{
-        "0", // triangle
-        "1", // sine
-        "3", // square
-        "6", // saw up
-        "7", // saw down
+    const int lfo_types_[5]{
+        0, // triangle
+        1, // sine
+        3, // square
+        6, // saw up
+        7, // saw down
     };
     const char *lfo_sync_[18]{
         "0.25",     // 1/16
@@ -176,6 +178,8 @@ private:
     };
 
     std::unordered_map<std::string, std::string> opcodes;
+    std::vector<std::string> messageList;
+    sfz::ClientPtr client;
 
     // some constants
     const float lfo_max_freq = 20.0f;

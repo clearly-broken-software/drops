@@ -132,7 +132,7 @@ void DropsUI::initTabAmp()
 
     fAmpLFOSync = new CheckBox(hbox_amp_row_2);
     fAmpLFOSync->setId(kAmpLFOSync);
-    fAmpLFOSync->setSize(knobSize);
+    fAmpLFOSync->setSize(knobSize.getWidth()*.5,knobSize.getWidth());
     fAmpLFOSync->setCallback(this);
     fAmpLFOSync->background_color = black_olive;
     fAmpLFOSync->foreground_color = saffron;

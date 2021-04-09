@@ -92,6 +92,8 @@ DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 2)
 
     fFilterMaxFreq = sampleRate * .5;
     initSFZ();
+
+    client = synth.createClient(&messageList);
 }
 
 // --  PARAMETERS  -------------------------------------------------------------
@@ -741,34 +743,46 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
     {
     case kSampleIn:
         fSampleIn = value;
-        //  makeSFZ();
         break;
     case kSampleOut:
-        fSampleOut = value;
-        makeSFZ();
+        fSampleOut = -value + 1.0f;
         break;
     case kSampleLoopStart:
         fSampleLoopStart = value;
-        //  makeSFZ();
         break;
     case kSampleLoopEnd:
         fSampleLoopEnd = value;
-        //   makeSFZ();
         break;
     case kSamplePitchKeyCenter:
         fSamplePitchKeyCenter = value;
-        makeSFZ();
-        break;
+        {
+            sfizz_arg_t args;
+            args.i = static_cast<int>(fSamplePitchKeyCenter);
+            synth.sendMessage(*client, 0, "/region0/pitch_keycenter", "i", &args);
+            break;
+        }
     case kSamplePitch:
         fSamplePitch = std::round(value);
         break;
     case kSamplePlayMode:
         fSamplePlayMode = value;
-        makeSFZ();
+        {
+            sfizz_arg_t args;
+            const int i = static_cast<int>(fSamplePlayMode);
+            args.s = play_modes_[i];
+            synth.sendMessage(*client, 0, "/region0/loop_mode", "s", &args);
+        }
+        //makeSFZ();
         break;
     case kSamplePlayDirection:
         fSamplePlayDirection = value;
-        makeSFZ();
+        {
+            sfizz_arg_t args;
+            const int i = static_cast<int>(fSamplePlayDirection);
+            args.s = direction_[i];
+            synth.sendMessage(*client, 0, "/region0/direction", "s", &args);
+        }
+        //makeSFZ();
         break;
     case kSampleOversampling:
     {
@@ -810,7 +824,12 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         // lfo
     case kAmpLFOType:
         fAmpLFOType = value;
-        makeSFZ();
+        {
+            sfizz_arg_t args;
+            const int i = static_cast<int>(fAmpLFOType);
+            args.i = lfo_types_[i];
+            synth.sendMessage(*client, 1, "/region0/lfo0/wave", "i", &args);
+        }
         break;
     case kAmpLFOSync:
         fAmpLFOSync = value;
@@ -831,9 +850,14 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         break;
         // filter
     case kFilterType:
+    {
         fFilterType = value;
-        makeSFZ();
-        break;
+        // Update value
+        sfizz_arg_t args;
+        args.s = filters_[static_cast<uint>(fFilterType)];
+        synth.sendMessage(*client, 1, "/region0/filter0/type", "s", &args);
+    }
+    break;
     case kFilterCutOff:
         fFilterCutOff = value;
         break;
@@ -858,7 +882,12 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         break;
     case kFilterLFOType:
         fFilterLFOType = value;
-        makeSFZ();
+        {
+            sfizz_arg_t args;
+            const int i = static_cast<int>(fFilterLFOType);
+            args.i = lfo_types_[i];
+            synth.sendMessage(*client, 1, "/region0/lfo1/wave", "i", &args);
+        }
         break;
     case kFilterLFOSync:
         fFilterLFOSync = value;
@@ -880,7 +909,6 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
     // pitch
     case kPitchEgDepth:
         fPitchEGDepth = value;
-        makeSFZ();
         break;
     case kPitchEgAttack:
         fPitchEGAttack = value;
@@ -896,7 +924,12 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         break;
     case kPitchLFOType:
         fPitchLFOType = value;
-        makeSFZ();
+        {
+            sfizz_arg_t args;
+            const int i = static_cast<int>(fPitchLFOType);
+            args.i = lfo_types_[i];
+            synth.sendMessage(*client, 1, "/region0/lfo2/wave", "i", &args);
+        }
         break;
     case kPitchLFOSync:
         fPitchLFOSync = value;
@@ -1167,11 +1200,12 @@ void DropsPlugin::makeSFZ()
     // display
     buffer << "offset=0\n";
     buffer << "offset_oncc501=" << std::to_string(sampleLength) << "\n";
-    buffer << "end=" << opcodes["end"] << "\n";
+    buffer << "end=" << std::to_string(sampleLength) << "\n";
+    buffer << "end_oncc502=-" << std::to_string(sampleLength) << "\n";
     buffer << "loop_start=0\n";
-    buffer << "loop_start_oncc502=" << std::to_string(sampleLength) << "\n";
+    buffer << "loop_start_oncc503=" << std::to_string(sampleLength) << "\n";
     buffer << "loop_end=0\n";
-    buffer << "loop_end_oncc503=" << std::to_string(sampleLength) << "\n";
+    buffer << "loop_end_oncc504=" << std::to_string(sampleLength) << "\n";
 
     // amp TAB
     // amp ADSR cc 201 - 299
@@ -1205,7 +1239,7 @@ void DropsPlugin::makeSFZ()
     buffer << "cutoff=20\n"; // << opcodes["cutoff"] << "\n";
     buffer << "cutoff_oncc310=12000\n";
     buffer << "resonance=0\n";
-    buffer << "resonance_oncc311=40\n";
+    buffer << "resonance_oncc311=20\n";
     // filter adsr
     buffer << "fileg_depth=0\n";
     buffer << "fileg_depth_oncc312=12000\n";
@@ -1322,7 +1356,7 @@ void DropsPlugin::run(
     synth.hdcc(0, 203, fAmpEgSustain);
     synth.hdcc(0, 204, fAmpEgRelease);
     // amp lfo
-    // todo lfo wave and sync
+    // todo lfo sync
     synth.hdcc(0, 205, fAmpLFOFreq);
     synth.hdcc(0, 206, fAmpLFODepth);
     synth.hdcc(0, 207, fAmpLFOFade);
@@ -1337,7 +1371,7 @@ void DropsPlugin::run(
     synth.hdcc(0, 303, fFilterEgSustain);
     synth.hdcc(0, 304, fFilterEgRelease);
     // filter lfo
-    // todo lfo wave and sync
+    // todo lfo sync
     synth.hdcc(0, 305, fFilterLFOFreq);
     synth.hdcc(0, 306, fFilterLFODepth);
     synth.hdcc(0, 307, fFilterLFOFade);
@@ -1350,7 +1384,7 @@ void DropsPlugin::run(
     synth.hdcc(0, 403, fPitchEgSustain);
     synth.hdcc(0, 404, fPitchEgRelease);
     // pitch lfo
-    // todo lfo wave and sync
+    // todo lfo sync
     synth.hdcc(0, 405, fPitchLFOFreq);
     synth.hdcc(0, 406, fPitchLFODepth);
     synth.hdcc(0, 407, fPitchLFOFade);
@@ -1358,8 +1392,9 @@ void DropsPlugin::run(
     const float n = fSamplePitch / 200.f;
     synth.hdcc(0, 500, n);
     synth.hdcc(0, 501, fSampleIn);
-    synth.hdcc(0, 502, fSampleLoopStart);
-    synth.hdcc(0, 503, fSampleLoopEnd);
+    synth.hdcc(0, 502, fSampleOut);
+    synth.hdcc(0, 503, fSampleLoopStart);
+    synth.hdcc(0, 504, fSampleLoopEnd);
 
     while (framesDone < frames)
     {

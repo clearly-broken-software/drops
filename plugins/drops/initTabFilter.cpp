@@ -85,13 +85,12 @@ void DropsUI::initTabFilter()
     fFilterCutOff->highlight_color = blue_pigment_2;
     fFilterCutOff->text_color = floral_white;
     fFilterCutOff->default_value = 1;
-    const float max_cutoff = getSampleRate() / 2.0f;
-    fFilterCutOff->real_min = 20.0f;
-    fFilterCutOff->real_max = max_cutoff;
+    fFilterCutOff->real_min = 0.0f;
+    fFilterCutOff->real_max = 12000.0f;
     fFilterCutOff->min = 1.0f;
     fFilterCutOff->max = 101.f;
-    fFilterCutOff->using_log = true;
-    fFilterCutOff->format_str = "%.f Hz";
+    fFilterCutOff->using_log = false;
+    fFilterCutOff->format_str = "%.f Ct";
     fFilterCutOff->setParamOnMove = true;
 
     fFilterResonance = new Knob(hbox_filter_row_1);
@@ -316,8 +315,8 @@ void DropsUI::initTabFilter()
     fFilterLFODepth->text_color = floral_white;
     fFilterLFODepth->default_value = 0.5f;
     fFilterLFODepth->real_min = 0.0f;
-    fFilterLFODepth->real_max = max_cutoff / 2.0f;
-    fFilterLFODepth->format_str = "%.f Hz";
+    fFilterLFODepth->real_max = 12000.0f;
+    fFilterLFODepth->format_str = "%.f Ct";
     fFilterLFODepth->setParamOnMove = true;
 
     fFilterLFOFade = new Knob(hbox_filter_row_3);
