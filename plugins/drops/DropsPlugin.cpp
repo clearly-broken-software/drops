@@ -38,7 +38,7 @@ DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 2)
     synth.setSampleRate(sampleRate);
     synth.setNumVoices(16);
     fSampleIn = 0.0f;
-    fSampleOut = 1.0f;
+    fSampleOut = 0.0f;
     fSampleLoopStart = 0.0f;
     fSampleLoopEnd = 1.0f;
     fSamplePitchKeyCenter = 60.0f;
@@ -119,8 +119,8 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.symbol = "sample_out";
         parameter.ranges.min = 0.0f;
         parameter.ranges.max = 1.0f;
-        parameter.ranges.def = 1.0f;
-        // parameter.hints = kParameterIsAutomable;
+        parameter.ranges.def = 0.0f;
+        parameter.hints = kParameterIsAutomable;
         break;
     case kSampleLoopStart:
         parameter.name = "Loop Start";
