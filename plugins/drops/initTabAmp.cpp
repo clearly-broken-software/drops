@@ -148,7 +148,7 @@ void DropsUI::initTabAmp()
 
     fAmpLFOSync = new CheckBox(hbox_amp_row_2);
     fAmpLFOSync->setId(kAmpLFOSync);
-    fAmpLFOSync->setSize(knobSize.getWidth()*.5,knobSize.getWidth());
+    fAmpLFOSync->setSize(knobSize.getWidth()*.5,knobSize.getHeight());
     fAmpLFOSync->setCallback(this);
     fAmpLFOSync->background_color = black_olive;
     fAmpLFOSync->foreground_color = saffron;
@@ -244,7 +244,7 @@ void DropsUI::initTabAmp()
     fAmpLFOFade->setParamOnMove = true;
 
     fAmpLFOTypeMenu = new Menu(hbox_amp_row_2);
-    fAmpLFOTypeMenu->setMaxViewItems(5);
+    fAmpLFOTypeMenu->setMaxViewItems(6);
     fAmpLFOTypeMenu->setId(kAmpLFOTypeMenu);
     fAmpLFOTypeMenu->setCallback(this);
     fAmpLFOTypeMenu->font_size = font_size + 2;
@@ -255,7 +255,8 @@ void DropsUI::initTabAmp()
                                "b",
                                "c",
                                "d",
-                               "e"});
+                               "e",
+                               "f"});
     fAmpLFOTypeMenu->hide();
     fAmpLFOTypeMenu->background_color = black_olive;
     fAmpLFOTypeMenu->foreground_color = black_olive_2;

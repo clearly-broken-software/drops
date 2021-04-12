@@ -240,15 +240,15 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.ranges.min = 0.0f;
         parameter.ranges.max = 4.0f;
         parameter.ranges.def = 0.0f;
-        parameter.enumValues.count = 5;
+        parameter.enumValues.count = 6;
         parameter.enumValues.restrictedMode = true;
-        parameter.enumValues.values = new ParameterEnumerationValue[5]{
+        parameter.enumValues.values = new ParameterEnumerationValue[6]{
             ParameterEnumerationValue(0.0f, "triangle"),
             ParameterEnumerationValue(1.0f, "sine"),
             ParameterEnumerationValue(2.0f, "square"),
             ParameterEnumerationValue(3.0f, "saw up"),
             ParameterEnumerationValue(4.0f, "saw down"),
-        };
+            ParameterEnumerationValue(5.0f, "s/h")};
         //parameter.hints = kParameterIsAutomable;
         break;
     case kAmpLFOSync:
@@ -852,14 +852,14 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         break;
         // filter
     case kFilterType:
-    {
         fFilterType = value;
-        // Update value
-        sfizz_arg_t args;
-        args.s = filters_[static_cast<uint>(fFilterType)];
-        synth.sendMessage(*client, 1, "/region0/filter0/type", "s", &args);
-    }
-    break;
+        {
+
+            sfizz_arg_t args;
+            args.s = filters_[static_cast<uint>(fFilterType)];
+            synth.sendMessage(*client, 1, "/region0/filter0/type", "s", &args);
+        }
+        break;
     case kFilterCutOff:
         fFilterCutOff = value;
         break;
@@ -868,7 +868,6 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         break;
     case kFilterEgDepth:
         fFilterEGDepth = value;
-        makeSFZ();
         break;
     case kFilterEgAttack:
         fFilterEGAttack = value;
@@ -1158,25 +1157,23 @@ void DropsPlugin::makeSFZ()
     uint sampleOutInFrames = fSampleLength * fSampleOut;
     opcodes["sample"] = path;
 
-    opcodes["loop_start"] = std::to_string(loopstartInFrames);
-    opcodes["loop_end"] = std::to_string(loopEndInFrames);
     opcodes["offset"] = std::to_string(sampleInInFrames);
     opcodes["end"] = std::to_string(sampleOutInFrames);
     opcodes["direction"] = direction_[static_cast<uint>(fSamplePlayDirection)];
 
-    opcodes["lfo01_wave"] = lfo_types_[static_cast<int>(fAmpLFOType)];
+    opcodes["lfo01_wave"] = std::to_string(lfo_types_[static_cast<int>(fAmpLFOType)]);
     opcodes["lfo01_freq"] = std::to_string(fAmpLFOFreq * lfo_max_freq);
     opcodes["lfo01_volume"] = std::to_string(fAmpLFODepth * amp_lfo_depth);
     opcodes["lfo01_fade"] = std::to_string(fAmpLFOFade * lfo_fade);
     opcodes["lfo01_beats"] = lfo_sync_[static_cast<int>(fAmpLFOSyncFreq)];
 
-    opcodes["lfo02_wave"] = lfo_types_[static_cast<int>(fFilterLFOType)];
+    opcodes["lfo02_wave"] = std::to_string(lfo_types_[static_cast<int>(fFilterLFOType)]);
     opcodes["lfo02_freq"] = std::to_string(fFilterLFOFreq * lfo_max_freq);
     opcodes["lfo02_cutoff"] = std::to_string(fFilterLFODepth * (fFilterMaxFreq * .5));
     opcodes["lfo02_fade"] = std::to_string(fFilterLFOFade * lfo_fade);
     opcodes["lfo02_beats"] = lfo_sync_[static_cast<int>(fFilterLFOSyncFreq)];
 
-    opcodes["lfo03_wave"] = lfo_types_[static_cast<int>(fPitchLFOType)];
+    opcodes["lfo03_wave"] = std::to_string(lfo_types_[static_cast<int>(fPitchLFOType)]);
     opcodes["lfo03_freq"] = std::to_string(fPitchLFOFreq * lfo_max_freq);
     // opcodes["lfo03_pitch"] = std::to_string(fPitchLFODepth * pitch_lfo_depth);
     opcodes["lfo03_fade"] = std::to_string(fPitchLFOFade * lfo_fade);

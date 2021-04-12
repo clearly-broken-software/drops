@@ -264,7 +264,7 @@ void DropsUI::initTabPitch()
     fPitchLFOFreq->setParamOnMove = true;
 
     fPitchLFOTypeMenu = new Menu(hbox_pitch_row_2);
-    fPitchLFOTypeMenu->setMaxViewItems(5);
+    fPitchLFOTypeMenu->setMaxViewItems(6);
     fPitchLFOTypeMenu->setId(kPitchLFOTypeMenu);
     fPitchLFOTypeMenu->setCallback(this);
     fPitchLFOTypeMenu->font_size = font_size + 2;
@@ -275,7 +275,8 @@ void DropsUI::initTabPitch()
                                  "b",
                                  "c",
                                  "d",
-                                 "e"});
+                                 "e",
+                                 "f"});
     fPitchLFOTypeMenu->hide();
     fPitchLFOTypeMenu->background_color = black_olive;
     fPitchLFOTypeMenu->foreground_color = black_olive_2;

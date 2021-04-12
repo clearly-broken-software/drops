@@ -258,7 +258,7 @@ void DropsUI::initTabFilter()
     fFilterLFOSync->labelSize = font_size;
 
     fFilterLFOTypeMenu = new Menu(hbox_filter_row_3);
-    fFilterLFOTypeMenu->setMaxViewItems(5);
+    fFilterLFOTypeMenu->setMaxViewItems(6);
     fFilterLFOTypeMenu->setId(kFilterLFOTypeMenu);
     fFilterLFOTypeMenu->setCallback(this);
     fFilterLFOTypeMenu->font_size = font_size + 4;
@@ -269,7 +269,8 @@ void DropsUI::initTabFilter()
                                   "b",
                                   "c",
                                   "d",
-                                  "e"});
+                                  "e",
+                                  "f"});
     fFilterLFOTypeMenu->hide();
     fFilterLFOTypeMenu->background_color = black_olive;
     fFilterLFOTypeMenu->foreground_color = black_olive_2;

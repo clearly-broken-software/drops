@@ -22,7 +22,7 @@
 #include "DistrhoPlugin.hpp"
 #include "DropsParams.h"
 #include "DropsGeometry.hpp"
-#include <sfizz.hpp>
+#include "sfizz.hpp"
 #include <iostream>
 #include <sndfile.hh>
 #include <unordered_map>
@@ -100,10 +100,12 @@ protected:
     // -------------------------------------------------------------------
 
 private:
+    void foo(void *data, int delay, const char *path, const char *sig, const sfizz_arg_t *args);
+
     void initSFZ();
     void makeSFZ();
     int loadSample(const char *fp);
-//    void simpleMessageReceiver(void *data, int delay, const char *path, const char *sig, const sfizz_arg_t *args);
+    //    void simpleMessageReceiver(void *data, int delay, const char *path, const char *sig, const sfizz_arg_t *args);
 
     sf_count_t sampleLength;
     bool sig_sampleLoaded;
@@ -140,7 +142,8 @@ private:
     float bpm;
 
     const char *play_modes_[4]{
-        "no_loop", "one_shot",
+        "no_loop",
+        "one_shot",
         "loop_continuous",
         "loop_sustain"};
     const char *direction_[2]{
@@ -151,12 +154,13 @@ private:
         "bpf_2p",
         "hpf_2p"};
 
-    const int lfo_types_[5]{
-        0, // triangle
-        1, // sine
-        3, // square
-        6, // saw up
-        7, // saw down
+    const int lfo_types_[6]{
+        0,  // triangle
+        1,  // sine
+        3,  // square
+        6,  // saw up
+        7,  // saw down
+        12, // s/h
     };
     const char *lfo_sync_[18]{
         "0.25",     // 1/16
