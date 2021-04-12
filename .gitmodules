@@ -4,6 +4,3 @@
 [submodule "plugins/drops/external"]
 	path = plugins/drops/external
 	url = https://github.com/memononen/nanosvg.git
-[submodule "sfizz"]
-	path = sfizz
-	url = https://github.com/sfztools/sfizz.git
