@@ -438,7 +438,7 @@ void DropsUI::initWidgets()
     fPlayModeMenu->setFont("RobotoRegular",
                            reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
                            fonts::Roboto_RegularDataSize);
-    fPlayModeMenu->addItems({"NO LOOP", "ONE SHOT", "CONTINUOUS", "SUSTAIN"});
+    fPlayModeMenu->addItems({"NO LOOP", "ONE SHOT", "CONTINUOUS"});
     fPlayModeMenu->hide();
     fPlayModeMenu->background_color = black_olive;
     fPlayModeMenu->foreground_color = black_olive_2;
