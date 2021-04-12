@@ -238,7 +238,7 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.name = "Amp LFO Type";
         parameter.symbol = "amp_lfo_type";
         parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 4.0f;
+        parameter.ranges.max = 5.0f;
         parameter.ranges.def = 0.0f;
         parameter.enumValues.count = 6;
         parameter.enumValues.restrictedMode = true;
@@ -388,16 +388,17 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.name = "Filter LFO Type";
         parameter.symbol = "filter_lfo_type";
         parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 4.0f;
+        parameter.ranges.max = 5.0f;
         parameter.ranges.def = 0.0f;
-        parameter.enumValues.count = 5;
+        parameter.enumValues.count = 6;
         parameter.enumValues.restrictedMode = true;
-        parameter.enumValues.values = new ParameterEnumerationValue[5]{
+        parameter.enumValues.values = new ParameterEnumerationValue[6]{
             ParameterEnumerationValue(0.0f, "triangle"),
             ParameterEnumerationValue(1.0f, "sine"),
             ParameterEnumerationValue(2.0f, "square"),
             ParameterEnumerationValue(3.0f, "saw up"),
             ParameterEnumerationValue(4.0f, "saw down"),
+            ParameterEnumerationValue(5.0f, "s/h")
         };
         parameter.hints = kParameterIsInteger;
         break;
@@ -506,16 +507,17 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.name = "Pitch LFO Type";
         parameter.symbol = "pitch_lfo_type";
         parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 4.0f;
+        parameter.ranges.max = 5.0f;
         parameter.ranges.def = 0.0f;
-        parameter.enumValues.count = 5;
+        parameter.enumValues.count = 6;
         parameter.enumValues.restrictedMode = true;
-        parameter.enumValues.values = new ParameterEnumerationValue[5]{
+        parameter.enumValues.values = new ParameterEnumerationValue[6]{
             ParameterEnumerationValue(0.0f, "triangle"),
             ParameterEnumerationValue(1.0f, "sine"),
             ParameterEnumerationValue(2.0f, "square"),
             ParameterEnumerationValue(3.0f, "saw up"),
             ParameterEnumerationValue(4.0f, "saw down"),
+            ParameterEnumerationValue(5.0f, "s/h")
         };
         parameter.hints = kParameterIsInteger;
         break;
