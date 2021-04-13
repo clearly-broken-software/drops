@@ -1250,8 +1250,18 @@ void DropsUI::uiFileBrowserSelected(const char *filename)
 
 void DropsUI::stateChanged(const char *key, const char *value)
 {
+    if (strcmp(key, "filepath") == 0)
+    {
+        fileName = std::string(value);
+        if (plugin->loadedSample)
+        {
+            loadSample();
+            sampleDir = dirnameOf(fileName.c_str());
+            fileopen_button->setText(fileName);
+        }
+    }
 #ifdef DEBUG
-    printf("key = %s, value = %s\n", key, value);
+    printf("DropsUI::stateChanged(key = %s, value = %s)\n", key, value);
 #endif
 }
 
