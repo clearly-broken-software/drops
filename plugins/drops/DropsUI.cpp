@@ -576,7 +576,7 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         setMarkers(); // FIXME: all markers are set, only 1 is needed :-/
         break;
     case kSampleOut:
-        sampleOut = value * static_cast<float>(sampleLength);
+        sampleOut = (-value + 1.0) * static_cast<float>(sampleLength);
         setMarkers();
         break;
     case kSampleLoopStart:
