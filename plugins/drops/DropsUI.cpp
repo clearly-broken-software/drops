@@ -962,23 +962,6 @@ void DropsUI::onNanoDisplay()
     stroke();
     closePath();
 
-    // back label EG
-    // beginPath();
-    // fillColor(blue_pigment_1);
-    // roundedRect(339 + 2,
-    //             329 + 2 + (211 / 3),
-    //             40, 18, 2);
-    // fill();
-    // closePath();
-    // // text
-    // beginPath();
-    // fontSize(16);
-    // fillColor(eerie_black);
-    // cx = 339 + 2 + 40 / 2;
-    // cy = 329 + 2 + 211 / 3 + 18 / 2;
-    // text(cx, cy, "EG", nullptr);
-    // closePath();
-
     // line 2
     beginPath();
     moveTo(339 + 2,

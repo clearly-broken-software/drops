@@ -18,13 +18,6 @@
 
 #include "DistrhoPlugin.hpp"
 #include "DropsPlugin.hpp"
-// #include <sfizz.hpp>
-
-//#include <sndfile.hh>
-//#include <samplerate.h>
-//#define MINIMP3_IMPLEMENTATION
-//#define MINIMP3_FLOAT_OUTPUT
-//#include "minimp3_ex.h"
 
 START_NAMESPACE_DISTRHO
 
@@ -969,9 +962,6 @@ void DropsPlugin::setState(const char *key, const char *value)
     if (strcmp(key, "filepath") == 0)
     {
         path = std::string(value);
-#ifdef DEBUG
-        std::cout << path << std::endl;
-#endif
         loadSample(value);
         makeSFZ();
     }
