@@ -224,7 +224,7 @@ void DropsUI::initTabFilter()
     fFilterLFOType = new DropDown(hbox_filter_row_3);
     fFilterLFOType->setId(kFilterLFOType);
     fFilterLFOType->font_size = font_size + 4;
-    fFilterLFOType->setFont("RobotoRegular",
+    fFilterLFOType->setFont("Roboto_Regular",
                             reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
                             fonts::Roboto_RegularDataSize);
     fFilterLFOType->setMenuFont("DropsIcons",
@@ -249,7 +249,7 @@ void DropsUI::initTabFilter()
     fFilterLFOSync->highlight_color_inactive = black_olive_1;
     fFilterLFOSync->highlight_color_active = blue_pigment_2;
     fFilterLFOSync->text_color = floral_white;
-    fFilterLFOSync->setFont("RobotoRegular",
+    fFilterLFOSync->setFont("Roboto_Regular",
                             reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
                             fonts::Roboto_RegularDataSize);
     fFilterLFOSync->margin = 6.f;

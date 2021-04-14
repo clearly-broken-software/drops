@@ -150,7 +150,7 @@ void DropsUI::initTabPitch()
     fPitchLFOType = new DropDown(hbox_pitch_row_2);
     fPitchLFOType->setId(kPitchLFOType);
     fPitchLFOType->font_size = font_size + 2;
-    fPitchLFOType->setFont("RobotoRegular",
+    fPitchLFOType->setFont("Roboto_Regular",
                            reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
                            fonts::Roboto_RegularDataSize);
     fPitchLFOType->setMenuFont("DropsIcons",
@@ -174,7 +174,7 @@ void DropsUI::initTabPitch()
     fPitchLFOSync->highlight_color_active = shamrock_green_1;
     fPitchLFOSync->highlight_color_inactive = black_olive_1;
     fPitchLFOSync->text_color = floral_white;
-    fPitchLFOSync->setFont("RobotoRegular", reinterpret_cast<const uchar *>(fonts::Roboto_RegularData), fonts::Roboto_RegularDataSize);
+    fPitchLFOSync->setFont("Roboto_Regular", reinterpret_cast<const uchar *>(fonts::Roboto_RegularData), fonts::Roboto_RegularDataSize);
     fPitchLFOSync->margin = 6.f;
     fPitchLFOSync->label = "SYNC";
     fPitchLFOSync->boxSize = 20;

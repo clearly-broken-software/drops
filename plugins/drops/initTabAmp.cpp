@@ -131,7 +131,7 @@ void DropsUI::initTabAmp()
     fAmpLFOType = new DropDown(hbox_amp_row_2);
     fAmpLFOType->setId(kAmpLFOType);
     fAmpLFOType->font_size = font_size + 2;
-    fAmpLFOType->setFont("RobotoRegular",
+    fAmpLFOType->setFont("Roboto_Regular",
                          reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
                          fonts::Roboto_RegularDataSize);
     fAmpLFOType->setMenuFont("DropsIcons",
@@ -155,7 +155,7 @@ void DropsUI::initTabAmp()
     fAmpLFOSync->highlight_color_active = saffron_1;
     fAmpLFOSync->highlight_color_inactive = black_olive_1;
     fAmpLFOSync->text_color = floral_white;
-    fAmpLFOSync->setFont("RobotoRegular",
+    fAmpLFOSync->setFont("Roboto_Regular",
                          reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
                          fonts::Roboto_RegularDataSize);
     fAmpLFOSync->margin = 6.f;

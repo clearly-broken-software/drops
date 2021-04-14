@@ -186,10 +186,10 @@ void DropsUI::initWidgets()
     fSamplePitchKeyCenter = new DropDown(window);
     fSamplePitchKeyCenter->setId(kSamplePitchKeyCenter);
     fSamplePitchKeyCenter->font_size = fSampleFontSize;
-    fSamplePitchKeyCenter->setFont("RobotoRegular",
+    fSamplePitchKeyCenter->setFont("Roboto_Regular",
                                    reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
                                    fonts::Roboto_RegularDataSize);
-    fSamplePitchKeyCenter->setMenuFont("RobotoRegular",
+    fSamplePitchKeyCenter->setMenuFont("Roboto_Regular",
                                        reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
                                        fonts::Roboto_RegularDataSize);
     fSamplePitchKeyCenter->setSize(175,
@@ -206,7 +206,7 @@ void DropsUI::initWidgets()
     fKeyCenterMenu = new Menu(window);
     fKeyCenterMenu->setId(kKeyCenterMenu);
     fKeyCenterMenu->setCallback(this);
-    fKeyCenterMenu->setFont("RobotoRegular",
+    fKeyCenterMenu->setFont("Roboto_Regular",
                             reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
                             fonts::Roboto_RegularDataSize);
     fKeyCenterMenu->font_size = fSampleFontSize;
@@ -377,10 +377,10 @@ void DropsUI::initWidgets()
     fSamplePlayDirection = new DropDown(window);
     fSamplePlayDirection->setId(kSamplePlayDirection);
     fSamplePlayDirection->font_size = fSampleFontSize;
-    fSamplePlayDirection->setFont("RobotoRegular",
+    fSamplePlayDirection->setFont("Roboto_Regular",
                                   reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
                                   fonts::Roboto_RegularDataSize);
-    fSamplePlayDirection->setMenuFont("RobotoRegular",
+    fSamplePlayDirection->setMenuFont("Roboto_Regular",
                                       reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
                                       fonts::Roboto_RegularDataSize);
     fSamplePlayDirection->setSize(216,
@@ -398,7 +398,7 @@ void DropsUI::initWidgets()
     fDirectionMenu->setId(kDirectionMenu);
     fDirectionMenu->setCallback(this);
     fDirectionMenu->font_size = fSampleFontSize;
-    fDirectionMenu->setFont("RobotoRegular",
+    fDirectionMenu->setFont("Roboto_Regular",
                             reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
                             fonts::Roboto_RegularDataSize);
 
@@ -418,10 +418,10 @@ void DropsUI::initWidgets()
     fSamplePlayMode->setSize(216,
                              fSamplePlayMode->font_size +
                                  fSamplePlayMode->margin * 2.0f);
-    fSamplePlayMode->setFont("RobotoRegular",
+    fSamplePlayMode->setFont("Roboto_Regular",
                              reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
                              fonts::Roboto_RegularDataSize);
-    fSamplePlayMode->setMenuFont("RobotoRegular",
+    fSamplePlayMode->setMenuFont("Roboto_Regular",
                                  reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
                                  fonts::Roboto_RegularDataSize);
     fSamplePlayMode->setCallback(this);
@@ -435,7 +435,7 @@ void DropsUI::initWidgets()
     fPlayModeMenu->setId(kPlayModeMenu);
     fPlayModeMenu->setCallback(this);
     fPlayModeMenu->font_size = fSampleFontSize;
-    fPlayModeMenu->setFont("RobotoRegular",
+    fPlayModeMenu->setFont("Roboto_Regular",
                            reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
                            fonts::Roboto_RegularDataSize);
     fPlayModeMenu->addItems({"NO LOOP", "ONE SHOT", "CONTINUOUS"});
@@ -451,10 +451,10 @@ void DropsUI::initWidgets()
     fSampleOversampling = new DropDown(window);
     fSampleOversampling->setId(kSampleOversampling);
     fSampleOversampling->font_size = fSampleFontSize;
-    fSampleOversampling->setFont("RobotoRegular",
+    fSampleOversampling->setFont("Roboto_Regular",
                                  reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
                                  fonts::Roboto_RegularDataSize);
-    fSampleOversampling->setMenuFont("RobotoRegular",
+    fSampleOversampling->setMenuFont("Roboto_Regular",
                                      reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
                                      fonts::Roboto_RegularDataSize);
     fSampleOversampling->setSize(116, fSamplePlayMode->font_size + fSamplePlayMode->margin * 2.0f);
@@ -469,7 +469,7 @@ void DropsUI::initWidgets()
     fOversamplingMenu->setId(kOversamplingMenu);
     fOversamplingMenu->setCallback(this);
     fOversamplingMenu->font_size = fSampleFontSize;
-    fOversamplingMenu->setFont("RobotoRegular",
+    fOversamplingMenu->setFont("Roboto_Regular",
                                reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
                                fonts::Roboto_RegularDataSize);
     fOversamplingMenu->addItems({"1x", "2x", "4x", "8x"});
@@ -502,7 +502,7 @@ void DropsUI::initWidgets()
     initTabPitch();
     // setup popup, needs to be last to get it on top
     fPopUp = new PopUp(window);
-    fPopUp->setFont("RobotoRegular",
+    fPopUp->setFont("Roboto_Regular",
                     reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
                     fonts::Roboto_RegularDataSize);
     fPopUp->setText("POP UP TEXT");
