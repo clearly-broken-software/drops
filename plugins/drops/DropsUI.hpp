@@ -105,9 +105,9 @@ private:
     ScopedPointer<HBox> hbox_sample;
     ScopedPointer<Slider> fSamplePitch;
     ScopedPointer<DropDown> fSamplePitchKeyCenter,
-        fSamplePlayMode, fSamplePlayDirection, fSampleOversampling;
+        fSamplePlayMode, fSamplePlayDirection; // fSampleOversampling;
     ScopedPointer<Menu> fNormalizeMenu, fKeyCenterMenu, fPlayModeMenu,
-        fDirectionMenu, fOversamplingMenu;
+        fDirectionMenu; // fOversamplingMenu;
     
     // amp
     ScopedPointer<VBox> vbox_amp;

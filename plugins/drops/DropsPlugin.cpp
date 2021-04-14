@@ -391,8 +391,7 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
             ParameterEnumerationValue(2.0f, "square"),
             ParameterEnumerationValue(3.0f, "saw up"),
             ParameterEnumerationValue(4.0f, "saw down"),
-            ParameterEnumerationValue(5.0f, "s/h")
-        };
+            ParameterEnumerationValue(5.0f, "s/h")};
         parameter.hints = kParameterIsInteger;
         break;
     case kFilterLFOSync:
@@ -510,8 +509,7 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
             ParameterEnumerationValue(2.0f, "square"),
             ParameterEnumerationValue(3.0f, "saw up"),
             ParameterEnumerationValue(4.0f, "saw down"),
-            ParameterEnumerationValue(5.0f, "s/h")
-        };
+            ParameterEnumerationValue(5.0f, "s/h")};
         parameter.hints = kParameterIsInteger;
         break;
     case kPitchLFOFreq:
@@ -773,38 +771,32 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         break;
     case kSamplePlayDirection:
         fSamplePlayDirection = value;
-        {
-            sfizz_arg_t args;
-            const int i = static_cast<int>(fSamplePlayDirection);
-            args.s = direction_[i];
-            synth.sendMessage(*client, 0, "/region0/direction", "s", &args);
-        }
-        //makeSFZ();
+        makeSFZ();
         break;
     case kSampleOversampling:
-    {
-        std::lock_guard<std::mutex> lock(synthMutex);
-        const uint index = value;
-        switch (index)
-        {
-        case 0:
-            synth.setOversamplingFactor(1);
-            break;
-        case 1:
-            synth.setOversamplingFactor(2);
-            break;
-        case 2:
-            synth.setOversamplingFactor(4);
-            break;
-        case 3:
-            synth.setOversamplingFactor(8);
-            break;
-        default:
-            synth.setOversamplingFactor(1);
-            break;
-        }
+        // {
+        //     std::lock_guard<std::mutex> lock(synthMutex);
+        //     const uint index = value;
+        //     switch (index)
+        //     {
+        //     case 0:
+        //         synth.setOversamplingFactor(1);
+        //         break;
+        //     case 1:
+        //         synth.setOversamplingFactor(2);
+        //         break;
+        //     case 2:
+        //         synth.setOversamplingFactor(4);
+        //         break;
+        //     case 3:
+        //         synth.setOversamplingFactor(8);
+        //         break;
+        //     default:
+        //         synth.setOversamplingFactor(1);
+        //         break;
+        //     }
         break;
-    }
+    //}
     // amp
     case kAmpEgAttack:
         fAmpEGAttack = value;

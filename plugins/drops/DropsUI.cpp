@@ -448,39 +448,39 @@ void DropsUI::initWidgets()
     fSamplePlayMode->setMenu(fPlayModeMenu);
     fSamplePlayMode->resize();
 
-    fSampleOversampling = new DropDown(window);
-    fSampleOversampling->setId(kSampleOversampling);
-    fSampleOversampling->font_size = fSampleFontSize;
-    fSampleOversampling->setFont("Roboto_Regular",
-                                 reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
-                                 fonts::Roboto_RegularDataSize);
-    fSampleOversampling->setMenuFont("Roboto_Regular",
-                                     reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
-                                     fonts::Roboto_RegularDataSize);
-    fSampleOversampling->setSize(116, fSamplePlayMode->font_size + fSamplePlayMode->margin * 2.0f);
-    fSampleOversampling->setCallback(this);
-    fSampleOversampling->label = "OVERSAMPLING: ";
-    fSampleOversampling->item = "1x";
-    fSampleOversampling->foreground_color = floral_white;
-    fSampleOversampling->background_color = black_olive;
-    fSampleOversampling->text_color = floral_white;
+    // fSampleOversampling = new DropDown(window);
+    // fSampleOversampling->setId(kSampleOversampling);
+    // fSampleOversampling->font_size = fSampleFontSize;
+    // fSampleOversampling->setFont("Roboto_Regular",
+    //                              reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+    //                              fonts::Roboto_RegularDataSize);
+    // fSampleOversampling->setMenuFont("Roboto_Regular",
+    //                                  reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+    //                                  fonts::Roboto_RegularDataSize);
+    // fSampleOversampling->setSize(116, fSamplePlayMode->font_size + fSamplePlayMode->margin * 2.0f);
+    // fSampleOversampling->setCallback(this);
+    // fSampleOversampling->label = "OVERSAMPLING: ";
+    // fSampleOversampling->item = "1x";
+    // fSampleOversampling->foreground_color = floral_white;
+    // fSampleOversampling->background_color = black_olive;
+    // fSampleOversampling->text_color = floral_white;
 
-    fOversamplingMenu = new Menu(window);
-    fOversamplingMenu->setId(kOversamplingMenu);
-    fOversamplingMenu->setCallback(this);
-    fOversamplingMenu->font_size = fSampleFontSize;
-    fOversamplingMenu->setFont("Roboto_Regular",
-                               reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
-                               fonts::Roboto_RegularDataSize);
-    fOversamplingMenu->addItems({"1x", "2x", "4x", "8x"});
-    fOversamplingMenu->hide();
-    fOversamplingMenu->background_color = black_olive;
-    fOversamplingMenu->foreground_color = black_olive_2;
-    fOversamplingMenu->highlight_color = flame;
-    fOversamplingMenu->text_color = floral_white;
+    // fOversamplingMenu = new Menu(window);
+    // fOversamplingMenu->setId(kOversamplingMenu);
+    // fOversamplingMenu->setCallback(this);
+    // fOversamplingMenu->font_size = fSampleFontSize;
+    // fOversamplingMenu->setFont("Roboto_Regular",
+    //                            reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+    //                            fonts::Roboto_RegularDataSize);
+    // fOversamplingMenu->addItems({"1x", "2x", "4x", "8x"});
+    // fOversamplingMenu->hide();
+    // fOversamplingMenu->background_color = black_olive;
+    // fOversamplingMenu->foreground_color = black_olive_2;
+    // fOversamplingMenu->highlight_color = flame;
+    // fOversamplingMenu->text_color = floral_white;
 
-    fSampleOversampling->setMenu(fOversamplingMenu);
-    fSampleOversampling->resize();
+    // fSampleOversampling->setMenu(fOversamplingMenu);
+    // fSampleOversampling->resize();
 
     hbox_sample = new HBox(window);
     hbox_sample->setAbsolutePos(0, 77);
@@ -489,13 +489,13 @@ void DropsUI::initWidgets()
     hbox_sample->addWidget(fSamplePitch);
     hbox_sample->addWidget(fSamplePlayDirection);
     hbox_sample->addWidget(fSamplePlayMode);
-    hbox_sample->addWidget(fSampleOversampling);
+   // hbox_sample->addWidget(fSampleOversampling);
     hbox_sample->positionWidgets();
 
     fSamplePitchKeyCenter->positionMenu();
     fSamplePlayDirection->positionMenu();
     fSamplePlayMode->positionMenu();
-    fSampleOversampling->positionMenu();
+    //fSampleOversampling->positionMenu();
 
     initTabAmp();
     initTabFilter();
@@ -603,7 +603,7 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         fSamplePlayDirection->setValue(value);
         break;
     case kSampleOversampling:
-        fSampleOversampling->setValue(value);
+      //  fSampleOversampling->setValue(value);
         break;
     // amp
     case kAmpLFOFade:
@@ -1535,7 +1535,7 @@ void DropsUI::onDropDownClicked(DropDown *dropDown)
         fDirectionMenu->show();
         break;
     case kSampleOversampling:
-        fOversamplingMenu->show();
+       // fOversamplingMenu->show();
         break;
     case kAmpLFOType:
         fAmpLFOTypeMenu->show();
@@ -1919,9 +1919,9 @@ void DropsUI::onMenuClicked(Menu *menu, uint menu_id, std::string item)
         setParameterValue(kSamplePlayDirection, menu_id);
         break;
     case kOversamplingMenu:
-        fSampleOversampling->item = item;
-        fOversamplingMenu->hide();
-        setParameterValue(kSampleOversampling, menu_id);
+        // fSampleOversampling->item = item;
+        // fOversamplingMenu->hide();
+        // setParameterValue(kSampleOversampling, menu_id);
         break;
     case kAmpLFOTypeMenu:
         fAmpLFOType->item = item;
