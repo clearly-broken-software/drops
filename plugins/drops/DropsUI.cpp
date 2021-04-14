@@ -804,6 +804,7 @@ void DropsUI::parameterChanged(uint32_t index, float value)
 
 int DropsUI::loadSample()
 {
+    showWaveForm = false;
     sampleLength = static_cast<sf_count_t>(waveForm->size() - 1);
     sampleIn = 0;
     sampleOut = sampleLength;
@@ -1081,6 +1082,11 @@ void DropsUI::drawWaveform()
 
 void DropsUI::drawMinimap()
 {
+    if (miniMap->size() < (display_width - 1))
+    {
+        printf("DropsUI::drawMinimap() ; empty minimap");
+        return;
+    }
     beginPath();
     strokeColor(pale_silver);
     strokeWidth(1);
@@ -1240,11 +1246,11 @@ void DropsUI::uiFileBrowserSelected(const char *filename)
     // if a file was selected, tell DSP
     if (filename != nullptr)
     {
-        //fileopen_button->setText(filename);
         setState("filepath", filename);
         sampleDir = dirnameOf(filename);
         fileName = filename;
-        // repaint();
+        showWaveForm = false;
+        
     }
 }
 
