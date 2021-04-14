@@ -33,7 +33,7 @@ DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 2)
     synth.setSampleRate(sampleRate);
     synth.setNumVoices(16);
     fSampleIn = 0.0f;
-    fSampleOut = 0.0f;
+    fSampleOut = 1.0f;
     fSampleLoopStart = 0.0f;
     fSampleLoopEnd = 1.0f;
     fSamplePitchKeyCenter = 60.0f;
@@ -114,7 +114,7 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.symbol = "sample_out";
         parameter.ranges.min = 0.0f;
         parameter.ranges.max = 1.0f;
-        parameter.ranges.def = 0.0f;
+        parameter.ranges.def = 1.0f;
         parameter.hints = kParameterIsAutomable;
         break;
     case kSampleLoopStart:
@@ -740,7 +740,7 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         fSampleIn = value;
         break;
     case kSampleOut:
-        fSampleOut = -value + 1.0f;
+        fSampleOut = value;
         break;
     case kSampleLoopStart:
         fSampleLoopStart = value;
@@ -1375,7 +1375,7 @@ void DropsPlugin::run(
     const float n = fSamplePitch / 200.f;
     synth.hdcc(0, 500, n);
     synth.hdcc(0, 501, fSampleIn);
-    synth.hdcc(0, 502, fSampleOut);
+    synth.hdcc(0, 502, -fSampleOut + 1.f);
     synth.hdcc(0, 503, fSampleLoopStart);
     synth.hdcc(0, 504, fSampleLoopEnd);
 

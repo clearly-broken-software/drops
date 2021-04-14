@@ -576,7 +576,7 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         setMarkers(); // FIXME: all markers are set, only 1 is needed :-/
         break;
     case kSampleOut:
-        sampleOut = (-value + 1.0) * static_cast<float>(sampleLength);
+        sampleOut = value * static_cast<float>(sampleLength);
         setMarkers();
         break;
     case kSampleLoopStart:
@@ -1496,8 +1496,8 @@ bool DropsUI::onMotion(const MotionEvent &ev)
         sampleOut = clamp<sf_count_t>(sampleOut, waveForm->size() - 1, sampleIn + 1);
         float sampleOutPixel = static_cast<float>(sampleOut - viewStart) / samples_per_pixel + static_cast<float>(display_left);
         fSampleOut->setAbsoluteX(sampleOutPixel);
-        // float value = static_cast<float>(sampleOut) / static_cast<float>(waveForm->size());
-        // setParameterValue(kSampleOut, value);
+        float value = static_cast<float>(sampleOut) / static_cast<float>(waveForm->size());
+        setParameterValue(kSampleOut, value);
         repaint();
     }
 
