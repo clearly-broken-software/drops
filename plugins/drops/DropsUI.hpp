@@ -108,7 +108,7 @@ private:
         fSamplePlayMode, fSamplePlayDirection; // fSampleOversampling;
     ScopedPointer<Menu> fNormalizeMenu, fKeyCenterMenu, fPlayModeMenu,
         fDirectionMenu; // fOversamplingMenu;
-    
+
     // amp
     ScopedPointer<VBox> vbox_amp;
     ScopedPointer<HBox> hbox_amp_row_1, hbox_amp_row_2, hbox_amp_row_3;
@@ -171,6 +171,7 @@ private:
     float scale;
     // sample
     sf_count_t sampleIn, sampleOut, sampleLoopStart, sampleLoopEnd;
+    float sampleIn_, sampleOut_, sampleLoopStart_, sampleLoopEnd_;
 
     std::vector<signed char> *waveForm;
     std::vector<char> *miniMap;
@@ -182,11 +183,10 @@ private:
     Rectangle<int> display;
     std::string sampleDir, fileName;
     FontId mainFont;
-    bool ampLFOSync,filterLFOSync,pitchLFOSync;
+    bool ampLFOSync, filterLFOSync, pitchLFOSync;
     float ampLFOFreq, ampLFOSyncFreq;
-    float filterLFOFreq,filterLFOSyncFreq;
-    float pitchLFOFreq,pitchLFOSyncFreq;
-    
+    float filterLFOFreq, filterLFOSyncFreq;
+    float pitchLFOFreq, pitchLFOSyncFreq;
 
     DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DropsUI)
 };

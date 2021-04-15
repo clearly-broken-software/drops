@@ -13,7 +13,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    along with this program.  If not, see <https://ww.gnu.org/licenses/>.
 */
 
 #include "DropsUI.hpp"
@@ -63,12 +63,14 @@ DropsUI::DropsUI()
     display.setPos(display_left, display_top);
     scrollbarDragging = false;
 
-    /* for testing */
     sampleLoopStart = 0;
     sampleLoopEnd = 0;
     sampleIn = 0;
     sampleOut = 0;
-    /* ----------- */
+    sampleIn_ = 0.f;
+    sampleOut_ = 1.f;
+    sampleLoopStart_ = 0.f;
+    sampleLoopEnd_ = 1.f;
 
     scale = 1.0f;
     makeIcons();
@@ -489,7 +491,7 @@ void DropsUI::initWidgets()
     hbox_sample->addWidget(fSamplePitch);
     hbox_sample->addWidget(fSamplePlayDirection);
     hbox_sample->addWidget(fSamplePlayMode);
-   // hbox_sample->addWidget(fSampleOversampling);
+    // hbox_sample->addWidget(fSampleOversampling);
     hbox_sample->positionWidgets();
 
     fSamplePitchKeyCenter->positionMenu();
@@ -572,19 +574,23 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         break;
     }
     case kSampleIn:
-        sampleIn = value * static_cast<float>(sampleLength);
+        sampleIn_ = value;
+        sampleIn = sampleIn_ * static_cast<float>(sampleLength);
         setMarkers(); // FIXME: all markers are set, only 1 is needed :-/
         break;
     case kSampleOut:
-        sampleOut = value * static_cast<float>(sampleLength);
+        sampleOut_ = value;
+        sampleOut = sampleOut_ * static_cast<float>(sampleLength);
         setMarkers();
         break;
     case kSampleLoopStart:
-        sampleLoopStart = value * static_cast<float>(sampleLength);
+        sampleLoopStart_ = value;
+        sampleLoopStart = sampleLoopStart_ * static_cast<float>(sampleLength);
         setMarkers();
         break;
     case kSampleLoopEnd:
-        sampleLoopEnd = value * static_cast<float>(sampleLength);
+        sampleLoopEnd_ = value;
+        sampleLoopEnd = sampleLoopEnd_ * static_cast<float>(sampleLength);
         setMarkers();
         break;
     case kSamplePitchKeyCenter:
@@ -603,7 +609,7 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         fSamplePlayDirection->setValue(value);
         break;
     case kSampleOversampling:
-      //  fSampleOversampling->setValue(value);
+        //  fSampleOversampling->setValue(value);
         break;
     // amp
     case kAmpLFOFade:
@@ -799,17 +805,17 @@ void DropsUI::parameterChanged(uint32_t index, float value)
         //       printf("DropsUI::parameterChanged(%i,%f)\n", index, value);
         break;
     }
-    repaint();
+    // repaint();
 }
 
 int DropsUI::loadSample()
 {
     showWaveForm = false;
     sampleLength = static_cast<sf_count_t>(waveForm->size() - 1);
-    sampleIn = 0;
-    sampleOut = sampleLength;
-    sampleLoopStart = 0;
-    sampleLoopEnd = sampleLength;
+    sampleIn = sampleIn_ * static_cast<float>(sampleLength);
+    sampleOut = sampleOut_ * static_cast<float>(sampleLength);
+    sampleLoopStart = sampleLoopStart_ * static_cast<float>(sampleLength);
+    sampleLoopEnd = sampleLoopEnd_ * static_cast<float>(sampleLength);
     viewStart = 0;
     viewEnd = sampleLength;
     viewZoom = 1.0f;
@@ -1127,7 +1133,6 @@ void DropsUI::drawMinimap()
 
 void DropsUI::drawInOutMarkers()
 {
-
     if (sampleIn >= viewStart && sampleIn <= viewEnd)
     {
 
@@ -1250,7 +1255,6 @@ void DropsUI::uiFileBrowserSelected(const char *filename)
         sampleDir = dirnameOf(filename);
         fileName = filename;
         showWaveForm = false;
-        
     }
 }
 
@@ -1535,7 +1539,7 @@ void DropsUI::onDropDownClicked(DropDown *dropDown)
         fDirectionMenu->show();
         break;
     case kSampleOversampling:
-       // fOversamplingMenu->show();
+        // fOversamplingMenu->show();
         break;
     case kAmpLFOType:
         fAmpLFOTypeMenu->show();
