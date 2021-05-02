@@ -261,8 +261,8 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.hints = kParameterIsAutomable;
         break;
     case kAmpLFOSyncFreq:
-        parameter.name = "Amp LFO Sync";
-        parameter.symbol = "amp_lfo_sync";
+        parameter.name = "Amp LFO Sync Freq";
+        parameter.symbol = "amp_lfo_sync_freq";
         parameter.ranges.min = 0.0f;
         parameter.ranges.max = 17.0f;
         parameter.ranges.def = 2.0f;
