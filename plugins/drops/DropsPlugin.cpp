@@ -1263,7 +1263,7 @@ void DropsPlugin::makeSFZ()
     // tab pitch
     // pitch adsr
     buffer << "pitcheg_depth=0\n";
-    buffer << "pitcheg_depth_oncc400=1200";
+    buffer << "pitcheg_depth_oncc400=1200\n";
     buffer << "pitcheg_attack=0 \n";
     buffer << "pitcheg_attack_oncc401=10\n";
     buffer << "pitcheg_decay=0\n";
