@@ -25,13 +25,17 @@ START_NAMESPACE_DISTRHO
 
 DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 2)
 {
-
     sampleRate = getSampleRate();
     sig_sampleLoaded = false;
     loadedSample = false;
     bpm = 120.;
+    
+   
     synth.setSampleRate(sampleRate);
     synth.setNumVoices(16);
+    const auto buffersize = getBufferSize();
+    synth.setSamplesPerBlock(buffersize);
+
     fSampleIn = 0.0f;
     fSampleOut = 1.0f;
     fSampleLoopStart = 0.0f;
@@ -994,6 +998,11 @@ void DropsPlugin::initState(unsigned int index, String &stateKey, String &defaul
 #endif
         break;
     }
+}
+
+void DropsPlugin::bufferSizeChanged(uint32_t newBufferSize)
+{
+    synth.setSamplesPerBlock(newBufferSize);
 }
 
 int DropsPlugin::loadSample(const char *fp)

@@ -78,6 +78,8 @@ protected:
         return d_cconst('D', 'r', 'p', 'S');
     }
 
+    void bufferSizeChanged(uint32_t newBufferSize) override;
+
     // -------------------------------------------------------------------
     // Init
 
