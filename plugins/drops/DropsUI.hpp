@@ -108,6 +108,7 @@ private:
         fSamplePlayMode, fSamplePlayDirection; // fSampleOversampling;
     ScopedPointer<Menu> fNormalizeMenu, fKeyCenterMenu, fPlayModeMenu,
         fDirectionMenu; // fOversamplingMenu;
+    ScopedPointer<CheckBox> fSampleNoPitch;
 
     // amp
     ScopedPointer<VBox> vbox_amp;
@@ -183,7 +184,7 @@ private:
     Rectangle<int> display;
     std::string sampleDir, fileName;
     FontId mainFont;
-    bool ampLFOSync, filterLFOSync, pitchLFOSync;
+    bool ampLFOSync, filterLFOSync, pitchLFOSync, sampleNoPitch;
     float ampLFOFreq, ampLFOSyncFreq;
     float filterLFOFreq, filterLFOSyncFreq;
     float pitchLFOFreq, pitchLFOSyncFreq;

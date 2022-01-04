@@ -41,6 +41,7 @@ DropsPlugin::DropsPlugin() : Plugin(kParameterCount, 0, 2)
     fSampleLoopStart = 0.0f;
     fSampleLoopEnd = 1.0f;
     fSamplePitchKeyCenter = 60.0f;
+    fSampleNoPitch = 0.0f;
     fSamplePlayMode = 0.0f;
     fSamplePlayDirection = 0.0f;
     fSamplePitch = 100.0f;
@@ -144,6 +145,14 @@ void DropsPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.ranges.max = 127.0f;
         parameter.ranges.def = 60.0f;
         parameter.hints = kParameterIsInteger;
+        break;
+    case kSampleNoPitch:
+        parameter.name = "No Pitch";
+        parameter.symbol = "no_pitch";
+        parameter.ranges.def = 0.0f;
+        parameter.ranges.min = 0.0f;
+        parameter.ranges.max = 1.0f;
+        parameter.hints = kParameterIsBoolean;
         break;
     case kSamplePitch:
         parameter.name = "Pitch";
@@ -606,6 +615,9 @@ float DropsPlugin::getParameterValue(uint32_t index) const
     case kSamplePitch:
         val = fSamplePitch;
         break;
+    case kSampleNoPitch:
+        val = fSampleNoPitch;
+        break;
     case kSamplePlayMode:
         val = fSamplePlayMode;
         break;
@@ -751,6 +763,9 @@ void DropsPlugin::setParameterValue(uint32_t index, float value)
         break;
     case kSampleLoopEnd:
         fSampleLoopEnd = value;
+        break;
+    case kSampleNoPitch:
+        fSampleNoPitch = value;
         break;
     case kSamplePitchKeyCenter:
         fSamplePitchKeyCenter = value;
@@ -1398,6 +1413,14 @@ void DropsPlugin::run(
             int midi_message = status & 0xF0;
             int midi_data1 = midiEvents[curEventIndex].data[1];
             int midi_data2 = midiEvents[curEventIndex].data[2];
+#ifdef DEBUG
+            printf("midi note %i\n", midi_data1);
+#endif
+
+            if(fSampleNoPitch == 1.0f ) {
+                midi_data1 = static_cast<int>( fSamplePitchKeyCenter);
+            }
+
             switch (midi_message)
             {
             case 0x80: // note_off

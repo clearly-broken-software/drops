@@ -76,6 +76,10 @@ void CheckBox::onNanoDisplay()
 {
     float width = getWidth();
     float height = getHeight();
+    float label_x,
+          label_y,
+          box_x,
+          box_y;
 
     // label
     fontFaceId(main_font_);
@@ -83,12 +87,22 @@ void CheckBox::onNanoDisplay()
     Rectangle<float> bounds;
     textBounds(0.f, 0.f, label, NULL, bounds);
     const float label_height = bounds.getHeight();
+    // unused const float label_width  = bounds.getWidth();
 
-    const float label_x = width * .5f; //- label_width / 2.0f;
-    const float label_y = height - label_height;
+    if(labelOnRightSide)
+    {
+        label_x = boxSize + margin + margin ; // checkbox width + 5px;
+        label_y = 0.f ;
+        textAlign(ALIGN_LEFT | ALIGN_TOP);
+    }
+    else
+    {
+        label_x = width * .5f; //- label_width / 2.0f;
+        label_y = height - label_height;
+        textAlign(ALIGN_CENTER | ALIGN_TOP);
+    }
     beginPath();
     fillColor(text_color);
-    textAlign(ALIGN_CENTER | ALIGN_TOP);
     text(label_x, label_y, label, NULL);
     closePath();
 
@@ -111,13 +125,29 @@ void CheckBox::onNanoDisplay()
         fill_color_ = background_color;
     }
 
-    const float box_x = width / 2.f - boxSize / 2.f;
-    const float box_y = height - label_height - boxSize - margin;
     beginPath();
     fillColor(fill_color_);
-    roundedRect(box_x + 1.f, box_y + 1.f,
-                boxSize - 2.f, boxSize - 2.f,
-                2.f);
+
+    if (labelOnRightSide) {
+        box_x = margin;
+        box_y = height - boxSize - margin - margin;
+#ifdef DEBUG
+        printf("\"x: %f,y: %f, width: %f, height: %f \" // \n", box_x, box_y, boxSize + 5 + width, boxSize - 2.f);
+#endif
+        roundedRect(box_x + 1.f, box_y ,
+                    boxSize - 2.f, boxSize - 2.f,
+                    2.f);
+    }
+    else
+    {
+        box_x = width / 2.f - boxSize / 2.f;
+        box_y = height - label_height - boxSize - margin;
+
+        roundedRect(box_x + 1.f, box_y + 1.f,
+                    boxSize - 2.f, boxSize - 2.f,
+                    2.f);
+    }
+
     fill();
     closePath();
 }
