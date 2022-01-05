@@ -125,9 +125,9 @@ private:
     float fSampleIn, fSampleOut, fSampleLoopStart, fSampleLoopEnd;
     //  sample
     float fSamplePitchKeyCenter, fSamplePitch, fSamplePlayMode,
-        fSamplePlayDirection, fSampleOversampling;
+        fSamplePlayDirection, fSampleOversampling, fSampleNoPitch;
     //  amp
-    float fAmpEGAttack, fAmpEgDecay, fAmpEgSustain, fAmpEgRelease,
+        float fAmpEGAttack, fAmpEgDecay, fAmpEgSustain, fAmpEgRelease,
         fAmpLFOType, fAmpLFOSync, fAmpLFOFreq, fAmpLFOSyncFreq, fAmpLFODepth,
         fAmpLFOFade;
     //  filter

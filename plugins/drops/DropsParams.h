@@ -36,6 +36,7 @@ enum Parameters
    // kSampleNormalize,      // amplitude or volume
    kSamplePitchKeyCenter, // pitch_keycenter
    kSamplePitch,          // tune
+   kSampleNoPitch,        // no opcode for sfizz
    kSamplePlayMode,       // loopmode
    kSamplePlayDirection,  // direction
    kSampleOversampling,   // 1,2,4,8
@@ -95,6 +96,7 @@ enum Widgets
    kScrollbarRight,
    kNormalizeMenu,
    kKeyCenterMenu,
+   kSampleNoPitchCheckbox,
    kPlayModeMenu,
    kDirectionMenu,
    kOversamplingMenu,

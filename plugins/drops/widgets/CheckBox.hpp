@@ -47,6 +47,7 @@ public:
   float boxSize;
   const char *label;
   bool isActive;
+  bool labelOnRightSide = false;
 
 protected:
   void onNanoDisplay() override;
