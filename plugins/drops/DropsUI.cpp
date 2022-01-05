@@ -376,6 +376,30 @@ void DropsUI::initWidgets()
     fSamplePitch->max_value = 100.0f;
     fSamplePitch->default_value = 0.0f;
 
+    /* turn of sample pitching and play every note with the pitch of the
+    / center note
+    */
+
+    fSampleNoPitch = new CheckBox(window);
+    fSampleNoPitch->setId(kSampleNoPitch);
+    fSampleNoPitch->setSize(150,50);
+    fSampleNoPitch->setCallback(this);
+    fSampleNoPitch->background_color = black_olive;
+    fSampleNoPitch->foreground_color = blue_pigment_1;
+    fSampleNoPitch->highlight_color_inactive = black_olive_1;
+    fSampleNoPitch->highlight_color_active = blue_pigment_2;
+    fSampleNoPitch->text_color = floral_white;
+    fSampleNoPitch->setFont("Roboto_Regular",
+                    reinterpret_cast<const uchar *>(fonts::Roboto_RegularData),
+                    fonts::Roboto_RegularDataSize);
+    fSampleNoPitch->label = "NO PITCHING";
+    fSampleNoPitch->boxSize = 20;
+    fSampleNoPitch->margin = 15;
+    fSampleNoPitch->labelSize = fSampleFontSize;
+    fSampleNoPitch->labelOnRightSide = true;
+
+
+
     fSamplePlayDirection = new DropDown(window);
     fSamplePlayDirection->setId(kSamplePlayDirection);
     fSamplePlayDirection->font_size = fSampleFontSize;
@@ -487,7 +511,9 @@ void DropsUI::initWidgets()
     hbox_sample = new HBox(window);
     hbox_sample->setAbsolutePos(0, 77);
     hbox_sample->setSize(UI_W, 20);
+    hbox_sample->align_items = HBox::Align_Items::top;
     hbox_sample->addWidget(fSamplePitchKeyCenter);
+    hbox_sample->addWidget(fSampleNoPitch);
     hbox_sample->addWidget(fSamplePitch);
     hbox_sample->addWidget(fSamplePlayDirection);
     hbox_sample->addWidget(fSamplePlayMode);
@@ -601,6 +627,8 @@ void DropsUI::parameterChanged(uint32_t index, float value)
     }
     case kSamplePitch:
         fSamplePitch->setValue(value - 100);
+        break;
+    case kSampleNoPitch:
         break;
     case kSamplePlayMode:
         fSamplePlayMode->setValue(value);
@@ -2065,6 +2093,11 @@ void DropsUI::onCheckBoxClicked(CheckBox *checkbox, bool is_checked)
         }
         setParameterValue(kPitchLFOSync, value);
         break;
+
+    case kSampleNoPitch:
+        setParameterValue(kSampleNoPitch,value);
+        break;
+
 
     default:
 #ifdef DEBUG
