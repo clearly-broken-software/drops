@@ -1098,7 +1098,17 @@ void DropsUI::drawWaveform()
     {
         fIndex = float(viewStart) + (float(i) * samples_per_pixel);
         iIndex = fIndex;
-        auto minmax = std::minmax_element(waveForm->begin() + iIndex, waveForm->begin() + iIndex + int(samples_per_pixel));
+        std::vector<signed char>::iterator start, end;
+        if (plugin->fSamplePlayDirection == 0.0f)
+        {
+            start = waveForm->begin() + iIndex;
+        }
+        else
+        {
+            start = waveForm->end() - iIndex - int(samples_per_pixel);
+        }
+        end = start + int(samples_per_pixel);
+        auto minmax = std::minmax_element(start, end);
         uint16_t min = *minmax.first + display_center;
         uint16_t max = *minmax.second + display_center;
         lineTo(i + display_left, min);
